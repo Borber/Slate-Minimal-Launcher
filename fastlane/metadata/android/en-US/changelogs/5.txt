@@ -1,0 +1,15 @@
+Features:
+- Implemented app shortcuts
+- Add enabled-count hint and enabled-first sort to the shortcut app picker
+- Add direction toggle for most-used sort (top/bottom)
+- Add custom TTF import to the Quick Toggles font picker
+- Allow folders to be pinned to the top of the home screen
+- Add setting to ignore silenced notifications when highlighting apps
+- Add opt-in setting to keep hidden apps in Recents
+- Add Work profile apps
+- Add a marker style picker for work profile apps
+
+Fixes:
+- Fix crash on API 26-27 from calling TextView.isAllCaps() getter (requires API 28)
+- Fix back gesture not exiting folders by removing shadowing callback in MainActivity
+- Fix stale-cache and locked-profile hazards in work app grouping
