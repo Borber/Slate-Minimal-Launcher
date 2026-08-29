@@ -265,7 +265,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change app color when notification arrives"
+                        android:text="Change app or folder color when notification arrives"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>

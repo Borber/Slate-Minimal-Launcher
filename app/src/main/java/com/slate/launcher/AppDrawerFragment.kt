@@ -1190,7 +1190,7 @@ class AppDrawerFragment : Fragment() {
             folder = item.folder,
             visibleCount = item.visibleCount,
             size = size,
-            defaultColor = defaultTextColor,
+            color = colorForFolder(item.folder, defaultTextColor, notifEnabled, notifColor, notifKeys),
             typeface = typeface,
             hPad = hPad, vPad = vPad, gravity = gravity
         )
@@ -1272,7 +1272,7 @@ class AppDrawerFragment : Fragment() {
         folder: Folder,
         visibleCount: Int,
         size: Float,
-        defaultColor: Int,
+        color: Int,
         typeface: Typeface,
         hPad: Int,
         vPad: Int,
@@ -1282,7 +1282,6 @@ class AppDrawerFragment : Fragment() {
         // the chevron form keeps the marker glued to the name when Flow wraps mid-paragraph.
         text = folderLabel(folder, visibleCount)
         textSize = size
-        val color = folder.color?.let { parseColorSafe(it, defaultColor) } ?: defaultColor
         setTextColor(color)
         this.typeface = typeface
         this.gravity = gravity
@@ -1379,6 +1378,35 @@ class AppDrawerFragment : Fragment() {
         if (hasNotif) return notifColor
         val appColor = prefs.getAppTextColor(app.key)
         return if (appColor != null) parseColorSafe(appColor) else defaultTextColor
+    }
+
+    /**
+     * [colorForApp]'s sibling for a closed folder: existential over members instead of a single
+     * check, since a folder's row stands in for everything inside it. Priority order matches
+     * colorForApp exactly - notification color first, then the user's own choice, then default -
+     * on purpose: folder.color is exactly as deliberate a user choice as a custom app color, and
+     * neither should outrank the other by default, but a closed folder hides its members
+     * entirely, so its color is the ONLY signal something inside needs attention without opening
+     * it - suppressing that in favor of a static custom color would defeat the point.
+     *
+     * `it !in prefs.hiddenApps` is load-bearing, not defensive. An app row is never built at all
+     * once hidden (filtered out of the enumeration before that point), so colorForApp never had
+     * this to consider - but a folder's own row keeps rendering even when some of its members are
+     * hidden, since hiding an app does NOT remove it from its folder (see FolderStore's own doc).
+     * Without this exclusion a hidden app's notification would leak through the folder's color,
+     * a side channel this app is otherwise careful never to open.
+     */
+    private fun colorForFolder(
+        folder: Folder,
+        defaultTextColor: Int,
+        notifEnabled: Boolean,
+        notifColor: Int,
+        notifKeys: Set<String>
+    ): Int {
+        val hasNotif = notifEnabled &&
+            folder.packages.any { it in notifKeys && it !in prefs.hiddenApps }
+        if (hasNotif) return notifColor
+        return folder.color?.let { parseColorSafe(it, defaultTextColor) } ?: defaultTextColor
     }
 
     private fun createAppTextView(
