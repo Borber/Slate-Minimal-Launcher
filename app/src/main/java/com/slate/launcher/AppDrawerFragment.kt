@@ -162,7 +162,14 @@ class AppDrawerFragment : Fragment() {
                     // always-visible search bar should not block customization long press.
                     val searchBlocksLongPress = isSearchOpen && !prefs.showSearchBarOnHome
                     if (!touchStartedOnApp && !searchBlocksLongPress) {
-                        showHomeLongPressDialog()
+                        AuthGate.authenticatePinOnly(
+                            activity = requireActivity(),
+                            prefs = prefs,
+                            pinManager = PinManager(prefs),
+                            enabled = prefs.lockLongPressMenusEnabled,
+                            title = "Home Menu",
+                            onSuccess = { showHomeLongPressDialog() }
+                        )
                     }
                 }
 
@@ -399,6 +406,9 @@ class AppDrawerFragment : Fragment() {
         mainHandler.removeCallbacksAndMessages(null)
         pendingContactQuery = null
         workGroupingRecheck = null
+        // Same WindowLeaked guard as activeFaqDetailDialog just above - a PIN dialog can now be
+        // showing here too (home menu gate, app menu gate), and was never covered before.
+        PinEntryDialog.dismissActive()
         super.onDestroyView()
     }
 
@@ -944,7 +954,17 @@ class AppDrawerFragment : Fragment() {
             is GestureAction.OpenNotifications -> { expandNotificationsPanel(); true }
             is GestureAction.LockScreen        -> { lockScreen(); true }
             is GestureAction.OpenSettings      -> {
-                startActivity(Intent(requireContext(), SettingsActivity::class.java)); true
+                AuthGate.authenticatePinOnly(
+                    activity = requireActivity(),
+                    prefs = prefs,
+                    pinManager = PinManager(prefs),
+                    enabled = prefs.lockLongPressMenusEnabled,
+                    title = "Settings",
+                    onSuccess = {
+                        startActivity(Intent(requireContext(), SettingsActivity::class.java))
+                    }
+                )
+                true
             }
             is GestureAction.ToggleWifi        -> { toggleWifi(); true }
             is GestureAction.ToggleBluetooth   -> { toggleBluetooth(); true }
@@ -1268,7 +1288,17 @@ class AppDrawerFragment : Fragment() {
         this.gravity = gravity
         setPadding(hPad, vPad, hPad, vPad)
         setOnClickListener { enterFolder(folder.id) }
-        setOnLongClickListener { showFolderMenu(folder, this); true }
+        setOnLongClickListener {
+            AuthGate.authenticatePinOnly(
+                activity = requireActivity(),
+                prefs = prefs,
+                pinManager = PinManager(prefs),
+                enabled = prefs.lockLongPressMenusEnabled,
+                title = "Folder Menu",
+                onSuccess = { showFolderMenu(folder, this) }
+            )
+            true
+        }
         setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) touchStartedOnApp = true
             singleFingerDetector.onTouchEvent(event)
@@ -1379,7 +1409,17 @@ class AppDrawerFragment : Fragment() {
         this.gravity = gravity
         setPadding(hPad, vPad, hPad, vPad)
         setOnClickListener { launchApp(app) }
-        setOnLongClickListener { showAppMenu(app, this); true }
+        setOnLongClickListener {
+            AuthGate.authenticatePinOnly(
+                activity = requireActivity(),
+                prefs = prefs,
+                pinManager = PinManager(prefs),
+                enabled = prefs.lockLongPressMenusEnabled,
+                title = "App Menu",
+                onSuccess = { showAppMenu(app, this) }
+            )
+            true
+        }
         setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) touchStartedOnApp = true
             singleFingerDetector.onTouchEvent(event)
@@ -1411,7 +1451,17 @@ class AppDrawerFragment : Fragment() {
         this.gravity = gravity
         setPadding(hPad, vPad, hPad, vPad)
         setOnClickListener { launchShortcut(shortcut) }
-        setOnLongClickListener { showShortcutMenu(shortcut, this); true }
+        setOnLongClickListener {
+            AuthGate.authenticatePinOnly(
+                activity = requireActivity(),
+                prefs = prefs,
+                pinManager = PinManager(prefs),
+                enabled = prefs.lockLongPressMenusEnabled,
+                title = "Shortcut Menu",
+                onSuccess = { showShortcutMenu(shortcut, this) }
+            )
+            true
+        }
         setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) touchStartedOnApp = true
             singleFingerDetector.onTouchEvent(event)
@@ -2243,6 +2293,15 @@ class AppDrawerFragment : Fragment() {
 
     // ── Home long-press dialog ────────────────────────────────────
 
+    /**
+     * The home long-press menu itself is gated at its call site (onLongPress). This dialog's
+     * own "Hidden Apps" branch keeps its independent AuthGate.authenticate check regardless -
+     * deliberately NOT skipped even when the outer gate just passed, because both checks
+     * verifying the "same" PIN is an assumption that would break the moment Hidden Apps gets
+     * its own separate PIN (a possible future feature); keeping the two checks fully
+     * independent now means neither has to change if that happens later. The cost is a second
+     * prompt when both locks are on, accepted deliberately in exchange for that decoupling.
+     */
     private fun showHomeLongPressDialog() {
         SlateListDialog(
             context = requireContext(),
@@ -2253,7 +2312,7 @@ class AppDrawerFragment : Fragment() {
             when (index) {
                 0 -> startActivity(Intent(requireContext(), SettingsActivity::class.java))
                 1 -> AuthGate.authenticate(
-                    activity = requireActivity() as androidx.fragment.app.FragmentActivity,
+                    activity = requireActivity(),
                     prefs = prefs,
                     pinManager = PinManager(prefs),
                     title = "Hidden Apps",
@@ -2283,6 +2342,26 @@ class AppDrawerFragment : Fragment() {
 
             "How does the hidden apps lock work?" to
                 "Turning on \"Lock hidden apps\" in Settings → Security asks you to set a 4–8 digit PIN. After that, opening the Hidden Apps dialog from the home long-press menu requires PIN (or biometric, if you opt in).\n\nYour PIN is never stored in plain text. Slate stores a salted PBKDF2-HMAC-SHA256 hash with 120,000 iterations and a per-device random 16-byte salt. The hash is a one-way verifier - even with the file, an attacker would have to brute-force the PIN.\n\nBiometric is optional. When enabled, Slate uses Android's BiometricPrompt to show the standard fingerprint/face dialog. Biometric data stays inside the OS and Slate only sees a success/fail signal.\n\nAfter 5 wrong PIN attempts you're locked out for 30 seconds; 10 wrong for 5 minutes; 15 wrong for 15 minutes. There is no PIN recovery - clearing app data is the only reset. When restoring a backup that includes hidden apps, you'll be asked for the backup's PIN. If you don't know it, the rest of your settings still restore and your current PIN and hidden apps stay as they were.",
+
+            "How does the long-press menu lock work?" to
+                "Turning on \"Lock long-press\" in Settings → Security asks you to " +
+                "set a 4–8 digit PIN, the same one \"Lock hidden apps\" uses if you also " +
+                "turn that on. Once it's on, opening the home long-press menu (Customize / " +
+                "Hidden Apps / FAQ), an app's long-press menu (Pin, Hide, Rename, Uninstall, " +
+                "and the rest), a folder's or a pinned shortcut's long-press menu, or a " +
+                "gesture bound to \"Open settings\" asks for that PIN " +
+                "first.\n\n" +
+                "This lock is PIN-only. It never uses biometric, even if you've turned on " +
+                "biometric unlock for hidden apps elsewhere on this screen, so you'll always " +
+                "be asked to type the PIN here.\n\n" +
+                "The PIN itself is the exact same one described above: a salted " +
+                "PBKDF2-HMAC-SHA256 hash, never stored in plain text, with the same " +
+                "5/10/15-attempt lockout schedule shared across both locks. If you don't have " +
+                "a PIN yet, turning this on walks you through setting one first, exactly like " +
+                "\"Lock hidden apps\" does.\n\n" +
+                "The two locks are independent otherwise. Turning this one off does not touch " +
+                "\"Lock hidden apps,\" your PIN, or your hidden apps; it only stops asking for " +
+                "a PIN before the long-press menus and the gesture above.",
 
             "Do hidden apps appear in the Recents (Overview) screen?" to
                 "When you open a hidden app from Slate, it's launched in a way that keeps it off the Android Recents / Overview screen - so someone glancing at Recents won't see what hidden app you opened.\n\nOne caveat Android can't avoid: if the app already had a task in Recents from before (because you opened it from another launcher, or because it uses Android's \"single task\" mode like Chrome on some devices), Slate can't remove that existing entry. Swipe it away from Recents once, and from then on Slate's launches stay invisible.",

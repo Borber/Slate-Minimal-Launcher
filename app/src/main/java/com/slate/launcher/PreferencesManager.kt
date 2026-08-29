@@ -64,6 +64,7 @@ class PreferencesManager(context: Context) {
         /** Stored in slate_device_prefs, not slate_prefs. See [keepHiddenAppsInRecents]. */
         private const val KEY_KEEP_HIDDEN_IN_RECENTS = "keep_hidden_apps_in_recents"
         private const val KEY_BIOMETRIC_ENABLED = "biometric_enabled"
+        private const val KEY_LOCK_LONG_PRESS_MENUS = "lock_long_press_menus_enabled"
         private const val KEY_PIN_HASH = "pin_hash"
         private const val KEY_PIN_SALT = "pin_salt"
         private const val KEY_PIN_ITERATIONS = "pin_iterations"
@@ -372,6 +373,22 @@ class PreferencesManager(context: Context) {
     var biometricEnabled: Boolean
         get() = prefs.getBoolean(KEY_BIOMETRIC_ENABLED, false)
         set(value) = prefs.edit().putBoolean(KEY_BIOMETRIC_ENABLED, value).apply()
+
+    /**
+     * PIN-gates the home long-press menu (Customize / Hidden Apps / FAQ), each app's long-press
+     * menu (Pin, Hide, Rename, Uninstall, ...), the folder and pinned-shortcut long-press menus,
+     * and the "Open settings" gesture action - using the SAME PIN as [hiddenAppsSecurityEnabled].
+     * There is exactly one PIN in this app (see
+     * PinManager); this flag and that one are otherwise independent, either can be on, off, or
+     * both, and PinManager.hasPin() is the only thing that ever ties them together.
+     *
+     * Never uses biometric, regardless of [biometricEnabled] - see AuthGate.authenticatePinOnly,
+     * which has no biometric branch in its body at all, a deliberate choice over a parameter
+     * that could be silently passed wrong.
+     */
+    var lockLongPressMenusEnabled: Boolean
+        get() = prefs.getBoolean(KEY_LOCK_LONG_PRESS_MENUS, false)
+        set(value) = prefs.edit().putBoolean(KEY_LOCK_LONG_PRESS_MENUS, value).apply()
 
     /**
      * When false (the default), the JSON backup omits the entire private bundle - hidden-apps

@@ -6,7 +6,8 @@ import org.json.JSONObject
 class BackupManager(private val prefs: PreferencesManager) {
 
     /**
-     * The private bundle inside a backup file - hidden-apps list, security flag, biometric
+     * The private bundle inside a backup file - hidden-apps list, security flag, the
+     * long-press-menu lock flag, biometric
      * flag, and the PIN's PBKDF2 verifier. Surfaced as a separate type so the import flow can
      * (a) detect its presence cheaply via [BackupContents.privateBundle] and (b) verify the
      * backup's PIN in-memory via [PinManager.verifyAgainst] BEFORE committing any of this to
@@ -19,6 +20,7 @@ class BackupManager(private val prefs: PreferencesManager) {
         val hiddenApps: Set<String>,
         val hiddenAppsSecurityEnabled: Boolean,
         val biometricEnabled: Boolean,
+        val lockLongPressMenusEnabled: Boolean,
         val pinHash: String,
         val pinSalt: String,
         val pinIterations: Int,
@@ -143,7 +145,8 @@ class BackupManager(private val prefs: PreferencesManager) {
             .forEach { (k, v) -> namesObj.put(k, v) }
         root.put("appCustomNames", namesObj)
 
-        // Private bundle - hidden apps + PIN + biometric. Opt-in via Settings → Backup. When
+        // Private bundle - hidden apps + PIN + biometric + long-press-menu lock. Opt-in via
+        // Settings → Backup. When
         // OFF (the default), none of these keys appear in the JSON, so the backup file cannot
         // carry the user's hidden-apps list or the PIN's PBKDF2 verifier off-device. The
         // toggle itself (`includePrivateInBackup`) is intentionally NOT written into the
@@ -154,6 +157,12 @@ class BackupManager(private val prefs: PreferencesManager) {
             root.put("hiddenApps", hiddenArr)
             root.put("hiddenAppsSecurityEnabled", prefs.hiddenAppsSecurityEnabled)
             root.put("biometricEnabled", prefs.biometricEnabled)
+            // Folded in here, not exported unconditionally like an ordinary setting: an
+            // always-exported flag could silently start enforcing on an importing device's
+            // own unrelated pre-existing PIN, with nobody there having chosen it. Bundling it
+            // means it only ever travels alongside proof the importer's PIN matches, exactly
+            // like hiddenAppsSecurityEnabled above.
+            root.put("lockLongPressMenusEnabled", prefs.lockLongPressMenusEnabled)
             prefs.pinHash?.let { root.put("pinHash", it) }
             prefs.pinSalt?.let { root.put("pinSalt", it) }
             if (prefs.pinIterations > 0) root.put("pinIterations", prefs.pinIterations)
@@ -224,6 +233,7 @@ class BackupManager(private val prefs: PreferencesManager) {
                 hiddenApps = (0 until hiddenArr.length()).map { hiddenArr.getString(it) }.toSet(),
                 hiddenAppsSecurityEnabled = root.optBoolean("hiddenAppsSecurityEnabled", false),
                 biometricEnabled = root.optBoolean("biometricEnabled", false),
+                lockLongPressMenusEnabled = root.optBoolean("lockLongPressMenusEnabled", false),
                 pinHash = pinHash,
                 pinSalt = pinSalt,
                 pinIterations = pinIters,
@@ -443,7 +453,8 @@ class BackupManager(private val prefs: PreferencesManager) {
     /**
      * Apply the private bundle to disk. Called ONLY after the import-time PIN dialog has
      * verified the backup's PIN in-memory against [PinManager.verifyAgainst]. Replaces the
-     * device's hidden-apps list, security flag, biometric flag, and PIN verifier with the
+     * device's hidden-apps list, security flag, long-press-menu lock flag, biometric flag,
+     * and PIN verifier with the
      * backup's. Lockout counters reset to zero because they're device-local state, not user
      * data - the backup wasn't authorised to carry past failure counts forward.
      */
@@ -454,6 +465,7 @@ class BackupManager(private val prefs: PreferencesManager) {
         prefs.pinIterations = bundle.pinIterations
         prefs.hiddenAppsSecurityEnabled = bundle.hiddenAppsSecurityEnabled
         prefs.biometricEnabled = bundle.biometricEnabled
+        prefs.lockLongPressMenusEnabled = bundle.lockLongPressMenusEnabled
         prefs.pinFailedAttempts = 0
         prefs.pinLockoutUntilEpochMs = 0L
         prefs.pinLockoutUntilElapsedMs = 0L

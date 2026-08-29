@@ -292,6 +292,7 @@ class SettingsActivity : AppCompatActivity() {
         setupQuickStrip()
         setupAppShortcuts()
         setupSecurity()
+        setupLockLongPressMenus()
         setupAbout()
         setupBatteryBanner()
     }
@@ -308,6 +309,7 @@ class SettingsActivity : AppCompatActivity() {
         keepHiddenInRecentsDialog = null
         includePrivateDialog?.dismiss()
         includePrivateDialog = null
+        PinEntryDialog.dismissActive()
         super.onDestroy()
     }
 
@@ -491,6 +493,7 @@ class SettingsActivity : AppCompatActivity() {
             findViewById(R.id.switchAlphaFastScroll),
             findViewById(R.id.switchHiddenAppsSecurity),
             findViewById(R.id.switchBiometric),
+            findViewById(R.id.switchLockLongPressMenus),
             findViewById(R.id.switchKeepHiddenInRecents),
             findViewById(R.id.switchQuickStrip),
             findViewById(R.id.switchDirectCall),
@@ -2948,9 +2951,11 @@ class SettingsActivity : AppCompatActivity() {
         // (below) invokes setBioSilently. Kotlin local functions cannot forward-reference
         // each other across blocks.
         fun applyVisibility() {
-            val active = prefs.hiddenAppsSecurityEnabled && pinManager.hasPin()
-            rowBio.visibility = if (active) View.VISIBLE else View.GONE
-            rowChangePin.visibility = if (active) View.VISIBLE else View.GONE
+            val hasPin = pinManager.hasPin()
+            val bioActive = prefs.hiddenAppsSecurityEnabled && hasPin
+            val changePinActive = hasPin && (prefs.hiddenAppsSecurityEnabled || prefs.lockLongPressMenusEnabled)
+            rowBio.visibility = if (bioActive) View.VISIBLE else View.GONE
+            rowChangePin.visibility = if (changePinActive) View.VISIBLE else View.GONE
             val bioAvailable = AuthGate.canUseBiometric(this)
             // Reconcile stale pref: if the user removed their biometric enrollment from
             // Android system Settings while we were elsewhere, `prefs.biometricEnabled` is
@@ -2979,17 +2984,30 @@ class SettingsActivity : AppCompatActivity() {
         attachMaster = {
             switchMaster.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
-                    PinFlow.setupNew(
-                        activity = this,
-                        prefs = prefs,
-                        pinManager = pinManager,
-                        onComplete = {
-                            prefs.hiddenAppsSecurityEnabled = true
-                            setMasterSilently(true)
-                            applyVisibility()
-                        },
-                        onCancel = { setMasterSilently(false) }
-                    )
+                    // A PIN already alive and in current use by the sibling toggle is reused
+                    // silently rather than reset - resetting it here would change the PIN out
+                    // from under "Lock long-press" without that feature's own consent.
+                    // Gated on the sibling's OWN enabled flag, not bare hasPin(), so a stray
+                    // orphaned hash left over from some prior state is never silently adopted
+                    // without the user having confirmed they still know it.
+                    if (prefs.lockLongPressMenusEnabled && pinManager.hasPin()) {
+                        prefs.hiddenAppsSecurityEnabled = true
+                        setMasterSilently(true)
+                        applyVisibility()
+                    } else {
+                        PinFlow.setupNew(
+                            activity = this,
+                            prefs = prefs,
+                            pinManager = pinManager,
+                            message = "Choose a 4–8 digit PIN. You'll need it to view hidden apps.",
+                            onComplete = {
+                                prefs.hiddenAppsSecurityEnabled = true
+                                setMasterSilently(true)
+                                applyVisibility()
+                            },
+                            onCancel = { setMasterSilently(false) }
+                        )
+                    }
                 } else {
                     PinFlow.verifyExisting(
                         activity = this,
@@ -2999,7 +3017,11 @@ class SettingsActivity : AppCompatActivity() {
                         onSuccess = {
                             prefs.hiddenAppsSecurityEnabled = false
                             prefs.biometricEnabled = false
-                            pinManager.clear()
+                            // Only if "Lock long-press" isn't also keeping this PIN
+                            // alive. Clearing it unconditionally would silently disarm that
+                            // toggle too, while its own switch kept reading "on" until Settings
+                            // was next reopened - a real, found-in-review hazard, not a guess.
+                            if (!prefs.lockLongPressMenusEnabled) pinManager.clear()
                             setBioSilently(false)
                             setMasterSilently(false)
                             applyVisibility()
@@ -3066,6 +3088,92 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         setupKeepHiddenInRecents()
+    }
+
+    /**
+     * "Lock long-press" - PIN-gates the home long-press menu, each app's long-press menu,
+     * folder and pinned-shortcut long-press menus (see AppDrawerFragment.showHomeLongPressDialog
+     * / showAppMenu / showFolderMenu / showShortcutMenu), and the "Open settings" gesture action
+     * (see executeGestureAction), using the SAME PIN as "Lock hidden apps" but never biometric,
+     * regardless of [PreferencesManager.biometricEnabled].
+     *
+     * Independent of setupSecurity()'s master toggle: either can be on, off, or both, and
+     * [PinManager.hasPin] is the only thing that ever ties them together. The enable/disable
+     * guards here are the exact mirror of setupSecurity()'s own guards - see the comments there
+     * for why an unconditional PinFlow.setupNew or an unconditional pinManager.clear() would be
+     * wrong once a PIN can be kept alive by either toggle.
+     *
+     * No consent dialog on enable, unlike "Keep hidden apps in Recents" or "Include hidden apps
+     * in backups": those toggles WEAKEN an existing protection and this one only adds one,
+     * exactly like "Lock hidden apps" itself, which has no consent dialog either.
+     */
+    private fun setupLockLongPressMenus() {
+        val pinManager = PinManager(prefs)
+        val switch = findViewById<MaterialSwitch>(R.id.switchLockLongPressMenus)
+
+        var attach: () -> Unit = {}
+        fun setSilently(value: Boolean) {
+            switch.setOnCheckedChangeListener(null)
+            switch.isChecked = value
+            attach()
+        }
+
+        attach = {
+            switch.setOnCheckedChangeListener { _, checked ->
+                if (checked) {
+                    // Both sub-branches call biometricReconcile()?.invoke() afterwards, matching
+                    // the disable branch below - rowChangePin's visibility depends on this
+                    // toggle too now, and skipping the refresh here (a real bug caught by
+                    // review) left "Change PIN" hidden after enabling this toggle from a cold
+                    // state, until Settings happened to be reopened.
+                    if (prefs.hiddenAppsSecurityEnabled && pinManager.hasPin()) {
+                        prefs.lockLongPressMenusEnabled = true
+                        setSilently(true)
+                        biometricReconcile?.invoke()
+                    } else {
+                        PinFlow.setupNew(
+                            activity = this,
+                            prefs = prefs,
+                            pinManager = pinManager,
+                            message = "Choose a 4–8 digit PIN. You'll need it to open the " +
+                                "long-press menus.",
+                            onComplete = {
+                                prefs.lockLongPressMenusEnabled = true
+                                setSilently(true)
+                                biometricReconcile?.invoke()
+                            },
+                            onCancel = { setSilently(false) }
+                        )
+                    }
+                } else {
+                    PinFlow.verifyExisting(
+                        activity = this,
+                        prefs = prefs,
+                        pinManager = pinManager,
+                        title = "Disable Long-Press Lock",
+                        onSuccess = {
+                            prefs.lockLongPressMenusEnabled = false
+                            // Hidden Apps' own master toggle, its biometric flag, and the PIN
+                            // itself are untouched - this toggle only ever turns itself off.
+                            if (!prefs.hiddenAppsSecurityEnabled) pinManager.clear()
+                            setSilently(false)
+                            // Re-run setupSecurity()'s own applyVisibility(), exposed via the
+                            // same reconcile hook onResume already uses for the biometric-
+                            // enrollment-staleness check - rowChangePin's visibility depends on
+                            // this toggle too now, and setupSecurity() runs before this function
+                            // in onCreate, so the hook is guaranteed non-null by the time any
+                            // user interaction can reach here.
+                            biometricReconcile?.invoke()
+                        },
+                        onCancel = { setSilently(true) }
+                    )
+                }
+            }
+        }
+
+        switch.setOnCheckedChangeListener(null)
+        switch.isChecked = prefs.lockLongPressMenusEnabled && pinManager.hasPin()
+        attach()
     }
 
     /**

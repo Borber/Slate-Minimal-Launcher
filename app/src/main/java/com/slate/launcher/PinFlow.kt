@@ -17,6 +17,7 @@ object PinFlow {
         activity: FragmentActivity,
         prefs: PreferencesManager,
         pinManager: PinManager,
+        message: String,
         onComplete: () -> Unit,
         onCancel: () -> Unit = {}
     ) {
@@ -24,7 +25,7 @@ object PinFlow {
             context = activity,
             bgColor = prefs.backgroundColor,
             title = "SET PIN",
-            message = "Choose a 4–8 digit PIN. You'll need it to view hidden apps.",
+            message = message,
             confirmLabel = "Next",
             onConfirm = { newPin ->
                 if (PinManager.isTrivial(newPin)) {
@@ -34,7 +35,7 @@ object PinFlow {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                askConfirm(activity, prefs, pinManager, newPin, onComplete, onCancel)
+                askConfirm(activity, prefs, pinManager, message, newPin, onComplete, onCancel)
             },
             onCancel = onCancel
         ).show()
@@ -44,6 +45,7 @@ object PinFlow {
         activity: FragmentActivity,
         prefs: PreferencesManager,
         pinManager: PinManager,
+        message: String,
         newPin: CharArray,
         onComplete: () -> Unit,
         onCancel: () -> Unit
@@ -64,7 +66,7 @@ object PinFlow {
                     newPin.fill(' ')
                     confirmPin.fill(' ')
                     Toast.makeText(activity, "PINs didn't match. Try again.", Toast.LENGTH_SHORT).show()
-                    setupNew(activity, prefs, pinManager, onComplete, onCancel)
+                    setupNew(activity, prefs, pinManager, message, onComplete, onCancel)
                 }
             },
             onCancel = {
@@ -168,7 +170,13 @@ object PinFlow {
         verifyExisting(
             activity, prefs, pinManager,
             title = "Change PIN",
-            onSuccess = { setupNew(activity, prefs, pinManager, onComplete, onCancel) },
+            onSuccess = {
+                setupNew(
+                    activity, prefs, pinManager,
+                    message = "Choose a new 4–8 digit PIN.",
+                    onComplete = onComplete, onCancel = onCancel
+                )
+            },
             onCancel = onCancel
         )
     }

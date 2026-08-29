@@ -50,6 +50,44 @@ object AuthGate {
     }
 
     /**
+     * Authenticate for a feature that must NEVER use biometric, even if [prefs.biometricEnabled]
+     * is on for Hidden Apps - the "Lock long-press" feature is the only caller today.
+     *
+     * Deliberately a separate function rather than an `allowBiometric` parameter on
+     * [authenticate]. This project has no automated tests, so a boolean a future call site could
+     * silently pass wrong is a real risk; a function with no biometric branch in its body at all
+     * cannot route through biometric by accident, no matter what any future caller does.
+     *
+     * [enabled] is caller-supplied rather than read from a hardcoded pref, unlike [authenticate],
+     * because this function is meant to serve exactly the one caller-chosen feature flag, not a
+     * second copy of the Hidden Apps toggle - see [PreferencesManager.lockLongPressMenusEnabled].
+     *
+     * Fails open exactly like [authenticate]: no PIN configured means every caller of this
+     * function must behave as if the feature were off, never as a lock the user cannot pass.
+     */
+    fun authenticatePinOnly(
+        activity: FragmentActivity,
+        prefs: PreferencesManager,
+        pinManager: PinManager,
+        enabled: Boolean,
+        title: String,
+        onSuccess: () -> Unit,
+        onCancel: () -> Unit = {}
+    ) {
+        if (!enabled || !pinManager.hasPin()) {
+            onSuccess()
+            return
+        }
+        val lockoutMs = pinManager.lockoutMillisRemaining()
+        if (lockoutMs > 0) {
+            showLockedOutToast(activity, lockoutMs)
+            onCancel()
+            return
+        }
+        PinFlow.verifyExisting(activity, prefs, pinManager, title, onSuccess, onCancel)
+    }
+
+    /**
      * Returns true if the device has biometric hardware AND at least one biometric is enrolled
      * that meets the BIOMETRIC_STRONG class requirement.
      */

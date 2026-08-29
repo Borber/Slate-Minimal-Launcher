@@ -31,6 +31,21 @@ class PinEntryDialog(
     private val onCancel: () -> Unit = {}
 ) : Dialog(context, R.style.SlateDialogTheme) {
 
+    companion object {
+        private var active: PinEntryDialog? = null
+
+        /**
+         * Dismiss any showing instance. Call from a host Activity/Fragment's onDestroy(View) to
+         * avoid android.view.WindowLeaked on rotation - the same gap this project already
+         * guards against for WidgetPickerDialog, WidgetArrangeDialog, GuidedTourManager, and two
+         * SettingsActivity-owned consent dialogs, just never extended to the PIN flow until now.
+         */
+        fun dismissActive() {
+            active?.let { runCatching { it.dismiss() } }
+            active = null
+        }
+    }
+
     private var consumed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +61,11 @@ class PinEntryDialog(
         // input buffer is cleared and the caller's onCancel hook fires, letting upstream code
         // zero any captured PIN CharArrays.
         setOnDismissListener {
+            if (active === this) active = null
             findViewById<EditText>(R.id.pinDialogInput)?.text?.clear()
             if (!consumed) onCancel()
         }
+        active = this
 
         val bg = parseColorSafe(bgColor)
         val isLight = isColorLight(bg)
