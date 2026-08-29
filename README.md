@@ -8,14 +8,16 @@ A text-only Android home screen built for focus. No icons. No app drawers. No al
 
 ## Screenshots
 
-<p align="center">
-  <img src="screenshots/slate_home_black.jpg" width="18%" alt="Home - black theme" />
-  <img src="screenshots/slate_home_navy.jpg"  width="18%" alt="Home - navy theme" />
-  <img src="screenshots/slate_home_white.jpg" width="18%" alt="Home - white theme" />
-  <img src="screenshots/slate_home_minimal_list.jpg" width="18%" alt="Home - white theme" />
-  <img src="screenshots/slate_settings_1.jpg" width="18%" alt="Settings - general & text size" />
-  <img src="screenshots/slate_settings_2.jpg" width="18%" alt="Settings - colors & gestures" />
-</p>
+<table align="center" width="100%">
+  <tr>
+    <td><img src="screenshots/slate_home_black.jpg" width="100%" alt="Home - black theme" /></td>
+    <td><img src="screenshots/slate_home_navy.jpg" width="100%" alt="Home - navy theme" /></td>
+    <td><img src="screenshots/slate_home_white.jpg" width="100%" alt="Home - white theme" /></td>
+    <td><img src="screenshots/slate_home_minimal_list.jpg" width="87%" alt="Home - minimal list view" /></td>
+    <td><img src="screenshots/slate_settings_1.jpg" width="100%" alt="Settings - general & text size" /></td>
+    <td><img src="screenshots/slate_settings_2.jpg" width="100%" alt="Settings - colors & gestures" /></td>
+  </tr>
+</table>
 
 ---
 
