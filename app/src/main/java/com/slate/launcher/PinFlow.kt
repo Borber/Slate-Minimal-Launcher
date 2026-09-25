@@ -26,12 +26,12 @@ object PinFlow {
             bgColor = prefs.backgroundColor,
             title = activity.getString(R.string.pin_set_title),
             message = message,
-            confirmLabel = activity.getString(R.string.common_next),
+            confirmLabel = activity.getString(R.string.ui_next),
             onConfirm = { newPin ->
                 if (PinManager.isTrivial(newPin)) {
                     Toast.makeText(
                         activity,
-                        activity.getString(R.string.pin_weak_warning),
+                        activity.getString(R.string.pin_easy_warning),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -55,7 +55,7 @@ object PinFlow {
             bgColor = prefs.backgroundColor,
             title = activity.getString(R.string.pin_confirm_title),
             message = activity.getString(R.string.pin_confirm_message),
-            confirmLabel = activity.getString(R.string.common_save),
+            confirmLabel = activity.getString(R.string.pin_save),
             onConfirm = { confirmPin ->
                 if (newPin.contentEquals(confirmPin)) {
                     pinManager.setPin(newPin.copyOf())
@@ -65,9 +65,7 @@ object PinFlow {
                 } else {
                     newPin.fill(' ')
                     confirmPin.fill(' ')
-                    Toast.makeText(
-                        activity, activity.getString(R.string.pin_mismatch), Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(activity, activity.getString(R.string.pin_mismatch), Toast.LENGTH_SHORT).show()
                     setupNew(activity, prefs, pinManager, message, onComplete, onCancel)
                 }
             },
@@ -93,7 +91,7 @@ object PinFlow {
         verifyExistingWithMessage(
             activity, prefs, pinManager,
             title = title,
-            message = activity.getString(R.string.pin_enter_to_continue),
+            message = activity.getString(R.string.pin_enter),
             onSuccess = onSuccess,
             onCancel = onCancel
         )
@@ -112,9 +110,9 @@ object PinFlow {
         if (lockoutMs > 0) {
             val seconds = (lockoutMs / 1000).coerceAtLeast(1)
             val msg = if (seconds >= 60) {
-                activity.getString(R.string.pin_locked_out_minutes, seconds / 60)
+                activity.getString(R.string.pin_too_many_minutes, seconds / 60)
             } else {
-                activity.getString(R.string.pin_locked_out_seconds, seconds)
+                activity.getString(R.string.pin_too_many_seconds, seconds)
             }
             Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
             onCancel()
@@ -124,7 +122,7 @@ object PinFlow {
         val dialog = PinEntryDialog(
             context = activity,
             bgColor = prefs.backgroundColor,
-            title = title,
+            title = title.uppercase(),
             message = message,
             confirmLabel = activity.getString(R.string.pin_unlock),
             onConfirm = { pin ->
@@ -137,9 +135,9 @@ object PinFlow {
                     if (remaining > 0) {
                         val sec = (remaining / 1000).coerceAtLeast(1)
                         val msg = if (sec >= 60) {
-                            activity.getString(R.string.pin_wrong_locked_minutes, sec / 60)
+                            activity.getString(R.string.pin_locked_minutes, sec / 60)
                         } else {
-                            activity.getString(R.string.pin_wrong_locked_seconds, sec)
+                            activity.getString(R.string.pin_locked_seconds, sec)
                         }
                         Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
                         onCancel()
@@ -147,7 +145,7 @@ object PinFlow {
                         verifyExistingWithMessage(
                             activity, prefs, pinManager,
                             title = title,
-                            message = activity.getString(R.string.pin_wrong_try_again),
+                            message = activity.getString(R.string.pin_wrong),
                             onSuccess = onSuccess,
                             onCancel = onCancel
                         )
@@ -171,7 +169,7 @@ object PinFlow {
     ) {
         verifyExisting(
             activity, prefs, pinManager,
-            title = activity.getString(R.string.settings_change_pin),
+            title = activity.getString(R.string.ui_change_pin),
             onSuccess = {
                 setupNew(
                     activity, prefs, pinManager,

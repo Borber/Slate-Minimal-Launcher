@@ -44,9 +44,7 @@ object ShortcutSourceAppPickerDialog {
         launcherApps: LauncherApps,
         destination: ShortcutDestination
     ) {
-        val titlePrefix = activity.getString(
-            R.string.shortcut_choose_app_title, destination.displayLabel(activity)
-        )
+        val titlePrefix = activity.getString(R.string.shortcut_choose_app)
         val mainHandler = Handler(Looper.getMainLooper())
 
         val loading = SlateListDialog(
@@ -87,7 +85,7 @@ object ShortcutSourceAppPickerDialog {
             SlateListDialog(
                 context = activity,
                 title = titlePrefix,
-                items = listOf(activity.getString(R.string.shortcut_no_apps_with_shortcuts)),
+                items = listOf(activity.getString(R.string.shortcut_no_apps)),
                 bgColor = prefs.backgroundColor
             ) { _, _ -> }.apply { fillScreen() }.show()
             return
@@ -109,10 +107,7 @@ object ShortcutSourceAppPickerDialog {
             val ordered = candidates.sortedByDescending { app -> (pinnedCounts[app.packageName] ?: 0) > 0 }
             val hints = ordered.map { app ->
                 val count = pinnedCounts[app.packageName] ?: 0
-                if (count > 0) activity.resources.getQuantityString(
-                    R.plurals.shortcut_enabled_count, count, count
-                )
-                else ""
+                if (count > 0) activity.resources.getQuantityString(R.plurals.shortcut_enabled_count, count, count) else ""
             }
             // `index` below is a position in `ordered`, not `candidates` - both the displayed
             // label and this callback read `ordered`, since it may be resorted relative to

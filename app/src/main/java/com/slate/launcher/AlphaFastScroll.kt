@@ -46,12 +46,14 @@ class AlphaFastScroll @JvmOverloads constructor(
     var onTouchStateChanged: ((Boolean) -> Unit)? = null
 
     init {
-        contentDescription = context.getString(R.string.home_fast_scroll_description)
+        contentDescription = context.getString(R.string.fast_scroll_description)
         isHapticFeedbackEnabled = true
     }
 
     fun setLetters(letters: List<Char>) {
-        this.letters = letters.toCharArray()
+        val next = letters.toCharArray()
+        if (this.letters.contentEquals(next)) return
+        this.letters = next
         lastIndex = -1
         invalidate()
     }

@@ -111,68 +111,28 @@ object GuidedTourManager {
         showStep(activity, prefs, steps, startIndex)
     }
 
-    /** Build the runtime step list, dropping conditional steps for disabled features. */
-    private fun buildSteps(
-        activity: Activity,
-        prefs: PreferencesManager
-    ): List<TourStep> = buildList {
-        add(TourStep(
-            activity.getString(R.string.tour_welcome_title),
-            activity.getString(R.string.tour_welcome_body)
-        ))
-        add(TourStep(
-            activity.getString(R.string.tour_tap_to_open_title),
-            activity.getString(R.string.tour_tap_to_open_body)
-        ))
-        add(TourStep(
-            activity.getString(R.string.tour_long_press_app_title),
-            activity.getString(R.string.tour_long_press_app_body)
-        ))
-        add(TourStep(
-            activity.getString(R.string.tour_long_press_home_title),
-            activity.getString(R.string.tour_long_press_home_body)
-        ))
-        if (prefs.searchEnabled) {
-            add(TourStep(
-                activity.getString(R.string.tour_search_title),
-                activity.getString(R.string.tour_search_body)
-            ))
+    private fun buildSteps(activity: Activity, prefs: PreferencesManager): List<TourStep> = buildList {
+        fun addStep(title: Int, body: Int) {
+            add(TourStep(activity.getString(title), activity.getString(body)))
         }
-        add(TourStep(
-            activity.getString(R.string.tour_folders_title),
-            activity.getString(R.string.tour_folders_body)
-        ))
+        addStep(R.string.tour_welcome_title, R.string.tour_welcome_body)
+        addStep(R.string.tour_tap_title, R.string.tour_tap_body)
+        addStep(R.string.tour_app_menu_title, R.string.tour_app_menu_body)
+        addStep(R.string.tour_home_menu_title, R.string.tour_home_menu_body)
+        addStep(R.string.tour_folder_title, R.string.tour_folder_body)
         if (hasCustomGestures(prefs)) {
-            add(TourStep(
-                activity.getString(R.string.tour_gestures_title),
-                activity.getString(R.string.tour_gestures_body)
-            ))
+            addStep(R.string.tour_gestures_title, R.string.tour_gestures_body)
         }
         if (prefs.doubleTapToLock) {
-            add(TourStep(
-                activity.getString(R.string.tour_double_tap_lock_title),
-                activity.getString(R.string.tour_double_tap_lock_body)
-            ))
+            addStep(R.string.tour_lock_title, R.string.tour_lock_body)
         }
-        if (prefs.quickStripEnabled) {
-            add(TourStep(
-                activity.getString(R.string.tour_strip_title),
-                activity.getString(R.string.tour_strip_body)
-            ))
-        }
-        add(TourStep(
-            activity.getString(R.string.tour_customize_title),
-            activity.getString(R.string.tour_customize_body)
-        ))
-        add(TourStep(
-            activity.getString(R.string.tour_all_set_title),
-            activity.getString(R.string.tour_all_set_body)
-        ))
+        addStep(R.string.tour_custom_title, R.string.tour_custom_body)
+        addStep(R.string.tour_done_title, R.string.tour_done_body)
     }
 
     /**
      * Returns true if the user has mapped any swipe gesture to a non-default action. Defaults
-     * are: UP=Search, DOWN=OpenNotifications, LEFT/RIGHT=None. Comparing the serialized form
+     * are: UP=None, DOWN=OpenNotifications, LEFT/RIGHT=None. Comparing the serialized form
      * avoids relying on referential equality of the sealed-class objects.
      */
     private fun hasCustomGestures(prefs: PreferencesManager): Boolean {
@@ -233,9 +193,7 @@ object GuidedTourManager {
             setOnClickListener { complete(prefs) }
         }
         dialog.findViewById<TextView>(R.id.btnTourNext).apply {
-            text =
-                if (isLast) activity.getString(R.string.common_done)
-                else activity.getString(R.string.common_next)
+            text = activity.getString(if (isLast) R.string.shortcut_done else R.string.ui_next)
             setOnClickListener {
                 if (isLast) complete(prefs)
                 else showStep(activity, prefs, steps, index + 1)
@@ -274,10 +232,9 @@ object GuidedTourManager {
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.tourCounter).apply {
-            text = activity.getString(R.string.tour_step_counter, index + 1, total)
+            text = "${index + 1} / $total"
             setTextColor(secondary)
-            contentDescription =
-                activity.getString(R.string.tour_step_description, index + 1, total)
+            contentDescription = activity.getString(R.string.tour_step_count, index + 1, total)
         }
         dialog.findViewById<TextView>(R.id.tourBody).apply {
             text = step.body

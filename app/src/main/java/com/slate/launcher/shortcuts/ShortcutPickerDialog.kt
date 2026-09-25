@@ -109,7 +109,7 @@ class ShortcutPickerDialog private constructor(
             setPadding(0, (20 * density).toInt(), 0, 0)
         }
         closeRow.addView(TextView(context).apply {
-            text = context.getString(R.string.common_done)
+            text = context.getString(R.string.shortcut_done)
             textSize = 15f
             setTypeface(typeface, Typeface.BOLD)
             setTextColor(accent)
@@ -132,16 +132,12 @@ class ShortcutPickerDialog private constructor(
         listContainer.removeAllViews()
 
         if (!PinnedShortcutStore.hasShortcutHostPermissionSafe(launcherApps)) {
-            listContainer.addView(
-                emptyRow(context.getString(R.string.shortcut_needs_default_launcher))
-            )
+            listContainer.addView(emptyRow(context.getString(R.string.shortcut_default_launcher_required)))
             return
         }
         val shortcuts = PinnedShortcutStore.queryShortcuts(launcherApps, sourcePackage)
         if (shortcuts.isEmpty()) {
-            listContainer.addView(
-                emptyRow(context.getString(R.string.shortcut_none_found_for, sourceAppName))
-            )
+            listContainer.addView(emptyRow(context.getString(R.string.shortcut_none_for_app, sourceAppName)))
             return
         }
         shortcuts.forEach { info -> listContainer.addView(createShortcutRow(info)) }
@@ -186,22 +182,6 @@ class ShortcutPickerDialog private constructor(
             textSize = 16f
             setTextColor(primary)
         })
-        val otherDestination = destination.other()
-        if (existing != null && otherDestination in existing.destinations) {
-            labelGroup.addView(TextView(context).apply {
-                text = when (otherDestination) {
-                    ShortcutDestination.WIDGET_STRIP -> context.getString(
-                        R.string.shortcut_also_pinned_to_widget_strip
-                    )
-                    ShortcutDestination.APP_LIST -> context.getString(
-                        R.string.shortcut_also_pinned_to_app_list
-                    )
-                }
-                textSize = 12f
-                setTextColor(secondary)
-                alpha = 0.7f
-            })
-        }
         row.addView(labelGroup)
         row.addView(buildSwitch(info, label, existing))
         return row

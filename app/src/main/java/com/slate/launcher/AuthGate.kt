@@ -119,7 +119,7 @@ object AuthGate {
             .setTitle(title)
             .setSubtitle(subtitle)
             .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-            .setNegativeButtonText(activity.getString(R.string.common_cancel))
+            .setNegativeButtonText(activity.getString(R.string.ui_cancel))
             .setConfirmationRequired(false)
             .build()
         prompt.authenticate(info)
@@ -159,9 +159,9 @@ object AuthGate {
             })
         val info = BiometricPrompt.PromptInfo.Builder()
             .setTitle(title)
-            .setSubtitle(activity.getString(R.string.pin_biometric_subtitle))
+            .setSubtitle(activity.getString(R.string.auth_unlock_biometric))
             .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-            .setNegativeButtonText(activity.getString(R.string.pin_use_pin))
+            .setNegativeButtonText(activity.getString(R.string.auth_use_pin))
             .setConfirmationRequired(false)
             .build()
         prompt.authenticate(info)
@@ -170,9 +170,9 @@ object AuthGate {
     private fun showLockedOutToast(ctx: Context, lockoutMs: Long) {
         val seconds = (lockoutMs / 1000).coerceAtLeast(1)
         val text = if (seconds >= 60) {
-            ctx.getString(R.string.pin_locked_out_minutes, seconds / 60)
+            ctx.resources.getQuantityString(R.plurals.auth_lockout_minutes, (seconds / 60).toInt(), seconds / 60)
         } else {
-            ctx.getString(R.string.pin_locked_out_seconds, seconds)
+            ctx.resources.getQuantityString(R.plurals.auth_lockout_seconds, seconds.toInt(), seconds)
         }
         Toast.makeText(ctx, text, Toast.LENGTH_LONG).show()
     }

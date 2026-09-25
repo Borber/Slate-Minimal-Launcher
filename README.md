@@ -1,5 +1,18 @@
 # Slate - Minimal Android Launcher
 
+## Local Fork Changes
+
+- **Package:** `com.borber.slate.launcher`; installs alongside the upstream app.
+- **Home:** List only, with A–Z fast scroll and usage sorting.
+- **Removed:** App and contact search.
+- **Removed:** Notification highlighting and its listener.
+- **Removed:** The quick strip, widgets, work-profile handling, and Flow layout.
+- **Retained:** Folders, app shortcuts, hidden-app security, and double-tap lock.
+- **Languages:** Simplified Chinese and English UI; English in-app privacy policy.
+- **Background:** Removed the battery-exemption prompt and unused background work.
+- **Builds:** GitHub Actions uploads a signed release APK on pushes, manual runs, and same-repository PRs. Fork PRs and Dependabot runs upload an unsigned release APK because they cannot access signing secrets.
+- **Maintenance:** This fork stays local and will not be submitted upstream. The documentation below describes upstream.
+
 A text-only Android home screen built for focus. No icons. No app drawers. No algorithmic feeds - just your apps, listed by name, with an optional row of quick toggles.
 
 **Website:** [roufsyed.github.io/Slate-Minimal-Launcher](https://roufsyed.github.io/Slate-Minimal-Launcher/)

@@ -13,26 +13,17 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayout
-import com.google.android.flexbox.JustifyContent
 import com.google.android.material.checkbox.MaterialCheckBox
 
-class OnboardingActivity : AppCompatActivity() {
+class OnboardingActivity : LocalizedActivity() {
 
     private lateinit var prefs: PreferencesManager
     private lateinit var cardDark: LinearLayout
     private lateinit var cardLight: LinearLayout
-    private lateinit var cardFlow: LinearLayout
-    private lateinit var cardList: LinearLayout
     private lateinit var checkPrivacy: MaterialCheckBox
     private lateinit var btnSetDefault: TextView
     private lateinit var btnSkip: TextView
@@ -41,32 +32,9 @@ class OnboardingActivity : AppCompatActivity() {
     // 0 = dark selected, 1 = light selected
     private var selectedTheme = 0
 
-    // LAYOUT_FLOW or LAYOUT_LIST. Seeded from prefs in onCreate, not assumed.
-    private var selectedLayout = LAYOUT_FLOW
-
     companion object {
         private const val STATE_PRIVACY_CHECKED = "privacy_checked"
-        private const val STATE_SELECTED_THEME = "selected_theme"
-        private const val STATE_SELECTED_LAYOUT = "selected_layout"
         private const val LINK_COLOR = "#8888FF"
-
-        // Indices into listOf(cardFlow, cardList), the same way selectedTheme indexes themes.
-        private const val LAYOUT_FLOW = 0
-        private const val LAYOUT_LIST = 1
-
-        /**
-         * What each layout card writes besides the mode itself - see [applySelectedLayout].
-         *
-         * A list on the stock settings is centred, with every row at the 42sp maximum (list
-         * mode draws all rows at maxFontSize), which is nothing like the compact left-aligned
-         * column the card shows. So choosing Minimal List here also writes the two values that
-         * make day one match the preview. Flow's pair is simply the stock values, so that
-         * switching back within this screen undoes the list pair instead of leaving it behind.
-         */
-        private const val LIST_ALIGNMENT = "left"
-        private const val LIST_FONT_SIZE = 24
-        private const val FLOW_ALIGNMENT = "center"
-        private const val FLOW_FONT_SIZE = PreferencesManager.DEFAULT_MAX_FONT_SIZE
     }
 
     private data class Theme(
@@ -101,9 +69,7 @@ class OnboardingActivity : AppCompatActivity() {
         // Re-verify consent - the picker callback can fire after the user has unchecked the box
         // (e.g., they backgrounded onboarding while the picker was open).
         if (!hasAcceptedPrivacy()) {
-            Toast.makeText(
-                this, getString(R.string.onboarding_accept_privacy_first), Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, getString(R.string.onboarding_accept_privacy), Toast.LENGTH_SHORT).show()
             return@registerForActivityResult
         }
         try {
@@ -118,16 +84,12 @@ class OnboardingActivity : AppCompatActivity() {
             // private bundle through the standard PIN-verify path.
             val skippedNote =
                 if (contents.privateBundle != null)
-                    getString(R.string.onboarding_restored_reimport_note)
-                else getString(R.string.backup_settings_restored)
+                    getString(R.string.onboarding_restore_private_later)
+                else getString(R.string.code_settings_restored)
             Toast.makeText(this, skippedNote, Toast.LENGTH_LONG).show()
             finishOnboarding()
         } catch (e: Exception) {
-            Toast.makeText(
-                this,
-                getString(R.string.common_import_failed, importErrorText(this, e)),
-                Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(this, getString(R.string.error_import, e.message), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -155,32 +117,6 @@ class OnboardingActivity : AppCompatActivity() {
 
         cardDark = findViewById(R.id.cardDark)
         cardLight = findViewById(R.id.cardLight)
-        cardFlow = findViewById(R.id.cardFlow)
-        cardList = findViewById(R.id.cardList)
-
-        // Start from the layout already in prefs rather than assuming Flow. This screen can be
-        // reached by someone who has used Slate before: if it was already the default launcher
-        // on first launch, MainActivity skipped onboarding without marking it complete, and it
-        // appears later once another launcher takes over. Their layout must not flip unless
-        // they pick the other card.
-        selectedLayout =
-            if (prefs.homescreenView == PreferencesManager.VIEW_LIST) LAYOUT_LIST else LAYOUT_FLOW
-
-        // This activity is not orientation-locked, so both choices have to survive a rotation.
-        // Only the consent checkbox used to; the theme choice silently fell back to Dark.
-        savedInstanceState?.let {
-            selectedTheme = it.getInt(STATE_SELECTED_THEME, selectedTheme)
-            selectedLayout = it.getInt(STATE_SELECTED_LAYOUT, selectedLayout)
-        }
-
-        // The same four settings renderFlowMode applies to the real home screen, so the
-        // miniature wraps and centres the way Flow itself does at any card width.
-        findViewById<FlexboxLayout>(R.id.previewFlow).apply {
-            flexDirection = FlexDirection.ROW
-            flexWrap = FlexWrap.WRAP
-            alignItems = AlignItems.CENTER
-            justifyContent = JustifyContent.CENTER
-        }
 
         updateCardStyles()
         styleActionButton()
@@ -195,29 +131,17 @@ class OnboardingActivity : AppCompatActivity() {
             updateCardStyles()
         }
 
-        cardFlow.setOnClickListener {
-            selectedLayout = LAYOUT_FLOW
-            updateCardStyles()
-        }
-
-        cardList.setOnClickListener {
-            selectedLayout = LAYOUT_LIST
-            updateCardStyles()
-        }
-
         btnSetDefault = findViewById(R.id.btnSetDefault)
         btnSkip = findViewById(R.id.btnSkip)
         btnImport = findViewById(R.id.btnImportSettings)
 
         btnSetDefault.setOnClickListener {
             applySelectedTheme()
-            applySelectedLayout()
             requestDefaultLauncher()
         }
 
         btnSkip.setOnClickListener {
             applySelectedTheme()
-            applySelectedLayout()
             finishOnboarding()
         }
 
@@ -230,8 +154,6 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(STATE_SELECTED_THEME, selectedTheme)
-        outState.putInt(STATE_SELECTED_LAYOUT, selectedLayout)
         if (::checkPrivacy.isInitialized) {
             outState.putBoolean(STATE_PRIVACY_CHECKED, checkPrivacy.isChecked)
         }
@@ -241,24 +163,20 @@ class OnboardingActivity : AppCompatActivity() {
         checkPrivacy = findViewById(R.id.checkPrivacy)
         val label = findViewById<TextView>(R.id.labelPrivacyAcceptance)
 
-        // The sentence takes the link text as its argument, so a translation decides where
-        // the link sits.
+        val text = getString(R.string.onboarding_privacy_acceptance)
         val link = getString(R.string.onboarding_privacy_link)
-        val sentence = getString(R.string.onboarding_privacy_consent, link)
-        val linkStart = sentence.indexOf(link)
-        val span = SpannableString(sentence)
-        if (linkStart >= 0) {
-            span.setSpan(object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    PrivacyPolicyDialog.show(this@OnboardingActivity)
-                }
-                override fun updateDrawState(ds: TextPaint) {
-                    super.updateDrawState(ds)
-                    ds.color = Color.parseColor(LINK_COLOR)
-                    ds.isUnderlineText = true
-                }
-            }, linkStart, linkStart + link.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
+        val linkStart = text.indexOf(link)
+        val span = SpannableString(text)
+        span.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                PrivacyPolicyDialog.show(this@OnboardingActivity)
+            }
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color = Color.parseColor(LINK_COLOR)
+                ds.isUnderlineText = true
+            }
+        }, linkStart, linkStart + link.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         label.text = span
         label.movementMethod = LinkMovementMethod.getInstance()
 
@@ -314,39 +232,6 @@ class OnboardingActivity : AppCompatActivity() {
         prefs.appTextColor = theme.textColor
     }
 
-    /**
-     * Writes the chosen layout as a complete preset, and only when it differs from the layout
-     * already in prefs.
-     *
-     * "Complete" because "Set as default launcher" applies the choice and then leaves for the
-     * system role picker, which the user can cancel, come back from, pick the other card and
-     * tap again. If Flow wrote only the mode, that second tap would leave Minimal List's
-     * alignment and size behind on a Flow home screen. Each card therefore writes all three
-     * values, so the last tap alone decides the result.
-     *
-     * "Only when it differs" so that keeping the layout you already have costs nothing: a
-     * fresh install that stays on Flow writes no prefs at all, and someone reaching this screen
-     * with a layout they have already tuned keeps their alignment and size unless they switch.
-     *
-     * The Import path deliberately never calls this, exactly as it never calls
-     * [applySelectedTheme] - a restored backup outranks both cards.
-     */
-    private fun applySelectedLayout() {
-        val chosen =
-            if (selectedLayout == LAYOUT_LIST) PreferencesManager.VIEW_LIST
-            else PreferencesManager.VIEW_FLOW
-        if (prefs.homescreenView == chosen) return
-
-        prefs.homescreenView = chosen
-        if (chosen == PreferencesManager.VIEW_LIST) {
-            prefs.textAlignment = LIST_ALIGNMENT
-            prefs.maxFontSize = LIST_FONT_SIZE
-        } else {
-            prefs.textAlignment = FLOW_ALIGNMENT
-            prefs.maxFontSize = FLOW_FONT_SIZE
-        }
-    }
-
     private fun styleActionButton() {
         val density = resources.displayMetrics.density
         findViewById<TextView>(R.id.btnSetDefault).background = GradientDrawable().apply {
@@ -358,45 +243,18 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun updateCardStyles() {
-        listOf(cardDark, cardLight).forEachIndexed { index, card ->
-            card.background = cardBackground(themes[index], index == selectedTheme)
-        }
-
-        // The layout cards wear whichever theme is selected above, so the two rows read as one
-        // combined preview of the home screen rather than as two unrelated questions. Their
-        // colours come from the same Theme values the theme cards hardcode in XML: the label
-        // takes the accent (strokeSelected) and the names take textColor.
-        val theme = themes[selectedTheme]
-        val nameColor = Color.parseColor(theme.textColor)
-        listOf(cardFlow, cardList).forEachIndexed { index, card ->
-            val isSelected = index == selectedLayout
-            card.background = cardBackground(theme, isSelected)
-            // The stroke is the only visible sign of the choice, and a screen reader cannot
-            // see a stroke. The selected state is what lets TalkBack say which card is chosen.
-            card.isSelected = isSelected
-        }
-        findViewById<TextView>(R.id.labelFlow).setTextColor(theme.strokeSelected)
-        findViewById<TextView>(R.id.labelList).setTextColor(theme.strokeSelected)
-        findViewById<TextView>(R.id.captionFlow).setTextColor(nameColor)
-        tintNames(findViewById(R.id.previewFlow), nameColor)
-        tintNames(findViewById(R.id.previewList), nameColor)
-    }
-
-    private fun cardBackground(theme: Theme, isSelected: Boolean): GradientDrawable {
         val density = resources.displayMetrics.density
-        val stroke = if (isSelected) theme.strokeSelected else theme.strokeUnselected
-        val strokeWidth = if (isSelected) 2f else 1f
-        return GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = 16f * density
-            setColor(theme.cardFill)
-            setStroke((strokeWidth * density).toInt(), stroke)
-        }
-    }
-
-    private fun tintNames(group: ViewGroup, color: Int) {
-        for (i in 0 until group.childCount) {
-            (group.getChildAt(i) as? TextView)?.setTextColor(color)
+        listOf(cardDark, cardLight).forEachIndexed { index, card ->
+            val theme = themes[index]
+            val isSelected = index == selectedTheme
+            val stroke = if (isSelected) theme.strokeSelected else theme.strokeUnselected
+            val strokeWidth = if (isSelected) 2f else 1f
+            card.background = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = 16f * density
+                setColor(theme.cardFill)
+                setStroke((strokeWidth * density).toInt(), stroke)
+            }
         }
     }
 
