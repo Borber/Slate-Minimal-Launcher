@@ -78,7 +78,6 @@ class BackupManager(private val prefs: PreferencesManager) {
         root.put("version", 1)
 
         // Display
-        root.put("minFontSize", prefs.minFontSize)
         root.put("maxFontSize", prefs.maxFontSize)
         root.put("lineSpacing", prefs.lineSpacing)
         root.put("wordSpacing", prefs.wordSpacing)
@@ -107,17 +106,9 @@ class BackupManager(private val prefs: PreferencesManager) {
         root.put("mostUsedPosition", prefs.mostUsedPosition)
         root.put("lockOrientation", prefs.lockOrientation)
         root.put("hideStatusBar", prefs.hideStatusBar)
-        root.put("notificationColorEnabled", prefs.notificationColorEnabled)
-        root.put("notificationHighlightColor", prefs.notificationHighlightColor)
-        root.put("ignoreSilentNotifications", prefs.ignoreSilentNotifications)
 
         // Lockscreen
         root.put("syncToLockscreen", prefs.syncToLockscreen)
-
-        // Search
-        root.put("searchEnabled", prefs.searchEnabled)
-        root.put("showSearchBarOnHome", prefs.showSearchBarOnHome)
-        root.put("searchBarPosition", prefs.searchBarPosition)
 
         // Pinned apps
         val pinnedArr = JSONArray()
@@ -168,25 +159,6 @@ class BackupManager(private val prefs: PreferencesManager) {
             if (prefs.pinIterations > 0) root.put("pinIterations", prefs.pinIterations)
         }
 
-        // Quick toggles strip
-        root.put("quickStripEnabled", prefs.quickStripEnabled)
-        root.put("quickStripPosition", prefs.quickStripPosition)
-        root.put("quickStripDividerEnabled", prefs.quickStripDividerEnabled)
-        root.put("widgetTextSize", prefs.widgetTextSize)
-        root.put("widgetLineGap", prefs.widgetLineGap)
-        root.put("widgetWordGap", prefs.widgetWordGap)
-        root.put("widgetFontFamily", prefs.widgetFontFamily)
-        root.put("widgetFontWeight", prefs.widgetFontWeight)
-        root.put("widgetTextAlignment", prefs.widgetTextAlignment)
-        root.put("directCallEnabled", prefs.directCallEnabled)
-        root.put("directCallTrigger", prefs.directCallTrigger)
-        val quickStripWidgetsArr = JSONArray()
-        prefs.quickStripWidgets.forEach { quickStripWidgetsArr.put(it) }
-        root.put("quickStripWidgets", quickStripWidgetsArr)
-        // Embed the contact-shortcut library as a parsed JSON array (not a string) so the
-        // backup remains human-readable and round-trips through json libraries cleanly.
-        root.put("contactShortcuts", JSONArray(prefs.contactShortcutsJson))
-
         // User-created folders. Same human-readable strategy as contactShortcuts.
         root.put("folders", strippedFolders(prefs.foldersJson))
 
@@ -201,8 +173,7 @@ class BackupManager(private val prefs: PreferencesManager) {
 
         // Folder display style (chevron/slash/bullet/brackets/count/plain).
         root.put("folderStyle", prefs.folderStyle)
-        root.put("workMarkerStyle", prefs.workMarkerStyle)
-        root.put("suppressWorkMarkerInFolder", prefs.suppressWorkMarkerInFolder)
+        root.put("language", prefs.language)
 
         return root.toString(2)
     }
@@ -245,7 +216,7 @@ class BackupManager(private val prefs: PreferencesManager) {
 
     /**
      * Apply every non-private pref from a parsed [BackupContents] to disk. Theme, gestures,
-     * folders, widgets, pinned apps, custom names/colors, contact shortcuts, etc. The private
+     * folders, pinned apps, custom names/colors, and shortcuts. The private
      * bundle is NOT touched here - see [applyPrivate].
      */
     fun applyNonPrivate(contents: BackupContents) {
@@ -259,21 +230,13 @@ class BackupManager(private val prefs: PreferencesManager) {
         // hand-edited file, and this must still have run if the import dies partway.
         prefs.keepHiddenAppsInRecents = false
 
-        // Deliberately NOT reset here, and the contrast with the line above is the point:
-        //  - showWorkApps is an ordinary display preference; resetting it would silently
-        //    re-show work apps for someone who had turned them off.
-        //  - workGroupedSerials is never exported and must not be cleared, because clearing it
-        //    re-arms automatic grouping and would drag back apps the user had moved out.
-        //
-        // A backup carries no work keys at all (see isWorkKey), so an import would otherwise
-        // wipe the local Work folder entirely. Capture it here and restore it after the
-        // wholesale folders write below.
+        // Preserve legacy work-profile folders already on this device. The feature is gone,
+        // but importing a backup should not erase stored user folder data.
         val localWorkFolders = FolderStore.all(prefs).filter { it.profileSerial != null }
         val localWorkPins = prefs.pinnedFolders.filter { id ->
             localWorkFolders.any { it.id == id }
         }
 
-        prefs.minFontSize  = root.optInt("minFontSize",  PreferencesManager.DEFAULT_MIN_FONT_SIZE)
         prefs.maxFontSize  = root.optInt("maxFontSize",  PreferencesManager.DEFAULT_MAX_FONT_SIZE)
         prefs.lineSpacing  = root.optInt("lineSpacing",  PreferencesManager.DEFAULT_LINE_SPACING)
         prefs.wordSpacing  = root.optInt("wordSpacing",  PreferencesManager.DEFAULT_WORD_SPACING)
@@ -289,24 +252,13 @@ class BackupManager(private val prefs: PreferencesManager) {
         prefs.textAlignment     = root.optString("textAlignment", "center")
             .takeIf { it == "left" || it == "center" || it == "right" } ?: "center"
         prefs.sortByUsage       = root.optBoolean("sortByUsage", false)
-        // Sanitise: only "top"/"bottom" are valid. Same defence-in-depth pattern as
-        // `searchBarPosition` below.
+        // Sanitise: only "top"/"bottom" are valid.
         prefs.mostUsedPosition  = root.optString("mostUsedPosition", "top")
             .takeIf { it == "top" || it == "bottom" } ?: "top"
         prefs.lockOrientation   = root.optBoolean("lockOrientation", true)
         prefs.hideStatusBar     = root.optBoolean("hideStatusBar", false)
-        prefs.notificationColorEnabled   = root.optBoolean("notificationColorEnabled", false)
-        prefs.notificationHighlightColor = root.optString("notificationHighlightColor", "#FFFFFF")
-        prefs.ignoreSilentNotifications = root.optBoolean("ignoreSilentNotifications", false)
         prefs.syncToLockscreen  = root.optBoolean("syncToLockscreen", false)
-        prefs.searchEnabled     = root.optBoolean("searchEnabled", true)
-        prefs.showSearchBarOnHome = root.optBoolean("showSearchBarOnHome", false)
-        // Sanitise: only "top"/"bottom" are valid. Matches the same defence-in-depth pattern
-        // used for `quickStripPosition` further down. Unknown values silently fall through to
-        // "top" at read time anyway, but this keeps the on-disk pref clean.
-        prefs.searchBarPosition = root.optString("searchBarPosition", "top")
-            .takeIf { it == "top" || it == "bottom" } ?: "top"
-
+        prefs.language = root.optString("language", "system")
         // Pinned apps
         root.optJSONArray("pinnedApps")?.let { arr ->
             prefs.pinnedApps = (0 until arr.length())
@@ -347,38 +299,6 @@ class BackupManager(private val prefs: PreferencesManager) {
             }
         }
 
-        // Quick toggles strip
-        prefs.quickStripEnabled = root.optBoolean("quickStripEnabled", false)
-        // Absence falls back to "bottom" - current behaviour for older backups.
-        prefs.quickStripPosition = root.optString("quickStripPosition", "bottom")
-            .takeIf { it == "top" || it == "bottom" } ?: "bottom"
-        prefs.quickStripDividerEnabled = root.optBoolean("quickStripDividerEnabled", false)
-        prefs.widgetTextSize = root.optInt("widgetTextSize", PreferencesManager.DEFAULT_WIDGET_TEXT_SIZE)
-        prefs.widgetLineGap  = root.optInt("widgetLineGap",  PreferencesManager.DEFAULT_WIDGET_LINE_GAP)
-        prefs.widgetWordGap  = root.optInt("widgetWordGap",  PreferencesManager.DEFAULT_WIDGET_WORD_GAP)
-        prefs.widgetFontFamily = root.optString("widgetFontFamily", PreferencesManager.DEFAULT_WIDGET_FONT_FAMILY)
-        prefs.widgetFontWeight = root.optInt("widgetFontWeight", PreferencesManager.DEFAULT_WIDGET_FONT_WEIGHT)
-        // Sanitise the alignment string - only "left"/"center"/"right" are valid. A backup with
-        // a typo or a future-version value falls back to the default rather than persisting an
-        // unsupported state.
-        prefs.widgetTextAlignment = root.optString(
-            "widgetTextAlignment", PreferencesManager.DEFAULT_WIDGET_TEXT_ALIGNMENT
-        ).takeIf { it == "left" || it == "center" || it == "right" }
-            ?: PreferencesManager.DEFAULT_WIDGET_TEXT_ALIGNMENT
-        prefs.directCallEnabled = root.optBoolean("directCallEnabled", false)
-        // Sanitise: only "tap"/"longPress" are accepted. Defence-in-depth - the pref getter
-        // also guards against an unknown stored value, so a corrupt write here resolves to
-        // default on read.
-        prefs.directCallTrigger = root.optString(
-            "directCallTrigger", PreferencesManager.DEFAULT_DIRECT_CALL_TRIGGER
-        ).takeIf { it == "tap" || it == "longPress" }
-            ?: PreferencesManager.DEFAULT_DIRECT_CALL_TRIGGER
-        root.optJSONArray("quickStripWidgets")?.let { arr ->
-            prefs.quickStripWidgets = (0 until arr.length()).map { arr.getString(it) }
-        }
-        root.optJSONArray("contactShortcuts")?.let { arr ->
-            prefs.contactShortcutsJson = arr.toString()
-        }
         root.optJSONArray("folders")?.let { arr ->
             // Re-append the local work folders the import would otherwise destroy. Appending
             // rather than merging by id is correct: an imported folder and a local work folder
@@ -426,28 +346,6 @@ class BackupManager(private val prefs: PreferencesManager) {
             if (style in knownFolderStyles) prefs.folderStyle = style
         }
 
-        // Same whitelist idiom, and for the same reason: an absent key leaves the device's own
-        // choice alone, and an unknown value is ignored rather than written, so a hand-edited
-        // or newer-version file cannot persist a style this build does not render. One of the
-        // four hand-maintained enumerations of these eight values.
-        val knownWorkMarkers = setOf(
-            PreferencesManager.WORK_MARKER_WORD,
-            PreferencesManager.WORK_MARKER_BRACKETS,
-            PreferencesManager.WORK_MARKER_DAGGER,
-            PreferencesManager.WORK_MARKER_STAR,
-            PreferencesManager.WORK_MARKER_DOT,
-            PreferencesManager.WORK_MARKER_SQUARE,
-            PreferencesManager.WORK_MARKER_DIAMOND,
-            PreferencesManager.WORK_MARKER_NONE
-        )
-        if (root.has("workMarkerStyle")) {
-            val marker = root.optString("workMarkerStyle")
-            if (marker in knownWorkMarkers) prefs.workMarkerStyle = marker
-        }
-        // No whitelist needed - a boolean cannot carry an unrenderable value. Default matches
-        // PreferencesManager so a pre-existing backup file imports as ON, same as a fresh install.
-        prefs.suppressWorkMarkerInFolder =
-            root.optBoolean("suppressWorkMarkerInFolder", true)
     }
 
     /**

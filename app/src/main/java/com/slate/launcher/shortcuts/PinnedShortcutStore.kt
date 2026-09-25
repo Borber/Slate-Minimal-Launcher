@@ -12,8 +12,8 @@ import org.json.JSONArray
 
 /**
  * Persistence and OS-sync for pinned external-app shortcuts. Mirrors
- * [com.slate.launcher.widgets.ContactShortcutStore] / [com.slate.launcher.FolderStore]'s
- * single-JSON-blob-pref shape: one [PreferencesManager.pinnedShortcutsJson] string, full
+ * [com.slate.launcher.FolderStore]'s single-JSON-blob-pref shape: one
+ * [PreferencesManager.pinnedShortcutsJson] string, full
  * read-modify-write on every mutation.
  *
  * [unresolvedStreak] / [disabledShortcuts] are process-lifetime only, never persisted or backed
@@ -22,9 +22,7 @@ import org.json.JSONArray
  *
  * [syncPinnedShortcutsForPackage] is the ONLY function allowed to call
  * [LauncherApps.pinShortcuts] - it always re-reads the ledger fresh and unions every shortcut id
- * pinned to a package regardless of destination, so a picker scoped to one destination never
- * clobbers the OS-level pins the other destination depends on (`pinShortcuts` replaces the
- * entire pinned set for a package).
+ * pinned to a package (`pinShortcuts` replaces the entire pinned set for a package).
  */
 object PinnedShortcutStore {
 
@@ -106,10 +104,6 @@ object PinnedShortcutStore {
 
     /**
      * Merge-by-compound-key: adds [destination] to the existing record's set, or creates one.
-     * When [destination] is [ShortcutDestination.WIDGET_STRIP], also enrolls the shortcut in
-     * [PreferencesManager.quickStripWidgets] - the strip only ever renders ids present in that
-     * separate ordered "currently shown" list, so a record with WIDGET_STRIP in its destinations
-     * but absent from that list would silently never appear.
      */
     fun add(
         prefs: PreferencesManager,
@@ -133,14 +127,11 @@ object PinnedShortcutStore {
         }
         save(prefs, list)
         markResolved(sourcePackage, shortcutId)
-        if (destination == ShortcutDestination.WIDGET_STRIP) addToQuickStrip(prefs, record.id)
         syncPinnedShortcutsForPackage(prefs, launcherApps, sourcePackage)
     }
 
     /**
      * Shrinks the destination set for (sourcePackage, shortcutId); drops the record if empty.
-     * Mirrors [add]'s quickStripWidgets bookkeeping in reverse when [destination] is
-     * [ShortcutDestination.WIDGET_STRIP].
      */
     fun remove(
         prefs: PreferencesManager,
@@ -156,13 +147,12 @@ object PinnedShortcutStore {
         val newDestinations = existing.destinations - destination
         if (newDestinations.isEmpty()) list.removeAt(idx) else list[idx] = existing.copy(destinations = newDestinations)
         save(prefs, list)
-        if (destination == ShortcutDestination.WIDGET_STRIP) removeFromQuickStrip(prefs, existing.id)
         syncPinnedShortcutsForPackage(prefs, launcherApps, sourcePackage)
     }
 
     /**
      * Drops every record for [sourcePackage] in one batched pass (one read, one write, one
-     * quick-strip cleanup, one OS resync) - used when the source app itself is hidden, so N
+     * OS resync) - used when the source app itself is hidden, so N
      * pinned shortcuts don't cost N redundant read-modify-write-and-pinShortcuts cycles. Returns
      * the dropped records so the caller can report how many were removed.
      */
@@ -171,15 +161,13 @@ object PinnedShortcutStore {
         val (dropped, kept) = list.partition { it.sourcePackage == sourcePackage }
         if (dropped.isEmpty()) return dropped
         save(prefs, kept)
-        removeIdsFromQuickStrip(prefs, dropped.map { it.id })
         syncPinnedShortcutsForPackage(prefs, launcherApps, sourcePackage)
         return dropped
     }
 
     /**
      * Tier 1 (cheap, synchronous, every rebuild): drops records whose source app is no longer
-     * installed, using the same per-package existence check [QuickStripManager] independently
-     * needs anyway - a pinned shortcut's validity depends on its source package existing at all,
+     * installed. A pinned shortcut's validity depends on its source package existing at all,
      * not on whether that package has a launcher-visible activity. Returns the reconciled
      * (post-drop) list so callers that already need it don't have to re-parse the ledger.
      */
@@ -189,26 +177,8 @@ object PinnedShortcutStore {
         val kept = list.filter { shortcut -> runCatching { pm.getApplicationInfo(shortcut.sourcePackage, 0) }.isSuccess }
         if (kept.size != list.size) {
             save(prefs, kept)
-            val keptIds = kept.mapTo(HashSet()) { it.id }
-            removeIdsFromQuickStrip(prefs, list.map { it.id }.filterNot { it in keptIds })
         }
         return kept
-    }
-
-    private fun addToQuickStrip(prefs: PreferencesManager, id: String) {
-        val current = prefs.quickStripWidgets
-        if (id !in current) prefs.quickStripWidgets = current + id
-    }
-
-    private fun removeFromQuickStrip(prefs: PreferencesManager, id: String) =
-        removeIdsFromQuickStrip(prefs, listOf(id))
-
-    private fun removeIdsFromQuickStrip(prefs: PreferencesManager, ids: List<String>) {
-        if (ids.isEmpty()) return
-        val idSet = ids.toSet()
-        val current = prefs.quickStripWidgets
-        val filtered = current.filterNot { it in idSet }
-        if (filtered.size != current.size) prefs.quickStripWidgets = filtered
     }
 
     /**
@@ -273,6 +243,7 @@ object PinnedShortcutStore {
     /** Throttled entry point - call from app-foreground. Runs on a background thread; posts
      * [onComplete] back to the main thread only if anything may have changed. */
     fun performHealthCheckIfDue(context: Context, prefs: PreferencesManager, onComplete: () -> Unit) {
+        if (prefs.pinnedShortcutsJson == "[]") return
         val now = System.currentTimeMillis()
         if (now - lastHealthCheckAtMs < HEALTH_CHECK_THROTTLE_MS) return
         lastHealthCheckAtMs = now
@@ -286,7 +257,7 @@ object PinnedShortcutStore {
 
     /**
      * Re-resolves every pinned shortcut's live state. Never called from a render path (see
-     * AppRepository.getHomeItems / WidgetCatalog.byId) - only from [performHealthCheckIfDue], the
+     * AppRepository.getHomeItems) - only from [performHealthCheckIfDue], the
      * manual per-row [refreshOne], or [resyncAllWithOs]. Drops a record after
      * [STREAK_DROP_THRESHOLD] consecutive confirmed-permission passes with no resolution -
      * passes where permission is false don't count, so losing default-launcher status for a
@@ -340,7 +311,6 @@ object PinnedShortcutStore {
         }
 
         if (mutated) save(prefs, updated)
-        removeIdsFromQuickStrip(prefs, droppedIds)
         // Resync AFTER saving the pruned list, so the sync call's fresh read of the ledger no
         // longer contains the id(s) that were just dropped.
         packagesToResync.forEach { syncPinnedShortcutsForPackage(prefs, launcherApps, it) }

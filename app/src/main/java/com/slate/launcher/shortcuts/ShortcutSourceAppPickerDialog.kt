@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.slate.launcher.AppInfo
 import com.slate.launcher.AppRepository
 import com.slate.launcher.PreferencesManager
+import com.slate.launcher.R
 import com.slate.launcher.SlateListDialog
 
 /**
@@ -43,13 +44,13 @@ object ShortcutSourceAppPickerDialog {
         launcherApps: LauncherApps,
         destination: ShortcutDestination
     ) {
-        val titlePrefix = "${destination.displayLabel()} - choose an app"
+        val titlePrefix = activity.getString(R.string.shortcut_choose_app)
         val mainHandler = Handler(Looper.getMainLooper())
 
         val loading = SlateListDialog(
             context = activity,
             title = titlePrefix,
-            items = listOf("Loading apps…"),
+            items = listOf(activity.getString(R.string.shortcut_loading_apps)),
             bgColor = prefs.backgroundColor
         ) { _, _ -> }
         loading.fillScreen()
@@ -84,7 +85,7 @@ object ShortcutSourceAppPickerDialog {
             SlateListDialog(
                 context = activity,
                 title = titlePrefix,
-                items = listOf("No apps with shortcuts found"),
+                items = listOf(activity.getString(R.string.shortcut_no_apps)),
                 bgColor = prefs.backgroundColor
             ) { _, _ -> }.apply { fillScreen() }.show()
             return
@@ -106,7 +107,7 @@ object ShortcutSourceAppPickerDialog {
             val ordered = candidates.sortedByDescending { app -> (pinnedCounts[app.packageName] ?: 0) > 0 }
             val hints = ordered.map { app ->
                 val count = pinnedCounts[app.packageName] ?: 0
-                if (count > 0) "$count enabled" else ""
+                if (count > 0) activity.resources.getQuantityString(R.plurals.shortcut_enabled_count, count, count) else ""
             }
             // `index` below is a position in `ordered`, not `candidates` - both the displayed
             // label and this callback read `ordered`, since it may be resorted relative to

@@ -11,12 +11,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : LocalizedActivity() {
 
     private lateinit var prefs: PreferencesManager
 

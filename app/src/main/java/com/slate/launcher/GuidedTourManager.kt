@@ -100,7 +100,7 @@ object GuidedTourManager {
         prefs: PreferencesManager,
         resumeFromCurrentStep: Boolean
     ) {
-        val steps = buildSteps(prefs)
+        val steps = buildSteps(activity, prefs)
         if (steps.isEmpty()) {
             complete(prefs)
             return
@@ -111,76 +111,28 @@ object GuidedTourManager {
         showStep(activity, prefs, steps, startIndex)
     }
 
-    /** Build the runtime step list, dropping conditional steps for disabled features. */
-    private fun buildSteps(prefs: PreferencesManager): List<TourStep> = buildList {
-        add(TourStep(
-            "Welcome to Slate",
-            "Slate shows your apps as plain text - no icons, no widgets. " +
-                    "Here's a 30-second tour of how to use it."
-        ))
-        add(TourStep(
-            "Tap to open",
-            "Tap any app's name to open it. The more you use an app, the larger its name " +
-                    "appears (in Flow view)."
-        ))
-        add(TourStep(
-            "Long-press an app",
-            "Press and hold any app name to pin it, hide it, move it to a folder, " +
-                    "rename it, change its color, or uninstall."
-        ))
-        add(TourStep(
-            "Long-press the home screen",
-            "Press and hold a blank area of the home screen for Customize (Settings), " +
-                    "Hidden Apps, and FAQ."
-        ))
-        if (prefs.searchEnabled) {
-            add(TourStep(
-                "Swipe up to search",
-                "Swipe up anywhere on home to open the search bar. Start typing to filter apps."
-            ))
+    private fun buildSteps(activity: Activity, prefs: PreferencesManager): List<TourStep> = buildList {
+        fun addStep(title: Int, body: Int) {
+            add(TourStep(activity.getString(title), activity.getString(body)))
         }
-        add(TourStep(
-            "Folders",
-            "Long-press an app and pick \"Move to folder\" to group related apps. " +
-                    "A folder appears as \"Name ›\" - tap to expand, long-press to rename or delete."
-        ))
+        addStep(R.string.tour_welcome_title, R.string.tour_welcome_body)
+        addStep(R.string.tour_tap_title, R.string.tour_tap_body)
+        addStep(R.string.tour_app_menu_title, R.string.tour_app_menu_body)
+        addStep(R.string.tour_home_menu_title, R.string.tour_home_menu_body)
+        addStep(R.string.tour_folder_title, R.string.tour_folder_body)
         if (hasCustomGestures(prefs)) {
-            add(TourStep(
-                "Swipe gestures",
-                "You've mapped extra swipe gestures. Swipe up/down/left/right on home to " +
-                        "trigger the actions you configured in Settings → Gestures."
-            ))
+            addStep(R.string.tour_gestures_title, R.string.tour_gestures_body)
         }
         if (prefs.doubleTapToLock) {
-            add(TourStep(
-                "Double-tap to lock",
-                "Double-tap an empty area of the home screen to lock the device. " +
-                        "You enabled this in Settings → General."
-            ))
+            addStep(R.string.tour_lock_title, R.string.tour_lock_body)
         }
-        if (prefs.quickStripEnabled) {
-            add(TourStep(
-                "Quick toggles strip",
-                "The strip at the bottom shows live status (Wi-Fi, battery, clock, …). " +
-                        "Tap a toggle to open its settings; manage which widgets appear in " +
-                        "Settings → Quick toggles."
-            ))
-        }
-        add(TourStep(
-            "Customize more",
-            "Fonts, colors, gestures, search bar, security, theme, and backup - all live in " +
-                    "Settings. Long-press the home screen → Customize to open them."
-        ))
-        add(TourStep(
-            "You're set",
-            "That's everything. You can re-run this tour anytime from Settings → About → " +
-                    "Show guided tour."
-        ))
+        addStep(R.string.tour_custom_title, R.string.tour_custom_body)
+        addStep(R.string.tour_done_title, R.string.tour_done_body)
     }
 
     /**
      * Returns true if the user has mapped any swipe gesture to a non-default action. Defaults
-     * are: UP=Search, DOWN=OpenNotifications, LEFT/RIGHT=None. Comparing the serialized form
+     * are: UP=None, DOWN=OpenNotifications, LEFT/RIGHT=None. Comparing the serialized form
      * avoids relying on referential equality of the sealed-class objects.
      */
     private fun hasCustomGestures(prefs: PreferencesManager): Boolean {
@@ -241,7 +193,7 @@ object GuidedTourManager {
             setOnClickListener { complete(prefs) }
         }
         dialog.findViewById<TextView>(R.id.btnTourNext).apply {
-            text = if (isLast) "Done" else "Next"
+            text = activity.getString(if (isLast) R.string.shortcut_done else R.string.ui_next)
             setOnClickListener {
                 if (isLast) complete(prefs)
                 else showStep(activity, prefs, steps, index + 1)
@@ -282,7 +234,7 @@ object GuidedTourManager {
         dialog.findViewById<TextView>(R.id.tourCounter).apply {
             text = "${index + 1} / $total"
             setTextColor(secondary)
-            contentDescription = "Step ${index + 1} of $total"
+            contentDescription = activity.getString(R.string.tour_step_count, index + 1, total)
         }
         dialog.findViewById<TextView>(R.id.tourBody).apply {
             text = step.body

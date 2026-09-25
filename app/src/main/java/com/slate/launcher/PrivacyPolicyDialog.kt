@@ -20,18 +20,15 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
-import java.io.IOException
 
 /**
- * Shows the bundled privacy policy in a themed in-app dialog. The .md file is generated at
- * build time by the `copyPrivacyPolicy` Gradle task and loaded from assets at runtime.
+ * Shows the bundled English privacy policy in a themed in-app dialog.
  *
  * If the asset is missing (e.g., a corrupted install), falls back to opening the canonical
  * GitHub URL externally so the user can always read it.
  */
 object PrivacyPolicyDialog {
 
-    private const val ASSET_NAME = "PRIVACY_POLICY.md"
     private const val FALLBACK_URL =
         "https://github.com/roufsyed/Slate-Minimal-Launcher/blob/master/PRIVACY_POLICY.md"
 
@@ -57,7 +54,7 @@ object PrivacyPolicyDialog {
         accent: Int = Color.parseColor("#8888FF")
     ) {
         val markdown = loadMarkdown(activity) ?: run {
-            Toast.makeText(activity, "Opening privacy policy in browser…", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, activity.getString(R.string.privacy_opening_browser), Toast.LENGTH_SHORT).show()
             openExternal(activity)
             return
         }
@@ -105,11 +102,10 @@ object PrivacyPolicyDialog {
         dialog.show()
     }
 
-    private fun loadMarkdown(ctx: Context): String? = try {
-        ctx.assets.open(ASSET_NAME).bufferedReader().use { it.readText() }
-    } catch (_: IOException) {
-        null
-    }
+    private fun loadMarkdown(ctx: Context): String? = runCatching {
+        ctx.resources.openRawResource(R.raw.slate_privacy_policy_en)
+            .bufferedReader().use { it.readText() }
+    }.getOrNull()
 
     private fun openExternal(ctx: Context) {
         try {

@@ -26,7 +26,7 @@ class PinEntryDialog(
     private val bgColor: String,
     private val title: String,
     private val message: String,
-    private val confirmLabel: String = "OK",
+    private val confirmLabel: String? = null,
     private val onConfirm: (CharArray) -> Unit,
     private val onCancel: () -> Unit = {}
 ) : Dialog(context, R.style.SlateDialogTheme) {
@@ -98,7 +98,7 @@ class PinEntryDialog(
         }
 
         val btnOk = findViewById<TextView>(R.id.pinBtnOk).apply {
-            text = confirmLabel
+            text = confirmLabel ?: context.getString(R.string.ui_ok)
             setTextColor(secondary) // disabled-looking until min length reached
             isEnabled = false
         }

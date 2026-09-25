@@ -1,118 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <!-- Search bar - hidden until triggered -->
-    <LinearLayout
-        android:id="@+id/searchContainer"
+    <com.slate.launcher.HomeRecyclerView
+        android:id="@+id/appList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="24dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="12dp"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/searchInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="search…"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textSize="22sp"
-            android:background="@android:color/transparent"
-            android:imeOptions="actionSearch"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/searchClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="✕"
-            android:textSize="18sp"
-            android:padding="8dp"
-            android:layout_marginStart="8dp" />
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <com.slate.launcher.FitAwareScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="40dp">
-
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/appFlowLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-        </com.slate.launcher.FitAwareScrollView>
-
-        <com.slate.launcher.AlphaFastScroll
-            android:id="@+id/fastScroll"
-            android:layout_width="28dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:paddingTop="24dp"
-            android:paddingBottom="24dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/fastScrollBubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="96sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            android:importantForAccessibility="no" />
-
-    </FrameLayout>
-
-    <!-- ── Quick toggles strip ── -->
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/quickStripContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:overScrollMode="never"
         android:paddingHorizontal="20dp"
-        android:paddingVertical="8dp"
+        android:paddingVertical="40dp"
+        android:scrollbars="none" />
+
+    <com.slate.launcher.AlphaFastScroll
+        android:id="@+id/fastScroll"
+        android:layout_width="28dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
         android:visibility="gone" />
 
-    <!--
-        Cosmetic hairline that hugs the strip's inner edge. Reordered into position adjacent to
-        the strip by AppDrawerFragment.applyChromeLayout(); visibility is computed there (strip
-        visible × pref enabled). Default gone so a cold start before applyChromeLayout doesn't
-        flash an unstyled line.
-    -->
-    <View
-        android:id="@+id/stripDivider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
+    <TextView
+        android:id="@+id/fastScrollBubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:importantForAccessibility="no"
+        android:textSize="96sp"
+        android:textStyle="bold"
         android:visibility="gone" />
 
-</LinearLayout>
+</FrameLayout>

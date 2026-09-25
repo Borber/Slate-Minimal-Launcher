@@ -3,15 +3,11 @@ package com.slate.launcher
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
-import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import java.io.File
 
 /**
- * Typeface and widget-styling helpers shared between the apps list ([AppDrawerFragment]) and
- * the Quick Toggles strip ([com.slate.launcher.widgets.QuickStripManager]). Both surfaces resolve
- * a (family, weight) pref pair to a [Typeface] via the same logic; centralising it here avoids
- * drift and gives the Settings preview a single styling source of truth.
+ * Typeface helper shared by the app list and the Settings preview.
  */
 object Typography {
 
@@ -25,11 +21,6 @@ object Typography {
      *   - `("gf:roboto", 0)`        → Roboto at the default 400 weight
      *   - `("gf:roboto", 700)`      → Roboto Bold
      *   - `("", 0)`                 → returns null, caller skips application entirely
-     *
-     * This matches the UI: the Settings Weight row shows "Bold" iff `widgetFontWeight=700`, so
-     * a user who picks Bold expects their widgets to render bold even if they haven't picked a
-     * font family. Apps' rendering never hits the null branch (its `fontFamily` default is
-     * non-empty); the null path is exclusively for the widget strip's legacy-look preservation.
      *
      * @param family String pref in one of these forms:
      *               - empty            → use theme default as the base typeface
@@ -61,29 +52,6 @@ object Typography {
             Typeface.create(base, effectiveWeight, false)
         } else {
             Typeface.create(base, if (effectiveWeight >= 700) Typeface.BOLD else Typeface.NORMAL)
-        }
-    }
-
-    /**
-     * Apply every widget-strip typography pref to a [TextView]. Used by
-     * `QuickStripManager.createWidgetView()` AND by the Settings preview so the two renderings
-     * are byte-for-byte identical.
-     *
-     * Does NOT set [TextView.setTextColor] / gravity / click behaviour - those are caller
-     * responsibilities (the home strip needs taps; the preview does not).
-     */
-    fun applyWidgetStyle(
-        view: TextView,
-        prefs: PreferencesManager,
-        context: Context,
-        density: Float
-    ) {
-        view.textSize = prefs.widgetTextSize.toFloat()
-        val pad = (prefs.widgetWordGap * density).toInt()
-        val vPad = (prefs.widgetLineGap * density).toInt()
-        view.setPadding(pad, vPad, pad, vPad)
-        buildTypeface(context, prefs.widgetFontFamily, prefs.widgetFontWeight)?.let {
-            view.typeface = it
         }
     }
 

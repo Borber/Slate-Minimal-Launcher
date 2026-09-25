@@ -1,7 +1,5 @@
 package com.slate.launcher
 
-import android.os.UserHandle
-
 /**
  * App identity across user profiles. The main profile (serial == null) encodes to the bare
  * package name, so every string written to SharedPreferences by a pre-work-profile build
@@ -22,15 +20,3 @@ object AppKey {
     fun serialOf(key: String): Long? =
         key.substringAfterLast(SEP, "").takeIf { it.isNotEmpty() }?.toLongOrNull()
 }
-
-/**
- * A work profile Slate has enumerated. Declared in Stage 0 as a type only - nothing constructs
- * one until Stage 2. [label] is the derived per-profile marker ("Work", "Work 2", ...),
- * ordinal-assigned from the ascending sort of managed serials present in getProfiles().
- */
-data class WorkProfile(
-    val handle: UserHandle,
-    val serial: Long,
-    val label: String,
-    val quiet: Boolean
-)

@@ -18,10 +18,7 @@ import java.util.UUID
  * Hiding an app does NOT alter folder membership - the app is simply filtered at render time so
  * unhiding restores the previous home layout cleanly.
  *
- * [reconcile]'s input must be the FULL launcher-visible key set. Handing it a hidden-filtered
- * or self-filtered set strips every affected app from its folder and deletes any folder that
- * empties, silently, on the next render. The function's entire danger is in its input, which
- * is why the input is a [ReconcileScope] carrying its own authority rather than a bare set.
+ * [reconcile]'s input must be the full launcher-visible key set, including hidden apps.
  */
 object FolderStore {
 
@@ -71,8 +68,7 @@ object FolderStore {
 
     /**
      * Removes [key] from whatever folder contains it (if any). Prunes if empty.
-     * Returns the folder that was pruned, or null. Behaviour is otherwise unchanged; the
-     * return value only lets a caller notice it just destroyed a work folder.
+     * Returns the folder that was pruned, or null.
      */
     fun removeAppFromFolder(prefs: PreferencesManager, key: String): Folder? {
         val list = all(prefs).toMutableList()
@@ -115,84 +111,22 @@ object FolderStore {
     }
 
     /**
-     * Adds [keys] to the folder that receives [serial]'s apps, minting one if none exists, and
-     * records [serial] as grouped - in a single write.
-     *
-     * ADDITIVE ONLY. It never renames, recolours, unpins, reorders, or removes a member, so
-     * every change the user has made to this folder survives untouched. The caller pre-filters
-     * [keys]: anything already in a folder or pinned must not be passed, because this
-     * deliberately does not strip apps from elsewhere the way addAppToFolder does.
-     *
-     * [nameIfCreating] is a lambda so the candidate-name walk runs only when a folder is
-     * actually minted, and so that with several pending serials each one sees the previous
-     * one's save().
-     */
-    fun createOrFillWorkFolder(
-        prefs: PreferencesManager,
-        serial: Long,
-        keys: List<String>,
-        groupedSerials: Set<String>,
-        nameIfCreating: () -> String
-    ) {
-        val list = all(prefs).toMutableList()
-        val existing = list.firstOrNull { it.profileSerial == serial }
-
-        // Nothing to place and nothing to fill: record the attempt so the one shot does not
-        // re-arm, but do not mint an empty folder that would sit as a permanent ghost.
-        if (existing == null && keys.isEmpty()) {
-            save(prefs, list, groupedSerials)
-            return
-        }
-
-        val target = existing ?: Folder(
-            id = UUID.randomUUID().toString(),
-            name = nameIfCreating(),
-            packages = mutableListOf(),
-            profileSerial = serial
-        ).also { list.add(it) }
-
-        keys.forEach { if (it !in target.packages) target.packages.add(it) }
-        save(prefs, list, groupedSerials)
-    }
-
-    /**
      * Drop any package from folders that no longer corresponds to an installed app. Prunes the
      * folder ONLY if removal actually emptied a previously non-empty folder (i.e. all of its
      * apps were uninstalled). Freshly-created empty folders are preserved so the user can add
      * apps to them via the "Move to folder" flow - otherwise a stray rebuild between
      * createEmpty() and addAppToFolder() would silently nuke the new folder.
      */
-    /**
-     * What reconcile is permitted to prune. Pruning requires POSITIVE evidence that an app is
-     * gone; the absence of evidence must never be read as absence of the app.
-     *
-     * [mainAuthoritative] false means the package-manager query failed, so no main-profile key
-     * is touched this pass. [enumeratedSerials] holds only serials that actually returned
-     * activities, so a paused, locked, stopped or switched-off profile keeps every key it owns.
-     * [provablyGoneSerials] is the one way a work key ever becomes prunable: the system no
-     * longer resolves that serial to a user at all.
-     */
-    class ReconcileScope(
-        val installedKeys: Set<String>,
-        private val mainAuthoritative: Boolean,
-        private val enumeratedSerials: Set<Long>,
-        private val provablyGoneSerials: Set<Long>
-    ) {
-        fun mayPrune(key: String): Boolean {
-            val serial = AppKey.serialOf(key) ?: return mainAuthoritative
-            return serial in enumeratedSerials || serial in provablyGoneSerials
-        }
-    }
-
-    fun reconcile(prefs: PreferencesManager, scope: ReconcileScope) {
-        val installedKeys = scope.installedKeys
+    /** Reconcile current-profile apps while preserving legacy work-profile keys in stored folders. */
+    fun reconcile(prefs: PreferencesManager, installedKeys: Set<String>, authoritative: Boolean): List<Folder> {
         val list = all(prefs).toMutableList()
+        if (!authoritative) return list
         var changed = false
         val iter = list.iterator()
         while (iter.hasNext()) {
             val f = iter.next()
             val before = f.packages.size
-            f.packages.removeAll { scope.mayPrune(it) && it !in installedKeys }
+            f.packages.removeAll { AppKey.serialOf(it) == null && it !in installedKeys }
             if (f.packages.size != before) {
                 changed = true
                 // Only auto-prune folders that BECAME empty here (had members before this call).
@@ -201,13 +135,11 @@ object FolderStore {
             }
         }
         if (changed) save(prefs, list)
+        return list
     }
 
-    private fun save(
-        prefs: PreferencesManager,
-        folders: List<Folder>,
-        groupedSerials: Set<String>? = null
-    ) {
+
+    private fun save(prefs: PreferencesManager, folders: List<Folder>) {
         val arr = JSONArray()
         folders.forEach { arr.put(it.toJson()) }
 
@@ -226,8 +158,7 @@ object FolderStore {
 
         prefs.commitFolderState(
             foldersJson = arr.toString(),
-            pinnedFolders = prunedPins,
-            workGroupedSerials = groupedSerials
+            pinnedFolders = prunedPins
         )
     }
 

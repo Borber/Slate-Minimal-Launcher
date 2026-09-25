@@ -1,2230 +1,373 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/settingsScrollView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@android:color/transparent">
+<?xml version='1.0' encoding='utf-8'?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/settingsScrollView" android:layout_width="match_parent" android:layout_height="match_parent" android:fitsSystemWindows="true" android:background="@android:color/transparent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="40dp">
-
-        <!-- ── Battery restriction banner ── -->
-        <LinearLayout
-            android:id="@+id/batteryBanner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#CC5500"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:visibility="gone"
-            android:tag="no_theme">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/batteryBannerTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Background activity restricted"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:tag="no_theme" />
-
-                <TextView
-                    android:id="@+id/btnBatteryDismiss"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#x2715;"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:padding="8dp"
-                    android:tag="no_theme" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/batteryBannerMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Notification highlight and screen lock may stop working."
-                android:textColor="#FFD5A8"
-                android:textSize="13sp"
-                android:paddingTop="3dp"
-                android:paddingBottom="10dp"
-                android:lineSpacingMultiplier="1.35"
-                android:tag="no_theme" />
-
-            <TextView
-                android:id="@+id/btnUnrestrict"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FIX THIS"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.08"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:tag="no_theme" />
-
-        </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="40dp">
 
         <!-- ── General ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                android:id="@+id/labelGeneral"
-                style="@style/SectionLabel"
-                android:text="General" />
+            <TextView android:id="@+id/labelGeneral" style="@style/SectionLabel" android:text="@string/ui_general"/>
 
             <!-- Double tap to lock screen -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/labelDoubleTap"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Double tap to lock screen"
-                        android:textSize="17sp" />
+                    <TextView android:id="@+id/labelDoubleTap" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_double_tap_to_lock_screen" android:textSize="17sp"/>
 
-                    <TextView
-                        android:id="@+id/labelDoubleTapSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Requires accessibility service permission"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:id="@+id/labelDoubleTapSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_requires_accessibility_service_permission" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchDoubleTap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchDoubleTap" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!-- Sort by usage toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sort by most used"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_sort_by_most_used" android:textSize="17sp"/>
 
-                    <TextView
-                        android:id="@+id/labelSortByUsageSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Most launched apps appear first"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:id="@+id/labelSortByUsageSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_most_launched_apps_appear_first" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchSortByUsage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchSortByUsage" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <!-- Most-used position (Top/Bottom). Regular row within the same section as
-                 Sort by most used, so it stays available (greyed) when that toggle is off
-                 rather than disappearing - matches Search bar position's gating style, not
-                 Quick strip position's (which fully hides). -->
-            <LinearLayout
-                android:id="@+id/rowMostUsedPosition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:background="?attr/selectableItemBackground">
+            <!-- Most-used position remains visible, but disabled, when usage sorting is off. -->
+            <LinearLayout android:id="@+id/rowMostUsedPosition" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp" android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Show most used at"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_show_most_used_at" android:textSize="17sp"/>
 
-                    <TextView
-                        android:id="@+id/labelMostUsedPositionSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Turn on Sort by most used to enable"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:id="@+id/labelMostUsedPositionSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_turn_on_sort_by_most_used_to_enable" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/mostUsedPositionValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp" />
+                <TextView android:id="@+id/mostUsedPositionValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Lock orientation toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lock screen rotation"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_lock_screen_rotation" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Keep launcher in portrait"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_keep_launcher_in_portrait" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchLockOrientation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Notification highlight toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Notification highlight"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Change app or folder color when notification arrives"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchNotifColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Notification color sub-row (visible when notif highlight is on) -->
-            <LinearLayout
-                android:id="@+id/rowNotifHighlight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Highlight color"
-                    android:textSize="15sp" />
-
-                <View
-                    android:id="@+id/notifColorSwatch"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="10dp" />
-
-                <TextView
-                    android:id="@+id/notifColorValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:fontFamily="monospace" />
-            </LinearLayout>
-
-            <!-- Ignore-silenced sub-row (visible when notif highlight is on) -->
-            <LinearLayout
-                android:id="@+id/rowIgnoreSilentNotifs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ignore silenced notifications"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Skip apps you set to Silent in Android settings"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchIgnoreSilentNotifs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchLockOrientation" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!-- Status bar toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hide status bar"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_hide_status_bar" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Full-screen launcher, swipe down to peek"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_full_screen_launcher_swipe_down_to_peek" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchHideStatusBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchHideStatusBar" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <!-- Homescreen view -->
-            <LinearLayout
-                android:id="@+id/rowHomescreenView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <!-- Alphabetical fast scroll -->
+            <LinearLayout android:id="@+id/rowAlphaFastScroll" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Homescreen view"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_alphabetical_fast_scroll" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Choose how apps are laid out"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:id="@+id/labelAlphaFastScrollSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_side_index_to_jump_letters_sorts_a_z" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/homescreenViewValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <!-- Alphabetical fast scroll (visible when view = list) -->
-            <LinearLayout
-                android:id="@+id/rowAlphaFastScroll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Alphabetical fast scroll"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/labelAlphaFastScrollSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Side index to jump letters (sorts A–Z)"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchAlphaFastScroll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchAlphaFastScroll" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!-- Default launcher row -->
-            <LinearLayout
-                android:id="@+id/rowDefaultLauncher"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowDefaultLauncher" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/labelDefaultLauncher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Set as default launcher"
-                        android:textSize="17sp" />
+                    <TextView android:id="@+id/labelDefaultLauncher" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_set_as_default_launcher" android:textSize="17sp"/>
 
-                    <TextView
-                        android:id="@+id/labelDefaultLauncherSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Open system launcher picker"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:id="@+id/labelDefaultLauncherSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_open_system_launcher_picker" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="→" android:textSize="17sp"/>
             </LinearLayout>
 
-        </LinearLayout>
+        <LinearLayout android:id="@+id/rowLanguage" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="14dp" android:background="?attr/selectableItemBackground"><LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/language" android:textSize="17sp"/></LinearLayout><TextView android:id="@+id/languageValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp"/></LinearLayout></LinearLayout>
 
-        <View
-            android:id="@+id/divider0"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider0" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── Text Size ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                android:id="@+id/labelTextSize"
-                style="@style/SectionLabel"
-                android:text="Text Size" />
+            <TextView android:id="@+id/labelTextSize" style="@style/SectionLabel" android:text="@string/ui_text_size"/>
 
-            <LinearLayout
-                android:id="@+id/rowMinFontSize"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:id="@+id/labelMinimum"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="Minimum"
-                    android:textSize="17sp" />
+                <TextView android:id="@+id/labelMaximum" android:layout_width="90dp" android:layout_height="wrap_content" android:text="@string/ui_maximum" android:textSize="17sp"/>
 
-                <SeekBar
-                    android:id="@+id/minFontSeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp" />
+                <SeekBar android:id="@+id/maxFontSeekBar" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginHorizontal="12dp"/>
 
-                <TextView
-                    android:id="@+id/minFontLabel"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:gravity="end" />
+                <TextView android:id="@+id/maxFontLabel" android:layout_width="44dp" android:layout_height="wrap_content" android:textSize="16sp" android:gravity="end"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:id="@+id/labelMaximum"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="Maximum"
-                    android:textSize="17sp" />
+                <TextView android:id="@+id/labelLineSpacing" android:layout_width="90dp" android:layout_height="wrap_content" android:text="@string/ui_line_gap" android:textSize="17sp"/>
 
-                <SeekBar
-                    android:id="@+id/maxFontSeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp" />
+                <SeekBar android:id="@+id/lineSpacingSeekBar" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginHorizontal="12dp"/>
 
-                <TextView
-                    android:id="@+id/maxFontLabel"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:gravity="end" />
+                <TextView android:id="@+id/lineSpacingLabel" android:layout_width="44dp" android:layout_height="wrap_content" android:textSize="16sp" android:gravity="end"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/labelLineSpacing"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="Line gap"
-                    android:textSize="17sp" />
+                <TextView android:id="@+id/labelWordSpacing" android:layout_width="90dp" android:layout_height="wrap_content" android:text="@string/ui_word_gap" android:textSize="17sp"/>
 
-                <SeekBar
-                    android:id="@+id/lineSpacingSeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp" />
+                <SeekBar android:id="@+id/wordSpacingSeekBar" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginHorizontal="12dp"/>
 
-                <TextView
-                    android:id="@+id/lineSpacingLabel"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:gravity="end" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/labelWordSpacing"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="Word gap"
-                    android:textSize="17sp" />
-
-                <SeekBar
-                    android:id="@+id/wordSpacingSeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp" />
-
-                <TextView
-                    android:id="@+id/wordSpacingLabel"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:gravity="end" />
+                <TextView android:id="@+id/wordSpacingLabel" android:layout_width="44dp" android:layout_height="wrap_content" android:textSize="16sp" android:gravity="end"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider1" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── Typography ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                android:id="@+id/labelTypography"
-                style="@style/SectionLabel"
-                android:text="Typography" />
+            <TextView android:id="@+id/labelTypography" style="@style/SectionLabel" android:text="@string/ui_typography"/>
 
-            <LinearLayout
-                android:id="@+id/rowFont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowFont" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Font"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_font" android:textSize="17sp"/>
 
-                <TextView
-                    android:id="@+id/fontValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
+                <TextView android:id="@+id/fontValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/rowWeight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowWeight" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Weight"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_weight" android:textSize="17sp"/>
 
-                <TextView
-                    android:id="@+id/weightValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
+                <TextView android:id="@+id/weightValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/rowAlignment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowAlignment" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Alignment"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_alignment" android:textSize="17sp"/>
 
-                <TextView
-                    android:id="@+id/alignmentValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
+                <TextView android:id="@+id/alignmentValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/rowFolderStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowFolderStyle" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Folder style"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_folder_style" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="How folder labels appear on the home screen"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_how_folder_labels_appear_on_the_home_screen" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/folderStyleValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
+                <TextView android:id="@+id/folderStyleValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider1b"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider1b" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── Colors ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                android:id="@+id/labelColors"
-                style="@style/SectionLabel"
-                android:text="Colors" />
+            <TextView android:id="@+id/labelColors" style="@style/SectionLabel" android:text="@string/ui_colors"/>
 
             <!-- Background row - tap to open picker -->
-            <LinearLayout
-                android:id="@+id/rowBgColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:layout_marginBottom="4dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowBgColor" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:layout_marginBottom="4dp" android:background="?attr/selectableItemBackground">
 
-                <TextView
-                    android:id="@+id/labelBg"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Background"
-                    android:textSize="17sp" />
+                <TextView android:id="@+id/labelBg" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_background" android:textSize="17sp"/>
 
-                <View
-                    android:id="@+id/bgColorSwatch"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginEnd="12dp" />
+                <View android:id="@+id/bgColorSwatch" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginEnd="12dp"/>
 
-                <TextView
-                    android:id="@+id/bgColorDisplay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:fontFamily="monospace" />
+                <TextView android:id="@+id/bgColorDisplay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp" android:fontFamily="monospace"/>
             </LinearLayout>
 
             <!-- App text row - tap to open picker -->
-            <LinearLayout
-                android:id="@+id/rowTextColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowTextColor" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <TextView
-                    android:id="@+id/labelText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="App text"
-                    android:textSize="17sp" />
+                <TextView android:id="@+id/labelText" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_app_text" android:textSize="17sp"/>
 
-                <View
-                    android:id="@+id/textColorSwatch"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginEnd="12dp" />
+                <View android:id="@+id/textColorSwatch" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginEnd="12dp"/>
 
-                <TextView
-                    android:id="@+id/textColorDisplay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:fontFamily="monospace" />
+                <TextView android:id="@+id/textColorDisplay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp" android:fontFamily="monospace"/>
             </LinearLayout>
 
             <!-- Preset color combinations -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PRESETS"
-                android:textSize="11sp"
-                android:textAllCaps="true"
-                android:letterSpacing="0.15"
-                android:textStyle="bold"
-                android:alpha="0.5"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="10dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_presets" android:textSize="11sp" android:textAllCaps="true" android:letterSpacing="0.15" android:textStyle="bold" android:alpha="0.5" android:layout_marginTop="16dp" android:layout_marginBottom="10dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/preset1"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Aa"
-                    android:gravity="center"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                <TextView android:id="@+id/preset1" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/ui_aa" android:gravity="center" android:textSize="17sp" android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/preset2"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Aa"
-                    android:gravity="center"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                <TextView android:id="@+id/preset2" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/ui_aa" android:gravity="center" android:textSize="17sp" android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/preset3"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Aa"
-                    android:gravity="center"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                <TextView android:id="@+id/preset3" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="@string/ui_aa" android:gravity="center" android:textSize="17sp" android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/preset4"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_weight="1"
-                    android:text="Aa"
-                    android:gravity="center"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                <TextView android:id="@+id/preset4" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:text="@string/ui_aa" android:gravity="center" android:textSize="17sp" android:textStyle="bold"/>
 
             </LinearLayout>
 
             <!-- Apply to lockscreen toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:layout_marginTop="12dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp" android:layout_marginTop="12dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Apply to lockscreen"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_apply_to_lockscreen" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Fills your lockscreen with the same solid color as the launcher background for a uniform look"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_fills_your_lockscreen_with_the_same_solid_color_" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchSyncToLockscreen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchSyncToLockscreen" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!-- Follow system theme toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Follow system theme"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_follow_system_theme" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Switch colors with system dark mode"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_switch_colors_with_system_dark_mode" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchFollowSystemTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchFollowSystemTheme" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider4"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider4" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── Gestures ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                android:id="@+id/labelGestures"
-                style="@style/SectionLabel"
-                android:text="Gestures" />
+            <TextView android:id="@+id/labelGestures" style="@style/SectionLabel" android:text="@string/ui_gestures"/>
 
             <!-- Directional gesture rows - populated programmatically -->
-            <LinearLayout
-                android:id="@+id/gesturesContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+            <LinearLayout android:id="@+id/gesturesContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"/>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider2" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
-        <!-- ── Search ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <View android:id="@+id/divider3" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
-            <TextView
-                android:id="@+id/labelSearch"
-                style="@style/SectionLabel"
-                android:text="Search" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/labelSearchToggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Enable search"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/labelSearchSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Swipe up to open search bar"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Position is a regular Search-section row. It governs both the swipe-up
-                 transient bar and the show-on-home persistent bar, so it stays available
-                 (greyed) when the master Search toggle is off rather than disappearing. -->
-            <LinearLayout
-                android:id="@+id/rowSearchBarPosition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:background="?attr/selectableItemBackground">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Position"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/labelSearchBarPositionSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Top or bottom of the screen"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/searchBarPositionValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rowSearchOnHome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/labelSearchOnHome"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Show on home screen"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/labelSearchOnHomeSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Keep search bar visible, closes with keyboard"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchSearchOnHome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Search contacts - opt-in, gated on master Search toggle. Toggling ON triggers a
-                 consent dialog before the system READ_CONTACTS prompt fires. -->
-            <LinearLayout
-                android:id="@+id/rowContactSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/labelContactSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Search contacts"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/labelContactSearchSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Show matching contacts when you type"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchContactSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Google contacts only - second-level opt-in under Search → Search contacts.
-                 When ON, filters search results to com.google raw contacts, hiding duplicates
-                 from WhatsApp / Telegram / SIM / OEM-local sources. Off by default; rolling
-                 it under contactSearch (rather than gating on the master toggle alone) lets
-                 the row sit adjacent to its logical parent. Visually flat to match the rest
-                 of the Search section's sibling sub-rows. -->
-            <LinearLayout
-                android:id="@+id/rowGoogleContactsOnly"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/labelGoogleContactsOnly"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Google contacts only"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/labelGoogleContactsOnlySub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hide duplicates from WhatsApp, Telegram, SIM, and other sources"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchGoogleContactsOnly"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
-
-        <!-- ── Quick toggles ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
-
-            <TextView
-                style="@style/SectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quick toggles" />
-
-            <!-- Master toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Show toggles strip"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="A row of status/quick-toggle labels at the bottom of home"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchQuickStrip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Choose widgets (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowChooseWidgets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:paddingStart="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Choose widgets"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/labelChooseWidgetsValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-            <!-- Arrange widgets (sub-row, only when master is on AND ≥2 widgets enabled) -->
-            <LinearLayout
-                android:id="@+id/rowArrangeWidgets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:paddingStart="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Arrange widgets"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Reorder the enabled widgets"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-            <!-- Position (sub-row, only when master is on). Placed after Choose / Arrange
-                 because Position is a layout-level preference; the user typically picks WHAT
-                 widgets they want first, orders them, then decides WHERE the strip sits. -->
-            <LinearLayout
-                android:id="@+id/rowQuickStripPosition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:paddingStart="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Position"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Top or bottom of the home screen"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/quickStripPositionValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <!-- Direct call (sub-row, only when master is on). Toggling ON requests CALL_PHONE
-                 runtime permission; on denial the switch reverts and the pref stays false. -->
-            <LinearLayout
-                android:id="@+id/rowDirectCall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Direct call"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Place calls immediately when tapped or long-pressed, instead of opening the dialer"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchDirectCall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Direct-call trigger (sub-sub-row, visible only when master is on AND Direct
-                 call is on). "Tap" / "Long press". When "Long press" is chosen, long-press on
-                 a Call widget fires the direct call AND suppresses the home long-press menu;
-                 the menu is still reachable from blank home / other widgets / blank strip. -->
-            <LinearLayout
-                android:id="@+id/rowDirectCallTrigger"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="32dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Trigger"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Choose which gesture places the call directly"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/directCallTriggerValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <!-- Show divider (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowQuickStripDivider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Show divider"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="A hairline between the strip and the app list - just a visual touch"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchQuickStripDivider"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- Live preview header (sub-row, only when master is on) -->
-            <TextView
-                android:id="@+id/widgetPreviewHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Preview"
-                android:textSize="13sp"
-                android:alpha="0.6"
-                android:layout_marginTop="16dp"
-                android:paddingStart="16dp"
-                android:visibility="gone" />
-
-            <!--
-                Live preview of the widget strip rendered with the user's current typography
-                choices. Populated by SettingsActivity.setupQuickStrip → refreshPreview() with
-                sample labels so the layout is deterministic regardless of which widgets the user
-                has actually enabled. Background colour is set at runtime to mirror the home
-                background, so the preview reads as it will on home.
-            -->
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/widgetPreview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:visibility="gone" />
-
-            <!-- Widget font (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowWidgetFont"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:paddingStart="16dp"
-                android:layout_marginTop="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Font"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/widgetFontValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <!-- Widget weight (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowWidgetWeight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:paddingStart="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Weight"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/widgetWeightValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <!-- Widget alignment (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowWidgetAlignment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:paddingStart="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Alignment"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/widgetAlignmentValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <!-- Widget text size (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowWidgetTextSize"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="Text size"
-                    android:textSize="17sp" />
-
-                <SeekBar
-                    android:id="@+id/widgetTextSizeSeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp" />
-
-                <TextView
-                    android:id="@+id/widgetTextSizeLabel"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:gravity="end" />
-            </LinearLayout>
-
-            <!-- Widget line gap (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowWidgetLineGap"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="Line gap"
-                    android:textSize="17sp" />
-
-                <SeekBar
-                    android:id="@+id/widgetLineGapSeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp" />
-
-                <TextView
-                    android:id="@+id/widgetLineGapLabel"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:gravity="end" />
-            </LinearLayout>
-
-            <!-- Widget word gap (sub-row, only when master is on) -->
-            <LinearLayout
-                android:id="@+id/rowWidgetWordGap"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:text="Word gap"
-                    android:textSize="17sp" />
-
-                <SeekBar
-                    android:id="@+id/widgetWordGapSeekBar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp" />
-
-                <TextView
-                    android:id="@+id/widgetWordGapLabel"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:gravity="end" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider3b"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider3b" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── App shortcuts ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                style="@style/SectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="App shortcuts" />
+            <TextView style="@style/SectionLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_app_shortcuts"/>
 
-            <LinearLayout
-                android:id="@+id/rowAddShortcutToStrip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="14dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowAddShortcutToAppList" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="14dp" android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add to widget strip"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_add_to_application_list" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pin another app's shortcut into the toggles strip"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_pin_another_app_s_shortcut_as_an_entry_in_your_a" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rowAddShortcutToAppList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="14dp"
-                android:background="?attr/selectableItemBackground">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add to application list"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pin another app's shortcut as an entry in your app list"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="→" android:textSize="17sp"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider3c"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider3c" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
-        <!--
-          ── Work profile ──
-          The whole section is always visible, including on devices that have no work profile.
-          A setting the user cannot find is worse than one that turns out not to apply to them,
-          and deciding which case they are in costs a binder call on every Settings open. Gating
-          is functional, not visual: see setupWorkProfileRows.
-        -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
-
-            <TextView
-                style="@style/SectionLabel"
-                android:text="Work profile" />
-
-            <LinearLayout
-                android:id="@+id/rowShowWorkApps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Show work apps"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nothing is lost when off - everything returns as it was"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchShowWorkApps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rowGroupWorkApps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:background="?attr/selectableItemBackground">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Group work apps"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="File work apps into a folder, now"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rowWorkMarker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:background="?attr/selectableItemBackground">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Work app marker"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="How work apps are marked in the app list"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/workMarkerValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hide marker in work folders"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Skip it inside a folder holding only work apps"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchSuppressWorkMarker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider3d"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider3d" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── Backup ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                android:id="@+id/labelBackup"
-                style="@style/SectionLabel"
-                android:text="Backup" />
+            <TextView android:id="@+id/labelBackup" style="@style/SectionLabel" android:text="@string/ui_backup"/>
 
-            <LinearLayout
-                android:id="@+id/rowExportBackup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="14dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowExportBackup" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="14dp" android:background="?attr/selectableItemBackground">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Export settings"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_export_settings" android:textSize="17sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="→" android:textSize="17sp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/rowImportBackup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="14dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowImportBackup" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="14dp" android:background="?attr/selectableItemBackground">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Import settings"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_import_settings" android:textSize="17sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="→" android:textSize="17sp"/>
             </LinearLayout>
 
             <!-- Include hidden apps + PIN + biometric in backups. Off by default; toggling on
                  shows a consent dialog explaining the privacy trade-off. -->
-            <LinearLayout
-                android:id="@+id/rowIncludePrivateInBackup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="14dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowIncludePrivateInBackup" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="14dp" android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Include hidden apps in backups"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_include_hidden_apps_in_backups" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Off by default. Backups skip your hidden apps, PIN, and biometric setting."
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_off_by_default_backups_skip_your_hidden_apps_pin" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchIncludePrivateInBackup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchIncludePrivateInBackup" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider5"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider5" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── Security ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="24dp">
 
-            <TextView
-                style="@style/SectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Security" />
+            <TextView style="@style/SectionLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_security"/>
 
             <!-- Master toggle: Hidden apps security -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lock hidden apps"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_lock_hidden_apps" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Require PIN to view or unhide apps"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_require_pin_to_view_or_unhide_apps" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchHiddenAppsSecurity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchHiddenAppsSecurity" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!-- Sub-row: Use biometric -->
-            <LinearLayout
-                android:id="@+id/rowBiometric"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp"
-                android:paddingStart="16dp"
-                android:visibility="gone">
+            <LinearLayout android:id="@+id/rowBiometric" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp" android:paddingStart="16dp" android:visibility="gone">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Use biometric"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_use_biometric" android:textSize="17sp"/>
 
-                    <TextView
-                        android:id="@+id/labelBiometricSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Unlock with fingerprint or face; PIN remains as fallback"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:id="@+id/labelBiometricSub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_unlock_with_fingerprint_or_face_pin_remains_as_f" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchBiometric"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchBiometric" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/rowChangePin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:visibility="gone">
+            <LinearLayout android:id="@+id/rowChangePin" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground" android:visibility="gone">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Change PIN"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_change_pin" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Verify current PIN, then set a new one"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_verify_current_pin_then_set_a_new_one" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="→" android:textSize="17sp"/>
             </LinearLayout>
 
             <!--
@@ -2232,190 +375,71 @@
               privacy behaviour, and it applies to hidden apps whether or not the PIN lock is
               on, so it is always visible and is not part of applyVisibility()'s gate.
             -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Keep hidden apps in Recents"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_keep_hidden_apps_in_recents" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Stops Android closing them when you switch away, but they show in Recents"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_stops_android_closing_them_when_you_switch_away_" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchKeepHiddenInRecents"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchKeepHiddenInRecents" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lock long-press menus on homescreen"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_lock_long_press_menus_on_homescreen" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Require PIN to open them. Biometric isn\'t used here."
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_require_pin_to_open_them_biometric_isn_t_used_he" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchLockLongPressMenus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchLockLongPressMenus" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider6"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginEnd="28dp" />
+        <View android:id="@+id/divider6" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="28dp" android:layout_marginEnd="28dp"/>
 
         <!-- ── About ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="40dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="40dp">
 
-            <TextView
-                style="@style/SectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="About" />
+            <TextView style="@style/SectionLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_about"/>
 
             <!-- Show guided tour -->
-            <LinearLayout
-                android:id="@+id/rowGuidedTour"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowGuidedTour" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Show guided tour"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_show_guided_tour" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Walk through the launcher's gestures and features again"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_walk_through_the_launcher_s_gestures_and_feature" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="→" android:textSize="17sp"/>
             </LinearLayout>
 
             <!-- GitHub row -->
-            <LinearLayout
-                android:id="@+id/rowGithub"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
-                android:background="?attr/selectableItemBackground">
+            <LinearLayout android:id="@+id/rowGithub" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Source &amp; License"
-                        android:textSize="17sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_source_license" android:textSize="17sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="github.com/roufsyed/Slate-Minimal-Launcher"
-                        android:textSize="13sp"
-                        android:alpha="0.6" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_github_com_roufsyed_slate_minimal_launcher" android:textSize="13sp" android:alpha="0.6"/>
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="→"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="→" android:textSize="17sp"/>
             </LinearLayout>
 
             <!-- Version (read-only) -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="10dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Version"
-                    android:textSize="17sp" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/ui_version" android:textSize="17sp"/>
 
-                <TextView
-                    android:id="@+id/labelAppVersion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp" />
+                <TextView android:id="@+id/labelAppVersion" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp"/>
             </LinearLayout>
 
         </LinearLayout>
