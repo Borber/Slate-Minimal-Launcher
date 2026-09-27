@@ -1,7 +1,7 @@
 package com.slate.launcher
 
-import android.content.Context
 import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -10,38 +10,42 @@ import com.slate.launcher.shortcuts.PinnedShortcut
 import com.slate.launcher.shortcuts.PinnedShortcutStore
 import com.slate.launcher.shortcuts.ShortcutDestination
 
-class AppRepository(private val context: Context, private val prefs: PreferencesManager) {
+class AppRepository(
+    private val context: Context,
+    private val prefs: PreferencesManager,
+    onPackagesChanged: (() -> Unit)? = null
+) {
 
-    /**
-     * PackageManager enumeration is relatively expensive on every HOME resume. Keep the
-     * immutable package snapshot for the process lifetime and invalidate it only when Android
-     * tells us that the installed package set changed.
-     */
-    @Volatile private var cachedEnumeration: Enumeration? = null
-    private val packageReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            cachedEnumeration = null
+    private var installedSnapshot: Enumeration? = null
+    private val packageReceiver = onPackagesChanged?.let { notify ->
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                installedSnapshot = null
+                notify()
+            }
         }
     }
 
     init {
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_PACKAGE_ADDED)
-            addAction(Intent.ACTION_PACKAGE_REMOVED)
-            addAction(Intent.ACTION_PACKAGE_CHANGED)
-            addAction(Intent.ACTION_PACKAGE_REPLACED)
-            addDataScheme("package")
+        packageReceiver?.let { receiver ->
+            val filter = IntentFilter().apply {
+                addAction(Intent.ACTION_PACKAGE_ADDED)
+                addAction(Intent.ACTION_PACKAGE_REMOVED)
+                addAction(Intent.ACTION_PACKAGE_CHANGED)
+                addAction(Intent.ACTION_PACKAGE_REPLACED)
+                addDataScheme("package")
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                context.registerReceiver(receiver, filter)
+            }
         }
-        context.registerReceiver(packageReceiver, filter)
-    }
-
-    fun invalidate() {
-        cachedEnumeration = null
     }
 
     fun close() {
-        runCatching { context.unregisterReceiver(packageReceiver) }
-        cachedEnumeration = null
+        packageReceiver?.let { context.unregisterReceiver(it) }
+        installedSnapshot = null
     }
 
     data class HomeSnapshot(val items: List<HomeItem>, val allApps: List<AppInfo>)
@@ -53,7 +57,17 @@ class AppRepository(private val context: Context, private val prefs: Preferences
     )
 
     private fun enumerate(): Enumeration {
-        cachedEnumeration?.let { return it }
+        val installed = installedSnapshot ?: loadInstalledApps().also { installedSnapshot = it }
+        val hidden = prefs.hiddenApps
+        val apps = installed.apps.mapNotNull { app ->
+            if (app.packageName in hidden) return@mapNotNull null
+            val customName = prefs.getAppCustomName(app.packageName)
+            if (customName == null) app else app.copy(name = customName)
+        }
+        return installed.copy(apps = apps)
+    }
+
+    private fun loadInstalledApps(): Enumeration {
         val intent = Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_LAUNCHER) }
         val pm = context.packageManager
         val activities = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -63,20 +77,17 @@ class AppRepository(private val context: Context, private val prefs: Preferences
             pm.queryIntentActivities(intent, 0)
         }
         val installed = activities.mapTo(HashSet()) { it.activityInfo.packageName }
-        val hidden = prefs.hiddenApps
         val apps = activities.mapNotNull { info ->
             val pkg = info.activityInfo.packageName
-            if (pkg == context.packageName || pkg in hidden) return@mapNotNull null
+            if (pkg == context.packageName) return@mapNotNull null
             AppInfo(
-                name = prefs.getAppCustomName(pkg) ?: info.loadLabel(pm).toString(),
+                name = info.loadLabel(pm).toString(),
                 packageName = pkg,
                 activityName = info.activityInfo.name
             )
         }
         // An empty package-manager result is not proof that every app was uninstalled.
-        return Enumeration(apps, installed, installed.isNotEmpty()).also {
-            cachedEnumeration = it
-        }
+        return Enumeration(apps, installed, installed.isNotEmpty())
     }
 
     fun getAllApps(forceAlphabetical: Boolean = false): List<AppInfo> =
