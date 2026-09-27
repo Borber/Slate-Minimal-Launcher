@@ -91,7 +91,9 @@ class AppDrawerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         prefs = PreferencesManager(requireContext())
-        repository = AppRepository(requireContext(), prefs)
+        repository = AppRepository(requireContext(), prefs) {
+            if (isResumed && view != null) buildAppList()
+        }
         appList = view.findViewById(R.id.appList)
         listLayoutManager = CenteredLinearLayoutManager(requireContext())
         appList.layoutManager = listLayoutManager
@@ -227,7 +229,6 @@ class AppDrawerFragment : Fragment() {
         appList.adapter = null
         homeAdapter.clear()
         appList.recycledViewPool.clear()
-        repository.close()
         super.onStop()
     }
 
