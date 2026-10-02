@@ -98,6 +98,8 @@ class BackupManager(private val prefs: PreferencesManager) {
         // Written only when a folder color is set. While folders follow the app text color the
         // key is left out, so its absence is itself the "follow app text" setting.
         prefs.folderTextColor?.let { root.put("folderTextColor", it) }
+        // Colors typed into the picker, which it offers again as swatches. Newest first.
+        root.put("customColors", JSONArray(prefs.customColors))
 
         // Gestures
         root.put("doubleTapToLock", prefs.doubleTapToLock)
@@ -295,6 +297,14 @@ class BackupManager(private val prefs: PreferencesManager) {
         // the device's value rather than leaving it. Anything that is not a #RRGGBB the picker
         // could have produced is treated as absent.
         prefs.folderTextColor = root.optString("folderTextColor").takeIf { HEX_COLOR.matches(it) }
+        // Remembered picker colors. A present key replaces the device's list and an absent one
+        // leaves it alone, like the other collections below. The picker's own rules decide
+        // what survives, so a hand-edited file cannot store what the picker would never keep.
+        root.optJSONArray("customColors")?.let { arr ->
+            prefs.customColors = ColorPickerDialog.sanitizeCustomColors(
+                (0 until arr.length()).map { arr.optString(it) }
+            )
+        }
         prefs.doubleTapToLock   = root.optBoolean("doubleTapToLock", false)
         // Sanitise: only "left"/"center"/"right" are valid. A hand-edited or future-version
         // backup with anything else falls back to the default rather than persisting an

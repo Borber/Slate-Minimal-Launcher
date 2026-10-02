@@ -32,6 +32,7 @@ class PreferencesManager(context: Context) {
         private const val KEY_BACKGROUND_COLOR = "background_color"
         private const val KEY_TEXT_COLOR = "text_color"
         private const val KEY_FOLDER_TEXT_COLOR = "folder_text_color"
+        private const val KEY_CUSTOM_COLORS = "custom_colors"
         private const val KEY_DOUBLE_TAP_LOCK = "double_tap_lock"
         private const val KEY_SEARCH_ENABLED = "search_enabled"
         private const val KEY_SEARCH_BAR_ON_HOME = "search_bar_on_home"
@@ -192,6 +193,18 @@ class PreferencesManager(context: Context) {
             if (value == null) remove(KEY_FOLDER_TEXT_COLOR)
             else putString(KEY_FOLDER_TEXT_COLOR, value)
         }.apply()
+
+    /**
+     * Colors the user has applied that are not among the color picker's built-in swatches,
+     * newest first. The picker offers them again as extra swatches.
+     *
+     * This is storage only. Which colors qualify and how many are kept is decided in one
+     * place, [ColorPickerDialog.sanitizeCustomColors], and every writer goes through it.
+     */
+    var customColors: List<String>
+        get() = (prefs.getString(KEY_CUSTOM_COLORS, "") ?: "")
+            .split(',').map { it.trim() }.filter { it.isNotEmpty() }
+        set(value) = prefs.edit().putString(KEY_CUSTOM_COLORS, value.joinToString(",")).apply()
 
     var doubleTapToLock: Boolean
         get() = prefs.getBoolean(KEY_DOUBLE_TAP_LOCK, false)
