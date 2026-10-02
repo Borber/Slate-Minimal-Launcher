@@ -173,6 +173,190 @@
 
         </LinearLayout>
 
+        <!-- ── Layout selection ── -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:text="CHOOSE A LAYOUT"
+            android:textSize="11sp"
+            android:textColor="#555555"
+            android:textAllCaps="true"
+            android:letterSpacing="0.15"
+            android:textStyle="bold" />
+
+        <!--
+          Both cards are coloured in code with whichever theme is selected above, so no text
+          colour is set here. match_parent heights make the row equalise the pair, which the
+          theme cards get from a shared minHeight instead.
+        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <!-- Flow card: a wrapping, centred paragraph whose names differ in size -->
+            <LinearLayout
+                android:id="@+id/cardFlow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="16dp">
+
+                <TextView
+                    android:id="@+id/labelFlow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FLOW"
+                    android:textSize="11sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.15"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="14dp" />
+
+                <!-- Wrap and alignment are set in code, mirroring renderFlowMode. -->
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/previewFlow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="1dp"
+                        android:text="mail"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="1dp"
+                        android:text="maps"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="1dp"
+                        android:text="web"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="1dp"
+                        android:text="camera"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="1dp"
+                        android:text="clock"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="1dp"
+                        android:text="files"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="1dp"
+                        android:text="phone"
+                        android:textSize="12sp" />
+
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <TextView
+                    android:id="@+id/captionFlow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="names grow with use"
+                    android:textSize="10sp"
+                    android:alpha="0.7" />
+
+            </LinearLayout>
+
+            <!-- Minimal List card: one name per line, left-aligned, one size -->
+            <LinearLayout
+                android:id="@+id/cardList"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="16dp">
+
+                <TextView
+                    android:id="@+id/labelList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MINIMAL LIST"
+                    android:textSize="11sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.15"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="14dp" />
+
+                <LinearLayout
+                    android:id="@+id/previewList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="mail"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="maps"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="web"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="camera"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <!-- ── Spacer ── -->
         <View
             android:layout_width="0dp"
