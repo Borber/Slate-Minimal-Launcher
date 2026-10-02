@@ -107,6 +107,7 @@ class BackupManager(private val prefs: PreferencesManager) {
         root.put("mostUsedPosition", prefs.mostUsedPosition)
         root.put("lockOrientation", prefs.lockOrientation)
         root.put("hideStatusBar", prefs.hideStatusBar)
+        root.put("homescreenView", prefs.homescreenView)
         root.put("notificationColorEnabled", prefs.notificationColorEnabled)
         root.put("notificationHighlightColor", prefs.notificationHighlightColor)
         root.put("ignoreSilentNotifications", prefs.ignoreSilentNotifications)
@@ -448,6 +449,13 @@ class BackupManager(private val prefs: PreferencesManager) {
         // PreferencesManager so a pre-existing backup file imports as ON, same as a fresh install.
         prefs.suppressWorkMarkerInFolder =
             root.optBoolean("suppressWorkMarkerInFolder", true)
+
+        if (root.has("homescreenView")) {
+            val view = root.optString("homescreenView")
+            if (view == PreferencesManager.VIEW_FLOW || view == PreferencesManager.VIEW_LIST) {
+                prefs.homescreenView = view
+            }
+        }
     }
 
     /**
