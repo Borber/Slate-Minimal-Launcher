@@ -221,8 +221,8 @@ class AppDrawerFragment : Fragment() {
                         else Direction.UP
                     }
 
-                    // Swipe down while search open → close search
-                    if (dir == Direction.DOWN && isSearchOpen) {
+                    // Swipe down while search is in use → close search
+                    if (dir == Direction.DOWN && isSearchInUse()) {
                         closeSearch(); return true
                     }
                     // Swipe down only triggers when already at top
@@ -240,13 +240,16 @@ class AppDrawerFragment : Fragment() {
             false
         }
 
-        // Back press closes search if open
+        // Back acts on search while search is in use, otherwise it leaves an open folder
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (isSearchOpen) closeSearch()
-                    else if (currentFolderId != null) exitFolder()
+                    when {
+                        isSearchInUse() -> closeSearch()
+                        currentFolderId != null -> exitFolder()
+                        isSearchOpen && searchInput.hasFocus() -> closeSearch()
+                    }
                     // Launcher never exits
                 }
             }
@@ -597,6 +600,25 @@ class AppDrawerFragment : Fragment() {
         searchInput.postDelayed({
             imm.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT)
         }, 80)
+    }
+
+    /**
+     * Whether the search bar is what a Back press or a swipe down should act on.
+     *
+     * [isSearchOpen] cannot answer that by itself. With "Show on home screen" on it stays true
+     * for as long as the home screen does, and [closeSearch] never clears it, so a handler that
+     * tests it bare spends every Back press on a bar that cannot close. That is how Back
+     * stopped leaving folders in that mode, and how swipe down stopped reaching its action.
+     * With the bar always on, search has a claim only while someone is using it: a query is
+     * typed or the keyboard is up.
+     *
+     * Bare focus is deliberately not counted. A focused but empty field is dealt with last, by
+     * the Back handler itself, so it never costs the press that should have left a folder.
+     */
+    private fun isSearchInUse(): Boolean {
+        if (!isSearchOpen) return false
+        if (!prefs.showSearchBarOnHome) return true
+        return searchInput.text.isNotEmpty() || isImeVisible
     }
 
     private fun closeSearch() {
