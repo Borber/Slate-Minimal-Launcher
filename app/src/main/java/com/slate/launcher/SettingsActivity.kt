@@ -832,9 +832,12 @@ class SettingsActivity : AppCompatActivity() {
         val bgSwatch    = findViewById<View>(R.id.bgColorSwatch)
         val textDisplay = findViewById<TextView>(R.id.textColorDisplay)
         val textSwatch  = findViewById<View>(R.id.textColorSwatch)
+        val folderDisplay = findViewById<TextView>(R.id.folderTextColorDisplay)
+        val folderSwatch  = findViewById<View>(R.id.folderTextColorSwatch)
 
         bgDisplay.setTextColor(secondary)
         textDisplay.setTextColor(secondary)
+        folderDisplay.setTextColor(secondary)
 
         fun updateBgSwatch(hex: String) {
             bgDisplay.text = hex
@@ -856,8 +859,22 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        // Unset means "same as App text", so until a folder color is chosen this row simply
+        // mirrors the row above it, and keeps mirroring it when that one changes.
+        fun updateFolderSwatch() {
+            val hex = prefs.folderTextColor ?: prefs.appTextColor
+            folderDisplay.text = hex
+            folderSwatch.background = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = 6f * density
+                setColor(parseColorSafe(hex, Color.GRAY))
+                setStroke((1.5f * density).toInt(), borderColor)
+            }
+        }
+
         updateBgSwatch(prefs.backgroundColor)
         updateTextSwatch(prefs.appTextColor)
+        updateFolderSwatch()
 
         fun syncLockscreenIfNeeded(colorInt: Int) {
             if (!prefs.syncToLockscreen) return
@@ -896,8 +913,31 @@ class SettingsActivity : AppCompatActivity() {
             }.show()
         }
 
+        // Unlike the two pickers above, this one leaves Follow system theme alone. That
+        // feature rewrites only the background and app text colors, so a folder color is not
+        // something it would overwrite on the next resume.
+        fun openFolderTextPicker() {
+            ColorPickerDialog(
+                context = this,
+                title = "Folder Text",
+                initialColor = prefs.folderTextColor ?: prefs.appTextColor,
+                bgColor = prefs.backgroundColor,
+                // Reset is the way back to "same as App text", offered only once there is a
+                // folder color to clear.
+                showReset = prefs.folderTextColor != null,
+                onReset = {
+                    prefs.folderTextColor = null
+                    setupColors()
+                }
+            ) { hex ->
+                prefs.folderTextColor = hex
+                setupColors()
+            }.show()
+        }
+
         findViewById<View>(R.id.rowBgColor).setOnClickListener { openBgPicker() }
         findViewById<View>(R.id.rowTextColor).setOnClickListener { openTextPicker() }
+        findViewById<View>(R.id.rowFolderTextColor).setOnClickListener { openFolderTextPicker() }
 
         // Follow system theme toggle
         val switchFollowSystem = findViewById<MaterialSwitch>(R.id.switchFollowSystemTheme)

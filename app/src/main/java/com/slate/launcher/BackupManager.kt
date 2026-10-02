@@ -5,6 +5,11 @@ import org.json.JSONObject
 
 class BackupManager(private val prefs: PreferencesManager) {
 
+    private companion object {
+        /** The only color form ColorPickerDialog produces, so the only one import accepts. */
+        val HEX_COLOR = Regex("^#[0-9A-Fa-f]{6}$")
+    }
+
     /**
      * The private bundle inside a backup file - hidden-apps list, security flag, the
      * long-press-menu lock flag, biometric
@@ -90,6 +95,9 @@ class BackupManager(private val prefs: PreferencesManager) {
         // Colors
         root.put("backgroundColor", prefs.backgroundColor)
         root.put("appTextColor", prefs.appTextColor)
+        // Written only when a folder color is set. While folders follow the app text color the
+        // key is left out, so its absence is itself the "follow app text" setting.
+        prefs.folderTextColor?.let { root.put("folderTextColor", it) }
 
         // Gestures
         root.put("doubleTapToLock", prefs.doubleTapToLock)
@@ -282,6 +290,11 @@ class BackupManager(private val prefs: PreferencesManager) {
         prefs.fontWeight   = root.optInt("fontWeight",   PreferencesManager.DEFAULT_FONT_WEIGHT)
         prefs.backgroundColor = root.optString("backgroundColor", PreferencesManager.DEFAULT_BACKGROUND_COLOR)
         prefs.appTextColor    = root.optString("appTextColor",    PreferencesManager.DEFAULT_TEXT_COLOR)
+        // Folder text default. An absent key means "follow app text", which is also the only
+        // state a backup written before this key existed could have been in, so absent clears
+        // the device's value rather than leaving it. Anything that is not a #RRGGBB the picker
+        // could have produced is treated as absent.
+        prefs.folderTextColor = root.optString("folderTextColor").takeIf { HEX_COLOR.matches(it) }
         prefs.doubleTapToLock   = root.optBoolean("doubleTapToLock", false)
         // Sanitise: only "left"/"center"/"right" are valid. A hand-edited or future-version
         // backup with anything else falls back to the default rather than persisting an

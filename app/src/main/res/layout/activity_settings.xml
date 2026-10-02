@@ -849,6 +849,39 @@
                     android:fontFamily="monospace" />
             </LinearLayout>
 
+            <!-- Folder text row - tap to open picker. Shows the App text color until one is chosen. -->
+            <LinearLayout
+                android:id="@+id/rowFolderTextColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="12dp"
+                android:layout_marginTop="4dp"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/labelFolderText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Folder text"
+                    android:textSize="17sp" />
+
+                <View
+                    android:id="@+id/folderTextColorSwatch"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp" />
+
+                <TextView
+                    android:id="@+id/folderTextColorDisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:fontFamily="monospace" />
+            </LinearLayout>
+
             <!-- Preset color combinations -->
             <TextView
                 android:layout_width="wrap_content"

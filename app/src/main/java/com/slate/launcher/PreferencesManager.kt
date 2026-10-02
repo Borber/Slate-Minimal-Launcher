@@ -31,6 +31,7 @@ class PreferencesManager(context: Context) {
         private const val KEY_ONBOARDING_COMPLETE = "onboarding_complete"
         private const val KEY_BACKGROUND_COLOR = "background_color"
         private const val KEY_TEXT_COLOR = "text_color"
+        private const val KEY_FOLDER_TEXT_COLOR = "folder_text_color"
         private const val KEY_DOUBLE_TAP_LOCK = "double_tap_lock"
         private const val KEY_SEARCH_ENABLED = "search_enabled"
         private const val KEY_SEARCH_BAR_ON_HOME = "search_bar_on_home"
@@ -176,6 +177,21 @@ class PreferencesManager(context: Context) {
     var appTextColor: String
         get() = prefs.getString(KEY_TEXT_COLOR, DEFAULT_TEXT_COLOR) ?: DEFAULT_TEXT_COLOR
         set(value) = prefs.edit().putString(KEY_TEXT_COLOR, value).apply()
+
+    /**
+     * Default text color for folder labels, or null while folders follow [appTextColor].
+     *
+     * Null rather than a copied hex on purpose. Unset is a live link, not a snapshot: presets,
+     * Follow system theme and the App text picker keep recoloring folders exactly as they did
+     * before this setting existed, until the user picks a color here. A folder's own
+     * [Folder.color] outranks this either way.
+     */
+    var folderTextColor: String?
+        get() = prefs.getString(KEY_FOLDER_TEXT_COLOR, null)
+        set(value) = prefs.edit().run {
+            if (value == null) remove(KEY_FOLDER_TEXT_COLOR)
+            else putString(KEY_FOLDER_TEXT_COLOR, value)
+        }.apply()
 
     var doubleTapToLock: Boolean
         get() = prefs.getBoolean(KEY_DOUBLE_TAP_LOCK, false)

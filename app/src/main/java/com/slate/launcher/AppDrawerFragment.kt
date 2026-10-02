@@ -1074,6 +1074,7 @@ class AppDrawerFragment : Fragment() {
 
         val density = resources.displayMetrics.density
         val defaultTextColor = parseColorSafe(prefs.appTextColor, Color.GRAY)
+        val defaultFolderColor = resolveDefaultFolderColor(defaultTextColor)
         val notifEnabled = prefs.notificationColorEnabled
         val notifColor = parseColorSafe(prefs.notificationHighlightColor)
         // Which set to highlight from depends on a pref, so resolve it once per pass rather
@@ -1090,6 +1091,7 @@ class AppDrawerFragment : Fragment() {
                 item = item,
                 size = sizeForItem(item, maxUsage),
                 defaultTextColor = defaultTextColor,
+                defaultFolderColor = defaultFolderColor,
                 notifEnabled = notifEnabled,
                 notifColor = notifColor,
                 notifKeys = notifKeys,
@@ -1118,6 +1120,7 @@ class AppDrawerFragment : Fragment() {
 
         val density = resources.displayMetrics.density
         val defaultTextColor = parseColorSafe(prefs.appTextColor, Color.GRAY)
+        val defaultFolderColor = resolveDefaultFolderColor(defaultTextColor)
         val notifEnabled = prefs.notificationColorEnabled
         val notifColor = parseColorSafe(prefs.notificationHighlightColor)
         // Which set to highlight from depends on a pref, so resolve it once per pass rather
@@ -1135,6 +1138,7 @@ class AppDrawerFragment : Fragment() {
                 item = item,
                 size = fontSize,
                 defaultTextColor = defaultTextColor,
+                defaultFolderColor = defaultFolderColor,
                 notifEnabled = notifEnabled,
                 notifColor = notifColor,
                 notifKeys = notifKeys,
@@ -1167,6 +1171,7 @@ class AppDrawerFragment : Fragment() {
         item: HomeItem,
         size: Float,
         defaultTextColor: Int,
+        defaultFolderColor: Int,
         notifEnabled: Boolean,
         notifColor: Int,
         notifKeys: Set<String>,
@@ -1190,7 +1195,7 @@ class AppDrawerFragment : Fragment() {
             folder = item.folder,
             visibleCount = item.visibleCount,
             size = size,
-            color = colorForFolder(item.folder, defaultTextColor, notifEnabled, notifColor, notifKeys),
+            color = colorForFolder(item.folder, defaultFolderColor, notifEnabled, notifColor, notifKeys),
             typeface = typeface,
             hPad = hPad, vPad = vPad, gravity = gravity
         )
@@ -1395,10 +1400,14 @@ class AppDrawerFragment : Fragment() {
      * hidden, since hiding an app does NOT remove it from its folder (see FolderStore's own doc).
      * Without this exclusion a hidden app's notification would leak through the folder's color,
      * a side channel this app is otherwise careful never to open.
+     *
+     * "Default" here is [resolveDefaultFolderColor], not the app text color: the Settings
+     * "Folder text" choice when there is one. It sits below folder.color, so one folder can
+     * still be singled out against the rest.
      */
     private fun colorForFolder(
         folder: Folder,
-        defaultTextColor: Int,
+        defaultFolderColor: Int,
         notifEnabled: Boolean,
         notifColor: Int,
         notifKeys: Set<String>
@@ -1406,8 +1415,19 @@ class AppDrawerFragment : Fragment() {
         val hasNotif = notifEnabled &&
             folder.packages.any { it in notifKeys && it !in prefs.hiddenApps }
         if (hasNotif) return notifColor
-        return folder.color?.let { parseColorSafe(it, defaultTextColor) } ?: defaultTextColor
+        return folder.color?.let { parseColorSafe(it, defaultFolderColor) } ?: defaultFolderColor
     }
+
+    /**
+     * The color a folder label takes when the folder has none of its own: the "Folder text"
+     * color from Settings, or [defaultTextColor] while that is unset, which keeps folders the
+     * same color as app names. An unparseable stored value also falls back to app text.
+     *
+     * Resolved once per render pass by the caller, like the other per-pass values, rather than
+     * re-read from prefs for every folder row.
+     */
+    private fun resolveDefaultFolderColor(defaultTextColor: Int): Int =
+        prefs.folderTextColor?.let { parseColorSafe(it, defaultTextColor) } ?: defaultTextColor
 
     private fun createAppTextView(
         app: AppInfo,
@@ -2078,8 +2098,17 @@ class AppDrawerFragment : Fragment() {
         ColorPickerDialog(
             context = requireContext(),
             title = "Folder color",
-            initialColor = folder.color ?: prefs.appTextColor,
-            bgColor = prefs.backgroundColor
+            // Open on the color the folder is showing, which is the Settings default when the
+            // folder has none of its own.
+            initialColor = folder.color ?: prefs.folderTextColor ?: prefs.appTextColor,
+            bgColor = prefs.backgroundColor,
+            // Reset hands the folder back to the Settings default. Without it a folder that
+            // was ever colored by hand could never follow that default again.
+            showReset = folder.color != null,
+            onReset = {
+                FolderStore.setColor(prefs, folder.id, null)
+                buildAppList()
+            }
         ) { hex ->
             FolderStore.setColor(prefs, folder.id, hex)
             buildAppList()
