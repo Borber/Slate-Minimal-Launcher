@@ -527,8 +527,9 @@
 
                 <TextView
                     android:id="@+id/labelMinimum"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:text="@string/settings_minimum"
                     android:textSize="17sp" />
 
@@ -556,8 +557,9 @@
 
                 <TextView
                     android:id="@+id/labelMaximum"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:text="@string/settings_maximum"
                     android:textSize="17sp" />
 
@@ -585,8 +587,9 @@
 
                 <TextView
                     android:id="@+id/labelLineSpacing"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:text="@string/settings_line_gap"
                     android:textSize="17sp" />
 
@@ -613,8 +616,9 @@
 
                 <TextView
                     android:id="@+id/labelWordSpacing"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:text="@string/settings_word_gap"
                     android:textSize="17sp" />
 
@@ -1710,8 +1714,9 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:text="@string/settings_text_size"
                     android:textSize="17sp" />
 
@@ -1742,8 +1747,9 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:text="@string/settings_line_gap"
                     android:textSize="17sp" />
 
@@ -1774,8 +1780,9 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:text="@string/settings_word_gap"
                     android:textSize="17sp" />
 

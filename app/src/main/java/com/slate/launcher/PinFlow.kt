@@ -124,7 +124,7 @@ object PinFlow {
         val dialog = PinEntryDialog(
             context = activity,
             bgColor = prefs.backgroundColor,
-            title = title.uppercase(),
+            title = title,
             message = message,
             confirmLabel = activity.getString(R.string.pin_unlock),
             onConfirm = { pin ->
