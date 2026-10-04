@@ -187,6 +187,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">General</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_system_default">Predeterminado del sistema</string>
     <string name="settings_double_tap_to_lock_screen">Doble toque para bloquear la pantalla</string>
     <string name="settings_double_tap_to_lock_screen_summary">Requiere el permiso del servicio de accesibilidad</string>
     <string name="settings_accessibility_body">El doble toque para bloquear usa el servicio de accesibilidad de Android para bloquear tu pantalla.\n\nEn la pantalla siguiente, busca «Slate» en la lista y actívalo.</string>

@@ -178,6 +178,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">Genel</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_language_system_default">Sistem varsayılanı</string>
     <string name="settings_double_tap_to_lock_screen">İki kez dokunarak ekranı kilitle</string>
     <string name="settings_double_tap_to_lock_screen_summary">Erişilebilirlik hizmeti izni gerektirir</string>
     <string name="settings_accessibility_body">İki kez dokunarak kilitleme özelliği, ekranınızı kilitlemek için Android\'in Erişilebilirlik Hizmeti\'ni kullanır.\n\nSonraki ekranda listede “Slate” öğesini bulun ve etkinleştirin.</string>

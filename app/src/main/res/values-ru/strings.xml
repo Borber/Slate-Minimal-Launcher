@@ -196,6 +196,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">Общие</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_system_default">Системные настройки по умолчанию</string>
     <string name="settings_double_tap_to_lock_screen">Двойное нажатие для блокировки экрана</string>
     <string name="settings_double_tap_to_lock_screen_summary">Требуется разрешение службы специальных возможностей</string>
     <string name="settings_accessibility_body">Блокировка двойным нажатием использует службу специальных возможностей Android, чтобы блокировать экран.\n\nНа следующем экране найдите в списке «Slate» и включите его.</string>

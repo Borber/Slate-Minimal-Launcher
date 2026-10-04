@@ -178,6 +178,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">Algemeen</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_language_system_default">Systeemstandaard</string>
     <string name="settings_double_tap_to_lock_screen">Dubbeltikken om scherm te vergrendelen</string>
     <string name="settings_double_tap_to_lock_screen_summary">Vereist het recht voor de toegankelijkheidsservice</string>
     <string name="settings_accessibility_body">Dubbeltikken om te vergrendelen gebruikt de toegankelijkheidsservice van Android om je scherm te vergrendelen.\n\nZoek op het volgende scherm ‘Slate’ in de lijst en zet het aan.</string>

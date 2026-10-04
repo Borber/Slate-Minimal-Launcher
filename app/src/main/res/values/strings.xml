@@ -179,6 +179,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">General</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system_default">System default</string>
     <string name="settings_double_tap_to_lock_screen">Double tap to lock screen</string>
     <string name="settings_double_tap_to_lock_screen_summary">Requires accessibility service permission</string>
     <string name="settings_accessibility_body">Double-tap to lock uses Android\'s Accessibility Service to lock your screen.\n\nOn the next screen, find \"Slate\" in the list and enable it.</string>

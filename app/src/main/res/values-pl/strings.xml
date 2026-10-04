@@ -196,6 +196,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">Ogólne</string>
+    <string name="settings_language">Język</string>
+    <string name="settings_language_system_default">Ustawienie domyślne systemu</string>
     <string name="settings_double_tap_to_lock_screen">Dwukrotne kliknięcie blokuje ekran</string>
     <string name="settings_double_tap_to_lock_screen_summary">Wymaga uprawnienia usługi ułatwień dostępu</string>
     <string name="settings_accessibility_body">Blokowanie dwukrotnym kliknięciem używa usługi ułatwień dostępu Androida, aby zablokować ekran.\n\nNa następnym ekranie znajdź na liście „Slate” i włącz go.</string>

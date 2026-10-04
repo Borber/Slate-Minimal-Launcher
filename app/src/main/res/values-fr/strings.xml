@@ -187,6 +187,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">Général</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_language_system_default">Paramètre système par défaut</string>
     <string name="settings_double_tap_to_lock_screen">Double appui pour verrouiller l\'écran</string>
     <string name="settings_double_tap_to_lock_screen_summary">Nécessite l\'autorisation du service d\'accessibilité</string>
     <string name="settings_accessibility_body">Le double appui pour verrouiller utilise le service d\'accessibilité d\'Android pour verrouiller votre écran.\n\nSur l\'écran suivant, trouvez «\u00A0Slate\u00A0» dans la liste et activez-le.</string>

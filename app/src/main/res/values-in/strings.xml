@@ -169,6 +169,8 @@
 
     <!-- Settings: General -->
     <string name="settings_general">Umum</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_language_system_default">Default sistem</string>
     <string name="settings_double_tap_to_lock_screen">Ketuk dua kali untuk mengunci layar</string>
     <string name="settings_double_tap_to_lock_screen_summary">Memerlukan izin layanan aksesibilitas</string>
     <string name="settings_accessibility_body">Fitur ketuk dua kali untuk mengunci menggunakan Layanan Aksesibilitas Android untuk mengunci layar Anda.\n\nDi layar berikutnya, temukan “Slate” dalam daftar lalu aktifkan.</string>

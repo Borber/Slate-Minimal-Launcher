@@ -2,6 +2,8 @@ package com.slate.launcher
 
 import android.app.ActivityManager
 import android.app.Dialog
+import android.app.LocaleConfig
+import android.app.LocaleManager
 import android.app.role.RoleManager
 import android.content.ComponentName
 import android.content.Context
@@ -14,6 +16,7 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.LocaleList
 import android.os.PowerManager
 import android.provider.OpenableColumns
 import android.provider.Settings
@@ -29,6 +32,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -48,6 +52,8 @@ import com.slate.launcher.widgets.ContactShortcut
 import com.slate.launcher.widgets.ContactShortcutStore
 import com.slate.launcher.widgets.WidgetPickerDialog
 import java.io.File
+import java.text.Collator
+import java.util.Locale
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -2270,10 +2276,59 @@ class SettingsActivity : AppCompatActivity() {
 
     // ── General ───────────────────────────────────────────────────
 
+    /**
+     * The language row. Android 13 and later keep one language per app, and the row reads and
+     * sets that, so it stays in step with the system's own App languages page. The choices are
+     * the languages in res/xml/locales_config.xml. Older versions have no such setting: the
+     * row is hidden there and Slate follows the phone's language.
+     */
+    private fun setupLanguage(secondary: Int) {
+        val row = findViewById<View>(R.id.rowLanguage)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            row.visibility = View.GONE
+            return
+        }
+        val localeManager = getSystemService(LocaleManager::class.java)
+        val systemDefault = getString(R.string.settings_language_system_default)
+        val value = findViewById<TextView>(R.id.languageValue)
+        val current = localeManager.applicationLocales
+        value.setTextColor(secondary)
+        value.text = if (current.isEmpty) systemDefault else languageName(current[0])
+
+        row.setOnClickListener {
+            val languages = supportedLanguages()
+            SlateListDialog(
+                context = this,
+                title = getString(R.string.settings_language),
+                items = listOf(systemDefault) + languages.map { languageName(it) },
+                bgColor = prefs.backgroundColor
+            ) { index, label ->
+                value.text = label
+                localeManager.applicationLocales =
+                    if (index == 0) LocaleList.getEmptyLocaleList()
+                    else LocaleList(languages[index - 1])
+            }.show()
+        }
+    }
+
+    /** The languages Slate ships, ordered by their own names. */
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun supportedLanguages(): List<Locale> {
+        val locales = LocaleConfig(this).supportedLocales ?: return emptyList()
+        return List(locales.size()) { locales[it] }
+            .sortedWith(compareBy(Collator.getInstance()) { languageName(it) })
+    }
+
+    /** A language's name in that language, capitalised as Android's own language page does. */
+    private fun languageName(locale: Locale): String =
+        locale.getDisplayName(locale).replaceFirstChar { it.titlecase(locale) }
+
     private fun setupGeneral() {
         val isLight = isColorLight(parseColorSafe(prefs.backgroundColor))
         val secondary = if (isLight) Color.parseColor("#555555") else Color.parseColor("#AAAAAA")
         val density = resources.displayMetrics.density
+
+        setupLanguage(secondary)
 
         // Sort by usage - also gates Alphabetical fast scroll (see refreshAlphaFastScrollGate
         // below). Local closures are used to keep the cross-row dependency explicit and
