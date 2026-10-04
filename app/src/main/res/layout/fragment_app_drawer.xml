@@ -55,13 +55,21 @@
             android:scrollbars="none"
             android:fillViewport="true">
 
+            <!--
+                Clipping is off because, while apps are being selected, the list can be drawn
+                outside the box it is laid out in and into this padding: sideways to make room
+                for markers, and a little lower while the selection bar is shown. See
+                AppDrawerFragment.slideMarkedRows() and holdListInPlace().
+            -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:paddingHorizontal="20dp"
-                android:paddingVertical="40dp">
+                android:paddingVertical="40dp"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <com.google.android.flexbox.FlexboxLayout
                     android:id="@+id/appFlowLayout"
@@ -93,6 +101,80 @@
             android:importantForAccessibility="no" />
 
     </FrameLayout>
+
+    <!--
+        Shown only while apps are being selected. AppDrawerFragment.applyChromeLayout() keeps
+        it directly under the list, gives it the bottom inset when it is the bottom edge, and
+        sets its height to the bottom strip's when it stands in for one. The row stretches to
+        whatever height that leaves and its labels stay centred in it. A label shrinks to fit
+        its third of the bar, which only happens at the largest system text sizes.
+    -->
+    <LinearLayout
+        android:id="@+id/selectionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/selectionBarDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingHorizontal="24dp"
+            android:baselineAligned="false">
+
+            <TextView
+                android:id="@+id/selectionCount"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:gravity="center_vertical|start"
+                android:textSize="16sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeStepGranularity="1sp"
+                android:maxLines="1"
+                android:accessibilityLiveRegion="polite" />
+
+            <TextView
+                android:id="@+id/selectionActions"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:gravity="center"
+                android:text="actions"
+                android:textSize="16sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeStepGranularity="1sp"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/selectionCancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:gravity="center_vertical|end"
+                android:text="cancel"
+                android:textSize="16sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeStepGranularity="1sp"
+                android:maxLines="1" />
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- ── Quick toggles strip ── -->
     <com.google.android.flexbox.FlexboxLayout

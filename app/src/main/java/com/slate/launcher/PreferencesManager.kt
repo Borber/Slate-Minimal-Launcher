@@ -94,6 +94,7 @@ class PreferencesManager(context: Context) {
         private const val KEY_FOLDER_STYLE = "folder_style"
         private const val KEY_WORK_MARKER_STYLE = "work_marker_style"
         private const val KEY_SUPPRESS_WORK_MARKER_IN_FOLDER = "suppress_work_marker_in_folder"
+        private const val KEY_SELECTION_STYLE = "selection_style"
 
         // How folder labels appear on the home screen. Default `chevron` preserves the
         // out-of-the-box behaviour; any unknown stored value also falls back to chevron at
@@ -316,6 +317,9 @@ class PreferencesManager(context: Context) {
         set(value) = prefs.edit().putStringSet(KEY_PINNED_APPS, value).apply()
 
     fun pinApp(key: String) { pinnedApps = pinnedApps + key }
+
+    /** Pins every key in [keys] with one write. */
+    fun pinApps(keys: Collection<String>) { pinnedApps = pinnedApps + keys }
     fun unpinApp(key: String) { pinnedApps = pinnedApps - key }
 
     /** Unpins every key in [keys] with one write, or none when nothing in it was pinned. */
@@ -662,6 +666,12 @@ class PreferencesManager(context: Context) {
         get() = prefs.getString(KEY_WORK_MARKER_STYLE, WORK_MARKER_BRACKETS) ?: WORK_MARKER_BRACKETS
         set(value) = prefs.edit().putString(KEY_WORK_MARKER_STYLE, value).apply()
 
+    /** Key of a [SelectionMarker] style. Default is check. */
+    var selectionStyle: String
+        get() = prefs.getString(KEY_SELECTION_STYLE, SelectionMarker.DEFAULT_KEY)
+            ?: SelectionMarker.DEFAULT_KEY
+        set(value) = prefs.edit().putString(KEY_SELECTION_STYLE, value).apply()
+
     // ── Per-app custom names ──────────────────────────────────────
 
     fun getAppCustomName(key: String): String? =
@@ -688,6 +698,14 @@ class PreferencesManager(context: Context) {
 
     fun clearAppTextColor(key: String) =
         prefs.edit().remove("app_color_$key").apply()
+
+    /** Gives every app in [keys] the color [hex] with one write. */
+    fun setAppTextColors(keys: Collection<String>, hex: String) =
+        prefs.edit().apply { keys.forEach { putString("app_color_$it", hex) } }.apply()
+
+    /** Clears the custom color of every app in [keys] with one write. */
+    fun clearAppTextColors(keys: Collection<String>) =
+        prefs.edit().apply { keys.forEach { remove("app_color_$it") } }.apply()
 
     fun getAllAppColors(): Map<String, String> =
         prefs.all.entries

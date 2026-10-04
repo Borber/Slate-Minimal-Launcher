@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
@@ -97,6 +98,28 @@ class AppDrawerFragment : Fragment() {
     /** Null = main view; non-null = home is showing the contents of that folder. */
     private var currentFolderId: String? = null
 
+    /**
+     * Keys of the apps ticked for a bulk action. Selecting is on exactly while this is
+     * non-empty, so there is no separate flag that could fall out of step with it. Never saved:
+     * like folder navigation, it ends when the home screen is left.
+     */
+    private val selectedKeys = LinkedHashSet<String>()
+    private val isSelecting: Boolean get() = selectedKeys.isNotEmpty()
+    /** Keys of the app rows in the last render, in order. This is what "Select all" ticks. */
+    private var viewAppKeys: List<String> = emptyList()
+    /**
+     * How many names each app key shows. One package can have several launcher entries, such
+     * as Google and Voice Search, and they share a key, so they are ticked together and each
+     * counts toward the number shown.
+     */
+    private var entriesPerKey: Map<String, Int> = emptyMap()
+    /** The marker character of the last render pass, or null when nothing is selected. */
+    private var selectionGlyph: String? = null
+    private lateinit var selectionBar: View
+    private lateinit var selectionCount: TextView
+    /** Height of the bottom strip the bar is standing in for, or 0 when it replaces none. */
+    private var replacedStripHeight = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_app_drawer, container, false)
@@ -114,6 +137,14 @@ class AppDrawerFragment : Fragment() {
         fastScroll = view.findViewById(R.id.fastScroll)
         fastScrollBubble = view.findViewById(R.id.fastScrollBubble)
         stripDivider = view.findViewById(R.id.stripDivider)
+        selectionBar = view.findViewById(R.id.selectionBar)
+        selectionCount = view.findViewById(R.id.selectionCount)
+        view.findViewById<View>(R.id.selectionActions).setOnClickListener { showSelectionMenu() }
+        view.findViewById<View>(R.id.selectionCancel).setOnClickListener { clearSelection() }
+        scrollView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            slideMarkedRows()
+            holdListInPlace()
+        }
 
         // Forward touches that begin on the strip into the home gesture detector so swipes
         // starting on the chrome execute the user's configured 1-finger gestures (instead of
@@ -247,6 +278,7 @@ class AppDrawerFragment : Fragment() {
                 override fun handleOnBackPressed() {
                     when {
                         isSearchInUse() -> closeSearch()
+                        isSelecting -> clearSelection()
                         currentFolderId != null -> exitFolder()
                         isSearchOpen && searchInput.hasFocus() -> closeSearch()
                     }
@@ -297,7 +329,7 @@ class AppDrawerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         SlateNotificationService.onChange = {
-            activity?.runOnUiThread { buildAppList() }
+            activity?.runOnUiThread { rerenderCurrentView() }
         }
         registerProfileReceiver()
         // Invalidate FIRST, matching the order the profile receiver already uses. The grouping
@@ -330,8 +362,9 @@ class AppDrawerFragment : Fragment() {
             searchContainer.visibility = View.GONE
         }
         // Always land on the main list when returning to home - folder state is a transient
-        // navigation, not a persisted view.
+        // navigation, not a persisted view. A selection ends the same way.
         currentFolderId = null
+        selectedKeys.clear()
         buildAppList()
         quickStrip?.let {
             it.bind()
@@ -430,6 +463,11 @@ class AppDrawerFragment : Fragment() {
      * Inset routing rule: whichever child is at an edge owns that edge's inset padding. When
      * the FrameLayout (containing the ScrollView) is at an edge, the scrollView itself gets the
      * padding so its content doesn't slide under the status / navigation bar.
+     *
+     * The selection bar sits directly under the list in every arrangement. It has to be named
+     * in each ordering below: the root is rebuilt from that list, so a child left out of it
+     * would be removed from the screen. Where it stands in for a bottom strip it takes that
+     * strip's height, so the list above it keeps its size.
      */
     private fun applyChromeLayout() {
         val root = requireView() as android.widget.LinearLayout
@@ -456,7 +494,10 @@ class AppDrawerFragment : Fragment() {
         // where isSearchOpen is permanently true (set in onResume) but the strip should still
         // be visible alongside the always-on bar at rest.
         val searchHidesStrip = isSearchOpen && !prefs.showSearchBarOnHome
-        val stripEffective = stripIntended && !isImeVisible && !searchHidesStrip
+        // The bar's "actions" and "cancel" would sit against a bottom strip's widgets.
+        val selectionHidesStrip = isSelecting && stripAtBottom
+        val stripWanted = stripIntended && !isImeVisible && !searchHidesStrip
+        val stripEffective = stripWanted && !selectionHidesStrip
         val newStripVisibility = if (stripEffective) View.VISIBLE else View.GONE
         val stripWasHidden = stripContainer.visibility != View.VISIBLE
         if (stripContainer.visibility != newStripVisibility) {
@@ -490,15 +531,15 @@ class AppDrawerFragment : Fragment() {
         // strip/search/frame siblings; the divider never becomes the edge child.
         val orderedChildren: List<View> = when {
             !searchAtBottom && stripAtBottom  ->
-                listOf(searchContainer, frameLayout, stripDivider, stripContainer)
+                listOf(searchContainer, frameLayout, selectionBar, stripDivider, stripContainer)
             !searchAtBottom && !stripAtBottom ->
                 // Both at top: strip is the absolute edge, divider just inside it, then search.
-                listOf(stripContainer, stripDivider, searchContainer, frameLayout)
+                listOf(stripContainer, stripDivider, searchContainer, frameLayout, selectionBar)
             searchAtBottom && !stripAtBottom  ->
-                listOf(stripContainer, stripDivider, frameLayout, searchContainer)
+                listOf(stripContainer, stripDivider, frameLayout, selectionBar, searchContainer)
             else                              ->
                 // Both at bottom: strip is the absolute edge, divider just inside it.
-                listOf(frameLayout, searchContainer, stripDivider, stripContainer)
+                listOf(frameLayout, selectionBar, searchContainer, stripDivider, stripContainer)
         }
 
         // Re-arrange only if the order actually changed, to avoid superfluous removeAllViews on
@@ -547,6 +588,35 @@ class AppDrawerFragment : Fragment() {
             0,
             if (bottomEdge === frameLayout) bottomInset else 0
         )
+        selectionBar.setPadding(0, 0, 0, if (bottomEdge === selectionBar) bottomInset else 0)
+        replacedStripHeight = if (stripWanted && selectionHidesStrip) {
+            hiddenStripHeight(stripContainer, root.width, stripVPad)
+        } else 0
+        val barHeight = if (replacedStripHeight > 0) {
+            maxOf(replacedStripHeight, selectionCount.lineHeight) + selectionBar.paddingBottom
+        } else ViewGroup.LayoutParams.WRAP_CONTENT
+        if (selectionBar.layoutParams.height != barHeight) {
+            selectionBar.layoutParams = selectionBar.layoutParams.apply { height = barHeight }
+        }
+    }
+
+    /**
+     * The height a bottom strip and its hairline take when shown. Selecting hides the strip, so
+     * it is measured by hand here, with the padding [applyChromeLayout] has just given it.
+     */
+    private fun hiddenStripHeight(strip: View, width: Int, vPad: Int): Int {
+        if (width <= 0) return 0
+        strip.measure(
+            View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        val widgets = strip.measuredHeight - strip.paddingTop - strip.paddingBottom
+        // Shown with its hairline, the strip gives up its own top padding.
+        return if (prefs.quickStripDividerEnabled) {
+            stripDivider.layoutParams.height + widgets + vPad
+        } else {
+            widgets + 2 * vPad
+        }
     }
 
     private fun setupSearch() {
@@ -560,6 +630,7 @@ class AppDrawerFragment : Fragment() {
 
         searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (isSelecting) return@setOnEditorActionListener true
                 val query = searchInput.text.toString()
                 val match = repository.getAllApps()
                     .firstOrNull { it.name.contains(query, ignoreCase = true) }
@@ -1072,6 +1143,11 @@ class AppDrawerFragment : Fragment() {
 
     /** Dispatch to the appropriate renderer based on the current view-mode pref. */
     private fun renderItems(items: List<HomeItem>, allAppsForUsage: List<AppInfo>) {
+        if (isSelecting) {
+            entriesPerKey = allAppsForUsage.groupingBy { it.key }.eachCount()
+            selectedKeys.retainAll(entriesPerKey.keys)
+        }
+        viewAppKeys = items.mapNotNull { (it as? HomeItem.AppItem)?.info?.key }
         flowLayout.removeAllViews()
         if (prefs.homescreenView == PreferencesManager.VIEW_LIST) {
             renderListMode(items)
@@ -1081,6 +1157,7 @@ class AppDrawerFragment : Fragment() {
                 ?.takeIf { it > 0 } ?: 1
             renderFlowMode(items, maxUsage)
         }
+        syncSelectionBar()
     }
 
     /** Original word-cloud rendering: row wrap, font size scales with usage. */
@@ -1105,6 +1182,7 @@ class AppDrawerFragment : Fragment() {
             SlateNotificationService.highlightedKeys(prefs.ignoreSilentNotifications)
         val markerStyle = markerStyleFor(items)
         val typeface = buildTypeface()
+        selectionGlyph = selectionGlyphFor(typeface)
         val hPad = (prefs.wordSpacing * density).toInt()
         val vPad = (prefs.lineSpacing * density).toInt()
 
@@ -1151,6 +1229,7 @@ class AppDrawerFragment : Fragment() {
             SlateNotificationService.highlightedKeys(prefs.ignoreSilentNotifications)
         val markerStyle = markerStyleFor(items)
         val typeface = buildTypeface()
+        selectionGlyph = selectionGlyphFor(typeface)
         val fontSize = prefs.maxFontSize.toFloat()
         val hPad = (prefs.wordSpacing * density).toInt()
         val vPad = (prefs.lineSpacing * density).toInt()
@@ -1285,7 +1364,7 @@ class AppDrawerFragment : Fragment() {
         this.typeface = typeface
         this.gravity = gravity
         setPadding(hPad, vPad, hPad, vPad)
-        setOnClickListener { dialContact(contact.number) }
+        setOnClickListener { if (!isSelecting) dialContact(contact.number) }
         // Forward touches to the host gesture detector so swipes that start on a contact row
         // still fire home gestures rather than dying on the chrome.
         setOnTouchListener { _, event ->
@@ -1315,6 +1394,7 @@ class AppDrawerFragment : Fragment() {
         setPadding(hPad, vPad, hPad, vPad)
         setOnClickListener { enterFolder(folder.id) }
         setOnLongClickListener {
+            if (isSelecting) return@setOnLongClickListener true
             AuthGate.authenticatePinOnly(
                 activity = requireActivity(),
                 prefs = prefs,
@@ -1460,7 +1540,7 @@ class AppDrawerFragment : Fragment() {
         hPad: Int,
         vPad: Int,
         gravity: Int
-    ): TextView = TextView(requireContext()).apply {
+    ): TextView = MarkedTextView(requireContext()).apply {
         // displayLabel composes the profile marker at render time; AppInfo.name never carries
         // it, so sorting, search and fast scroll all still see the plain app name.
         //
@@ -1478,8 +1558,17 @@ class AppDrawerFragment : Fragment() {
         this.typeface = typeface
         this.gravity = gravity
         setPadding(hPad, vPad, hPad, vPad)
-        setOnClickListener { launchApp(app) }
+        selectionGlyph?.let { glyph ->
+            tag = app.key
+            setMarker(glyph, SelectionMarker.fit(glyph, paint))
+            markRow(this, app.key in selectedKeys)
+        }
+        setOnClickListener { if (isSelecting) toggleSelected(app) else launchApp(app) }
         setOnLongClickListener {
+            if (isSelecting) {
+                showSelectionMenu()
+                return@setOnLongClickListener true
+            }
             AuthGate.authenticatePinOnly(
                 activity = requireActivity(),
                 prefs = prefs,
@@ -1520,8 +1609,9 @@ class AppDrawerFragment : Fragment() {
         this.typeface = typeface
         this.gravity = gravity
         setPadding(hPad, vPad, hPad, vPad)
-        setOnClickListener { launchShortcut(shortcut) }
+        setOnClickListener { if (!isSelecting) launchShortcut(shortcut) }
         setOnLongClickListener {
+            if (isSelecting) return@setOnLongClickListener true
             AuthGate.authenticatePinOnly(
                 activity = requireActivity(),
                 prefs = prefs,
@@ -1839,6 +1929,7 @@ class AppDrawerFragment : Fragment() {
             }
             add("Custom color")
             add("Rename")
+            add("Select")
         }
         SlateListDialog(
             context = requireContext(),
@@ -1918,6 +2009,7 @@ class AppDrawerFragment : Fragment() {
                 }
                 "Custom color" -> showAppColorPicker(app)
                 "Rename" -> showRenameDialog(app)
+                "Select" -> startSelecting(app)
             }
         }.show()
     }
@@ -1942,7 +2034,15 @@ class AppDrawerFragment : Fragment() {
     }
 
     /** Sub-menu listing existing folders + a "+ New folder" entry. */
-    private fun showMoveToFolderDialog(app: AppInfo) {
+    private fun showMoveToFolderDialog(app: AppInfo) = showFolderPicker { id ->
+        finishFolderChange(FolderStore.addAppToFolder(prefs, id, app.key))
+    }
+
+    /**
+     * Lists the folders plus "+ New folder" and hands [onPicked] the id of the one chosen,
+     * creating it first when it is new.
+     */
+    private fun showFolderPicker(onPicked: (folderId: String) -> Unit) {
         val existing = FolderStore.all(prefs)
         val items = existing.map { it.name } + "+ New folder"
         SlateListDialog(
@@ -1952,11 +2052,10 @@ class AppDrawerFragment : Fragment() {
             bgColor = prefs.backgroundColor
         ) { index, _ ->
             if (index < existing.size) {
-                finishFolderChange(FolderStore.addAppToFolder(prefs, existing[index].id, app.key))
+                onPicked(existing[index].id)
             } else {
                 showCreateFolderDialog { newName ->
-                    val folder = FolderStore.createEmpty(prefs, newName)
-                    finishFolderChange(FolderStore.addAppToFolder(prefs, folder.id, app.key))
+                    onPicked(FolderStore.createEmpty(prefs, newName).id)
                 }
             }
         }.show()
@@ -1981,6 +2080,276 @@ class AppDrawerFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    // ── Selecting several apps ────────────────────────────────────
+
+    /** Starts a selection with [app] ticked. Reached from the app long-press menu. */
+    private fun startSelecting(app: AppInfo) {
+        selectedKeys.add(app.key)
+        rerenderCurrentView()
+    }
+
+    /** Ends selecting and redraws. Does nothing when nothing is selected. */
+    private fun clearSelection() {
+        if (!isSelecting) return
+        selectedKeys.clear()
+        rerenderCurrentView()
+    }
+
+    /**
+     * Ticks or unticks [app]. Only its own rows and the bar change. A ticked row makes room for
+     * its marker by nudging the names on its own line, see [slideMarkedRows]. No other line
+     * moves and the list never re-wraps. Unticking the last app ends selecting, which takes
+     * the full redraw.
+     */
+    private fun toggleSelected(app: AppInfo) {
+        val selected = selectedKeys.add(app.key)
+        if (!selected) selectedKeys.remove(app.key)
+        if (!isSelecting) {
+            rerenderCurrentView()
+            return
+        }
+        for (i in 0 until flowLayout.childCount) {
+            val row = flowLayout.getChildAt(i) as? MarkedTextView ?: continue
+            if (row.tag == app.key) markRow(row, selected)
+        }
+        syncSelectionBar()
+    }
+
+    /** Redraws what is on screen: the search results while a query is typed, else the list. */
+    private fun rerenderCurrentView() {
+        val query = searchInput.text?.toString().orEmpty()
+        if (isSearchOpen && query.isNotEmpty()) filterApps(query) else buildAppList()
+    }
+
+    /** The marker character for a render pass using [typeface], or null when not selecting. */
+    private fun selectionGlyphFor(typeface: Typeface): String? {
+        if (!isSelecting) return null
+        val paint = Paint().apply { this.typeface = typeface }
+        return SelectionMarker.glyphFor(SelectionMarker.styleFor(prefs.selectionStyle), paint)
+    }
+
+    /**
+     * Shows or hides [row]'s marker and tells a screen reader which it is.
+     *
+     * A marked row is wider by the room its marker takes. That width is handed straight back
+     * as a negative margin, so the row counts for no more on its line than before and the list
+     * wraps exactly as it did. [slideMarkedRows] is what opens the room on screen.
+     */
+    private fun markRow(row: MarkedTextView, selected: Boolean) {
+        row.marked = selected
+        val params = row.layoutParams as? FlexboxLayout.LayoutParams
+            ?: FlexboxLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        params.marginStart = if (selected) -row.markerRoom else 0
+        row.layoutParams = params
+        row.isSelected = selected
+        row.contentDescription =
+            if (selected) "${row.text}, selected" else "${row.text}, not selected"
+    }
+
+    /**
+     * Opens the room for each marker by sliding the rows of its line apart, so the usual gap
+     * stays between a marker and the name before it. Nothing is laid out again, which is why
+     * a tick can only move names on its own line. Runs after every layout of the list.
+     *
+     * A line may spread into the list's side padding. Past that there is no room left, and
+     * the markers on that line close up toward the names before them instead.
+     */
+    private fun slideMarkedRows() {
+        if (selectionGlyph == null) return
+        val sign = if (flowLayout.layoutDirection == View.LAYOUT_DIRECTION_RTL) -1 else 1
+        val side = (flowLayout.parent as View).paddingLeft
+        if (flowLayout.flexDirection == FlexDirection.COLUMN) {
+            // List: each row is a line of its own.
+            for (i in 0 until flowLayout.childCount) {
+                val row = flowLayout.getChildAt(i)
+                val slack = flowLayout.width - row.width + markerRoomOf(row)
+                slideLine(listOf(row), slack, flowLayout.alignItems == AlignItems.CENTER,
+                    flowLayout.alignItems == AlignItems.FLEX_END, side, sign)
+            }
+            return
+        }
+        for (line in flowLayout.flexLines) {
+            val rows = (line.firstIndex until line.firstIndex + line.itemCount)
+                .mapNotNull { flowLayout.getChildAt(it) }
+            slideLine(rows, flowLayout.width - line.mainSize,
+                flowLayout.justifyContent == JustifyContent.CENTER,
+                flowLayout.justifyContent == JustifyContent.FLEX_END, side, sign)
+        }
+    }
+
+    private fun markerRoomOf(row: View): Int =
+        (row as? MarkedTextView)?.takeIf { it.marked }?.markerRoom ?: 0
+
+    /**
+     * Slides the [rows] of one line, given in reading order. [slack] is the width the line
+     * leaves unused, [side] the padding beside the list, and [sign] is -1 when the layout is
+     * RTL. A line is [centred], pinned at its [end], or pinned at its start.
+     *
+     * A centred line stays centred. A line pinned at its start keeps its first name still and
+     * hangs that name's marker in the side padding. A line pinned at its end keeps its last
+     * name still. Each gives way only when the line would otherwise leave the screen.
+     */
+    private fun slideLine(
+        rows: List<View>, slack: Int, centred: Boolean, end: Boolean, side: Int, sign: Int
+    ) {
+        val rooms = rows.map { markerRoomOf(it) }
+        val first = rooms.firstOrNull() ?: return
+        val rest = rooms.sum() - first
+        val startRoom = side + if (centred) slack / 2 else if (end) slack else 0
+        val endRoom = side + if (centred) slack / 2 else if (end) 0 else slack
+        // The first marker has no name before it to close up to, so its room is kept whole.
+        val opened = minOf(rest, maxOf(0, startRoom + endRoom - first)).toFloat()
+        val share = if (rest > 0) opened / rest else 1f
+        val wish = if (centred) (first - opened) / 2 else if (end) -opened else 0f
+        var shift = maxOf(first - startRoom.toFloat(), minOf(wish, endRoom - opened))
+        rows.forEachIndexed { i, row ->
+            if (i > 0) shift += rooms[i] * share
+            row.translationX = sign * shift
+        }
+    }
+
+    private fun selectionCountLabel(count: Int): String =
+        if (count == 1) "1 selected" else "$count selected"
+
+    /** Shows the bar with the current count while selecting, hides it otherwise. */
+    private fun syncSelectionBar() {
+        val show = isSelecting
+        if (show) {
+            selectionCount.text =
+                selectionCountLabel(selectedKeys.sumOf { entriesPerKey[it] ?: 1 })
+        }
+        if ((selectionBar.visibility == View.VISIBLE) == show) return
+        if (show) applySelectionBarColors()
+        selectionBar.visibility = if (show) View.VISIBLE else View.GONE
+        applyChromeLayout()
+    }
+
+    /**
+     * Keeps a list that is shorter than the screen where it is while the bar takes room under
+     * it. Such a list is centred in the room it has, so it would otherwise jump up by half the
+     * bar's height when selecting starts and back down when it ends. Runs after every layout
+     * of the list.
+     */
+    private fun holdListInPlace() {
+        val taken = if (selectionBar.visibility == View.VISIBLE) {
+            selectionBar.measuredHeight - selectionBar.paddingBottom - replacedStripHeight
+        } else 0
+        val content = flowLayout.parent as View
+        val viewport = scrollView.height - scrollView.paddingTop - scrollView.paddingBottom
+        // Where the list starts when the bar takes no room: centred if there is room to spare.
+        val spare = viewport + taken -
+            content.paddingTop - content.paddingBottom - flowLayout.height
+        var shift = content.paddingTop + maxOf(0, spare) / 2 - flowLayout.top
+        // A list that cannot scroll must not have its last row pushed under the bar.
+        if (flowLayout.bottom <= viewport) shift = minOf(shift, viewport - flowLayout.bottom)
+        flowLayout.translationY = maxOf(0, shift).toFloat()
+    }
+
+    /** The same palette as the search bar, see [applySearchColors]. */
+    private fun applySelectionBarColors() {
+        val bg = parseColorSafe(prefs.backgroundColor)
+        val isLight = isColorLight(bg)
+        val primary = if (isLight) Color.BLACK else Color.WHITE
+        val secondary = if (isLight) Color.parseColor("#555555") else Color.parseColor("#888888")
+        selectionBar.setBackgroundColor(bg)
+        selectionBar.findViewById<View>(R.id.selectionBarDivider).setBackgroundColor(
+            if (isLight) Color.parseColor("#DDDDDD") else Color.parseColor("#333333")
+        )
+        selectionCount.setTextColor(secondary)
+        selectionBar.findViewById<TextView>(R.id.selectionActions).setTextColor(primary)
+        selectionBar.findViewById<TextView>(R.id.selectionCancel).setTextColor(secondary)
+    }
+
+    /** The ticked apps that are still installed and visible. */
+    private fun selectedApps(): List<AppInfo> =
+        repository.getAllApps().filter { it.key in selectedKeys }
+
+    /**
+     * The bulk actions for the ticked apps. An entry appears only where it can do something,
+     * the way [showAppMenu] builds its own list.
+     */
+    private fun showSelectionMenu() {
+        val apps = selectedApps()
+        if (apps.isEmpty()) {
+            clearSelection()
+            return
+        }
+        val keys = apps.map { it.key }.distinct()
+        // Captured now: showing this menu can close search, which redraws the list behind it.
+        val inView = viewAppKeys
+        val pinned = prefs.pinnedApps
+        val inFolders = FolderStore.keysInAnyFolder(prefs)
+        val items = buildList {
+            add(if (keys.all { it in pinned }) "Unpin" else "Pin to top")
+            add("Move to folder")
+            if (keys.any { it in inFolders }) add("Remove from folder")
+            add("Custom color")
+            if (inView.any { it !in selectedKeys }) add("Select all")
+        }
+        SlateListDialog(
+            context = requireContext(),
+            title = selectionCountLabel(apps.size),
+            items = items,
+            bgColor = prefs.backgroundColor
+        ) { _, label ->
+            when (label) {
+                "Pin to top" -> {
+                    // Out of folders first, as showAppMenu does: a pinned app never sits in one.
+                    val removed = FolderStore.removeAppsFromFolders(prefs, keys)
+                    prefs.pinApps(keys)
+                    finishSelection(removed)
+                }
+                "Unpin" -> {
+                    prefs.unpinApps(keys)
+                    finishSelection()
+                }
+                "Move to folder" -> showFolderPicker { id ->
+                    finishSelection(FolderStore.addAppsToFolder(prefs, id, keys))
+                }
+                "Remove from folder" ->
+                    finishSelection(FolderStore.removeAppsFromFolders(prefs, keys))
+                "Custom color" -> showSelectionColorPicker(keys, apps.size)
+                "Select all" -> {
+                    selectedKeys.addAll(inView)
+                    rerenderCurrentView()
+                }
+            }
+        }.show()
+    }
+
+    /** One color for every app in [keys]. Reset clears all of their custom colors. */
+    private fun showSelectionColorPicker(keys: List<String>, count: Int) {
+        val custom = keys.mapNotNull { prefs.getAppTextColor(it) }
+        ColorPickerDialog(
+            context = requireContext(),
+            title = if (count == 1) "1 app" else "$count apps",
+            initialColor = custom.distinct().singleOrNull() ?: prefs.appTextColor,
+            bgColor = prefs.backgroundColor,
+            showReset = custom.isNotEmpty(),
+            onReset = {
+                prefs.clearAppTextColors(keys)
+                finishSelection()
+            }
+        ) { hex ->
+            prefs.setAppTextColors(keys, hex)
+            finishSelection()
+        }.show()
+    }
+
+    /**
+     * Ends selecting once a bulk action has run, then redraws. Like [finishFolderChange], but
+     * search results stay on screen.
+     */
+    private fun finishSelection(removed: List<Folder> = emptyList()) {
+        selectedKeys.clear()
+        announceRemovedWorkFolders(removed)
+        val open = currentFolderId
+        if (open != null && FolderStore.find(prefs, open) == null) exitFolder()
+        else rerenderCurrentView()
     }
 
     /** Long-press on a folder label - Pin / Rename / Delete / Custom color. */
