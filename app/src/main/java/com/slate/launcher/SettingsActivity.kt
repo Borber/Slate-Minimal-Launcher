@@ -110,6 +110,14 @@ class SettingsActivity : AppCompatActivity() {
             Triple(1, Direction.RIGHT, "1 finger  →"),
         )
 
+        /**
+         * (saved value, picker label) for the choices that are saved as a word. A picker takes
+         * the value from here by position and never works it out from the label.
+         */
+        private val ALIGNMENT_LABELS =
+            listOf("left" to "Left", "center" to "Center", "right" to "Right")
+        private val EDGE_LABELS = listOf("top" to "Top", "bottom" to "Bottom")
+
         data class FontOption(val key: String, val displayName: String)
 
         val FONTS = listOf(
@@ -691,16 +699,16 @@ class SettingsActivity : AppCompatActivity() {
 
         val alignmentValue = findViewById<TextView>(R.id.alignmentValue)
         alignmentValue.setTextColor(secondary)
-        alignmentValue.text = prefs.textAlignment.replaceFirstChar { it.uppercaseChar() }
+        alignmentValue.text = alignmentLabel(prefs.textAlignment)
 
         findViewById<android.view.View>(R.id.rowAlignment).setOnClickListener {
             SlateListDialog(
                 context = this,
                 title = "Alignment",
-                items = listOf("Left", "Center", "Right"),
+                items = ALIGNMENT_LABELS.map { it.second },
                 bgColor = prefs.backgroundColor
-            ) { _, label ->
-                prefs.textAlignment = label.lowercase()
+            ) { index, label ->
+                prefs.textAlignment = ALIGNMENT_LABELS[index].first
                 alignmentValue.text = label
             }.show()
         }
@@ -770,6 +778,14 @@ class SettingsActivity : AppCompatActivity() {
     private fun workMarkerDisplayLabel(value: String): String =
         WORK_MARKER_LABELS.firstOrNull { it.first == value }?.second
             ?: WORK_MARKER_LABELS.first().second
+
+    /** The label of a saved alignment. An unknown value reads as Center, as it renders. */
+    private fun alignmentLabel(value: String): String =
+        (ALIGNMENT_LABELS.firstOrNull { it.first == value } ?: ALIGNMENT_LABELS[1]).second
+
+    /** The label of a saved screen edge. An unknown value reads as Top, as it renders. */
+    private fun edgeLabel(value: String): String =
+        (EDGE_LABELS.firstOrNull { it.first == value } ?: EDGE_LABELS[0]).second
 
     /** Resolve the persisted pref value to the user-visible row label. */
     private fun folderStyleDisplayLabel(value: String): String =
@@ -1224,7 +1240,7 @@ class SettingsActivity : AppCompatActivity() {
         val labelGoogleOnlySub = findViewById<TextView>(R.id.labelGoogleContactsOnlySub)
 
         positionValue.setTextColor(secondary)
-        positionValue.text = prefs.searchBarPosition.replaceFirstChar { it.uppercaseChar() }
+        positionValue.text = edgeLabel(prefs.searchBarPosition)
 
         // Normalize a contradictory persisted state (e.g., from a backup that predates this
         // gate, or manually-edited JSON) where Show-on-home is true while Search is off. Bring
@@ -1334,10 +1350,10 @@ class SettingsActivity : AppCompatActivity() {
             SlateListDialog(
                 context = this,
                 title = "Search bar position",
-                items = listOf("Top", "Bottom"),
+                items = EDGE_LABELS.map { it.second },
                 bgColor = prefs.backgroundColor
-            ) { _, label ->
-                prefs.searchBarPosition = label.lowercase()
+            ) { index, label ->
+                prefs.searchBarPosition = EDGE_LABELS[index].first
                 positionValue.text = label
             }.show()
         }
@@ -2249,8 +2265,7 @@ class SettingsActivity : AppCompatActivity() {
             labelMostUsedPositionSub.text =
                 if (enabled) "Where the most-used apps land in the list"
                 else "Turn on Sort by most used to enable"
-            mostUsedPositionValue.text =
-                prefs.mostUsedPosition.replaceFirstChar { it.uppercaseChar() }
+            mostUsedPositionValue.text = edgeLabel(prefs.mostUsedPosition)
             labelSortByUsageSub.text = if (enabled) {
                 if (prefs.mostUsedPosition == "bottom")
                     "Most launched apps appear at the bottom"
@@ -2265,10 +2280,10 @@ class SettingsActivity : AppCompatActivity() {
             SlateListDialog(
                 context = this,
                 title = "Show most used at",
-                items = listOf("Top", "Bottom"),
+                items = EDGE_LABELS.map { it.second },
                 bgColor = prefs.backgroundColor
-            ) { _, label ->
-                prefs.mostUsedPosition = label.lowercase()
+            ) { index, _ ->
+                prefs.mostUsedPosition = EDGE_LABELS[index].first
                 refreshMostUsedPositionGate()
             }.show()
         }
@@ -2621,10 +2636,10 @@ class SettingsActivity : AppCompatActivity() {
             SlateListDialog(
                 context = this,
                 title = "Position",
-                items = listOf("Top", "Bottom"),
+                items = EDGE_LABELS.map { it.second },
                 bgColor = prefs.backgroundColor
-            ) { _, label ->
-                prefs.quickStripPosition = label.lowercase()
+            ) { index, _ ->
+                prefs.quickStripPosition = EDGE_LABELS[index].first
                 refreshPositionValue()
             }.show()
         }
@@ -2737,7 +2752,7 @@ class SettingsActivity : AppCompatActivity() {
             weightValueLabel.setTextColor(secondary())
         }
         fun refreshAlignmentValueLabel() {
-            alignmentValueLabel.text = prefs.widgetTextAlignment.replaceFirstChar { it.uppercaseChar() }
+            alignmentValueLabel.text = alignmentLabel(prefs.widgetTextAlignment)
             alignmentValueLabel.setTextColor(secondary())
         }
 
@@ -2797,10 +2812,10 @@ class SettingsActivity : AppCompatActivity() {
             SlateListDialog(
                 context = this,
                 title = "Alignment",
-                items = listOf("Left", "Center", "Right"),
+                items = ALIGNMENT_LABELS.map { it.second },
                 bgColor = prefs.backgroundColor
-            ) { _, label ->
-                prefs.widgetTextAlignment = label.lowercase()
+            ) { index, _ ->
+                prefs.widgetTextAlignment = ALIGNMENT_LABELS[index].first
                 refreshAlignmentValueLabel()
                 refreshPreview()
             }.show()

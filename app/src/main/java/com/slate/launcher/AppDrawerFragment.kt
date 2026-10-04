@@ -1726,17 +1726,27 @@ class AppDrawerFragment : Fragment() {
         }
     }
 
+    /** The entries of a pinned shortcut's menu. See [AppMenuAction]. */
+    private enum class ShortcutMenuAction(val label: String) {
+        REMOVE("Remove"),
+        REFRESH("Refresh"),
+        OPEN_SOURCE_APP("Open %s"),
+    }
+
     private fun showShortcutMenu(shortcut: PinnedShortcut, anchor: View) {
         val sourceLabel = appLabelFor(shortcut.sourcePackage) ?: shortcut.sourcePackage
-        val items = listOf("Remove", "Refresh", "Open $sourceLabel")
+        val actions = ShortcutMenuAction.entries
         SlateListDialog(
             context = requireContext(),
             title = shortcut.pinnedLabel,
-            items = items,
+            items = actions.map {
+                if (it == ShortcutMenuAction.OPEN_SOURCE_APP) it.label.format(sourceLabel)
+                else it.label
+            },
             bgColor = prefs.backgroundColor
-        ) { _, label ->
-            when (label) {
-                "Remove" -> {
+        ) { index, _ ->
+            when (actions[index]) {
+                ShortcutMenuAction.REMOVE -> {
                     // This row only ever renders the APP_LIST destination - unpin just that one,
                     // leaving an independent widget-strip pin (if any) untouched.
                     PinnedShortcutStore.remove(
@@ -1745,12 +1755,11 @@ class AppDrawerFragment : Fragment() {
                     )
                     buildAppList()
                 }
-                "Refresh" -> {
+                ShortcutMenuAction.REFRESH -> {
                     PinnedShortcutStore.refreshOne(prefs, launcherApps(), shortcut)
                     buildAppList()
                 }
-                else -> {
-                    // The remaining item is always "Open $sourceLabel".
+                ShortcutMenuAction.OPEN_SOURCE_APP -> {
                     val intent = requireContext().packageManager
                         .getLaunchIntentForPackage(shortcut.sourcePackage)
                     if (intent != null) {
@@ -1921,29 +1930,45 @@ class AppDrawerFragment : Fragment() {
             }
     }
 
+    /**
+     * The entries of the app long-press menu. A menu is built as a list of these and the one
+     * chosen is found by its position, so a label is only ever shown and never compared.
+     */
+    private enum class AppMenuAction(val label: String) {
+        PIN("Pin to top"),
+        UNPIN("Unpin"),
+        APP_INFO("App Info"),
+        HIDE("Hide"),
+        UNINSTALL("Uninstall"),
+        MOVE_TO_FOLDER("Move to folder"),
+        MOVE_TO_ANOTHER_FOLDER("Move to another folder"),
+        REMOVE_FROM_FOLDER("Remove from folder"),
+        CUSTOM_COLOR("Custom color"),
+        RENAME("Rename"),
+        SELECT("Select"),
+    }
+
     private fun showAppMenu(app: AppInfo, anchor: View) {
         val isPinned = prefs.isPinned(app.key)
-        val pinLabel = if (isPinned) "Unpin" else "Pin to top"
         val containingFolder = FolderStore.folderContaining(prefs, app.key)
-        // Build the menu dynamically so folder entries appear only where relevant. Dispatching
-        // on the chosen label avoids fragile index-based branching as items shift.
-        val items = buildList {
-            add(pinLabel)
-            add("App Info")
-            add("Hide")
+        // Build the menu dynamically so folder entries appear only where relevant.
+        val actions = buildList {
+            add(if (isPinned) AppMenuAction.UNPIN else AppMenuAction.PIN)
+            add(AppMenuAction.APP_INFO)
+            add(AppMenuAction.HIDE)
             // ACTION_DELETE carries no user, so for a work app it would silently target the
             // personal copy - the one destructive cross-profile intent with no way to aim it.
             // App Info still exposes the system's own uninstall where policy allows it.
-            if (app.profile == null) add("Uninstall")
+            if (app.profile == null) add(AppMenuAction.UNINSTALL)
             if (containingFolder != null) {
-                add("Move to another folder")
-                add("Remove from folder")
+                add(AppMenuAction.MOVE_TO_ANOTHER_FOLDER)
+                add(AppMenuAction.REMOVE_FROM_FOLDER)
             } else {
-                add("Move to folder")
+                add(AppMenuAction.MOVE_TO_FOLDER)
             }
-            add("Custom color")
-            add("Rename")
-            add("Select")
+            add(AppMenuAction.CUSTOM_COLOR)
+            add(AppMenuAction.RENAME)
+            add(AppMenuAction.SELECT)
         }
         SlateListDialog(
             context = requireContext(),
@@ -1953,19 +1978,19 @@ class AppDrawerFragment : Fragment() {
             // app, so here it is the only thing confirming WHICH Gmail is about to be renamed or
             // hidden - and it is what explains the missing Uninstall entry just below.
             title = app.displayLabel(prefs.workMarkerStyle),
-            items = items,
+            items = actions.map { it.label },
             bgColor = prefs.backgroundColor
-        ) { _, label ->
-            when (label) {
-                "Pin to top" -> {
+        ) { index, _ ->
+            when (actions[index]) {
+                AppMenuAction.PIN -> {
                     // Remove from folder FIRST so the "pinned ⊥ in-folder" invariant holds at
                     // every persistence intermediate, never just at the end of the sequence.
                     FolderStore.removeAppFromFolder(prefs, app.key)
                     prefs.pinApp(app.key)
                     buildAppList()
                 }
-                "Unpin" -> { prefs.unpinApp(app.key); buildAppList() }
-                "App Info" -> {
+                AppMenuAction.UNPIN -> { prefs.unpinApp(app.key); buildAppList() }
+                AppMenuAction.APP_INFO -> {
                     val profile = app.profile
                     if (profile == null) {
                         startActivity(
@@ -1986,7 +2011,7 @@ class AppDrawerFragment : Fragment() {
                         }
                     }
                 }
-                "Hide" -> {
+                AppMenuAction.HIDE -> {
                     prefs.hideApp(app.key)
                     // The cached work list was built before this hide. See hideSelection.
                     if (app.profile != null) repository.invalidateWorkCache()
@@ -1997,13 +2022,14 @@ class AppDrawerFragment : Fragment() {
                         showShortcutsRemovedForHiddenAppDialog(app.name, removedShortcuts.size)
                     }
                 }
-                "Uninstall" -> startActivity(
+                AppMenuAction.UNINSTALL -> startActivity(
                     Intent(Intent.ACTION_DELETE).apply {
                         data = Uri.fromParts("package", app.packageName, null)
                     }
                 )
-                "Move to folder", "Move to another folder" -> showMoveToFolderDialog(app)
-                "Remove from folder" -> {
+                AppMenuAction.MOVE_TO_FOLDER, AppMenuAction.MOVE_TO_ANOTHER_FOLDER ->
+                    showMoveToFolderDialog(app)
+                AppMenuAction.REMOVE_FROM_FOLDER -> {
                     val pruned = FolderStore.removeAppFromFolder(prefs, app.key)
                     // Removing the last app deletes the folder, and if it was a work folder
                     // that also ends automatic grouping for good. Silent permanence is the one
@@ -2023,9 +2049,9 @@ class AppDrawerFragment : Fragment() {
                         buildAppList()
                     }
                 }
-                "Custom color" -> showAppColorPicker(app)
-                "Rename" -> showRenameDialog(app)
-                "Select" -> startSelecting(app)
+                AppMenuAction.CUSTOM_COLOR -> showAppColorPicker(app)
+                AppMenuAction.RENAME -> showRenameDialog(app)
+                AppMenuAction.SELECT -> startSelecting(app)
             }
         }.show()
     }
@@ -2284,6 +2310,18 @@ class AppDrawerFragment : Fragment() {
     private fun selectedApps(): List<AppInfo> =
         repository.getAllApps().filter { it.key in selectedKeys }
 
+    /** The entries of the selection menu. See [AppMenuAction]. */
+    private enum class SelectionMenuAction(val label: String) {
+        PIN("Pin to top"),
+        UNPIN("Unpin"),
+        HIDE("Hide"),
+        UNINSTALL("Uninstall"),
+        MOVE_TO_FOLDER("Move to folder"),
+        REMOVE_FROM_FOLDER("Remove from folder"),
+        CUSTOM_COLOR("Custom color"),
+        SELECT_ALL("Select all"),
+    }
+
     /**
      * The bulk actions for the ticked apps. An entry appears only where it can do something,
      * the way [showAppMenu] builds its own list.
@@ -2300,44 +2338,47 @@ class AppDrawerFragment : Fragment() {
         val pinned = prefs.pinnedApps
         val inFolders = FolderStore.keysInAnyFolder(prefs)
         val removable = removablePackages(apps)
-        val items = buildList {
-            add(if (keys.all { it in pinned }) "Unpin" else "Pin to top")
-            add("Hide")
-            if (removable.isNotEmpty()) add("Uninstall")
-            add("Move to folder")
-            if (keys.any { it in inFolders }) add("Remove from folder")
-            add("Custom color")
-            if (inView.any { it !in selectedKeys }) add("Select all")
+        val actions = buildList {
+            add(
+                if (keys.all { it in pinned }) SelectionMenuAction.UNPIN
+                else SelectionMenuAction.PIN
+            )
+            add(SelectionMenuAction.HIDE)
+            if (removable.isNotEmpty()) add(SelectionMenuAction.UNINSTALL)
+            add(SelectionMenuAction.MOVE_TO_FOLDER)
+            if (keys.any { it in inFolders }) add(SelectionMenuAction.REMOVE_FROM_FOLDER)
+            add(SelectionMenuAction.CUSTOM_COLOR)
+            if (inView.any { it !in selectedKeys }) add(SelectionMenuAction.SELECT_ALL)
         }
         SlateListDialog(
             context = requireContext(),
             title = selectionCountLabel(apps.size),
-            items = items,
+            items = actions.map { it.label },
             bgColor = prefs.backgroundColor
-        ) { _, label ->
-            when (label) {
-                "Pin to top" -> {
+        ) { index, _ ->
+            when (actions[index]) {
+                SelectionMenuAction.PIN -> {
                     // Out of folders first, as showAppMenu does: a pinned app never sits in one.
                     val removed = FolderStore.removeAppsFromFolders(prefs, keys)
                     prefs.pinApps(keys)
                     finishSelection(removed)
                 }
-                "Unpin" -> {
+                SelectionMenuAction.UNPIN -> {
                     prefs.unpinApps(keys)
                     finishSelection()
                 }
-                "Hide" -> confirmHideSelection(apps)
-                "Uninstall" -> confirmUninstallSelection(
+                SelectionMenuAction.HIDE -> confirmHideSelection(apps)
+                SelectionMenuAction.UNINSTALL -> confirmUninstallSelection(
                     removable,
                     skipped = apps.count { it.packageName !in removable }
                 )
-                "Move to folder" -> showFolderPicker { id ->
+                SelectionMenuAction.MOVE_TO_FOLDER -> showFolderPicker { id ->
                     finishSelection(FolderStore.addAppsToFolder(prefs, id, keys))
                 }
-                "Remove from folder" ->
+                SelectionMenuAction.REMOVE_FROM_FOLDER ->
                     finishSelection(FolderStore.removeAppsFromFolders(prefs, keys))
-                "Custom color" -> showSelectionColorPicker(keys, apps.size)
-                "Select all" -> {
+                SelectionMenuAction.CUSTOM_COLOR -> showSelectionColorPicker(keys, apps.size)
+                SelectionMenuAction.SELECT_ALL -> {
                     selectedKeys.addAll(inView)
                     rerenderCurrentView()
                 }
@@ -2545,24 +2586,37 @@ class AppDrawerFragment : Fragment() {
         dialog.show()
     }
 
+    /** The entries of the folder menu. See [AppMenuAction]. */
+    private enum class FolderMenuAction(val label: String) {
+        PIN("Pin to top"),
+        UNPIN("Unpin"),
+        RENAME("Rename"),
+        CUSTOM_COLOR("Custom color"),
+        DELETE("Delete folder"),
+    }
+
     /** Long-press on a folder label - Pin / Rename / Delete / Custom color. */
     private fun showFolderMenu(folder: Folder, anchor: View) {
         // Pin sits first and its label toggles, matching showAppMenu. Unlike pinning an app,
         // this touches nothing but the pin set: a folder is a container, so the "pinned apps
         // can't live in folders" invariant has nothing to resolve here.
-        val pinLabel = if (prefs.isFolderPinned(folder.id)) "Unpin" else "Pin to top"
+        val pin =
+            if (prefs.isFolderPinned(folder.id)) FolderMenuAction.UNPIN else FolderMenuAction.PIN
+        val actions = listOf(
+            pin, FolderMenuAction.RENAME, FolderMenuAction.CUSTOM_COLOR, FolderMenuAction.DELETE
+        )
         SlateListDialog(
             context = requireContext(),
             title = folder.name,
-            items = listOf(pinLabel, "Rename", "Custom color", "Delete folder"),
+            items = actions.map { it.label },
             bgColor = prefs.backgroundColor
-        ) { _, label ->
-            when (label) {
-                "Pin to top" -> { prefs.pinFolder(folder.id); buildAppList() }
-                "Unpin" -> { prefs.unpinFolder(folder.id); buildAppList() }
-                "Rename" -> showRenameFolderDialog(folder)
-                "Custom color" -> showFolderColorPicker(folder)
-                "Delete folder" -> showDeleteFolderConfirm(folder)
+        ) { index, _ ->
+            when (actions[index]) {
+                FolderMenuAction.PIN -> { prefs.pinFolder(folder.id); buildAppList() }
+                FolderMenuAction.UNPIN -> { prefs.unpinFolder(folder.id); buildAppList() }
+                FolderMenuAction.RENAME -> showRenameFolderDialog(folder)
+                FolderMenuAction.CUSTOM_COLOR -> showFolderColorPicker(folder)
+                FolderMenuAction.DELETE -> showDeleteFolderConfirm(folder)
             }
         }.show()
     }

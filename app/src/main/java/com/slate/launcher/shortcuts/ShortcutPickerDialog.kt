@@ -185,7 +185,10 @@ class ShortcutPickerDialog private constructor(
         val otherDestination = destination.other()
         if (existing != null && otherDestination in existing.destinations) {
             labelGroup.addView(TextView(context).apply {
-                text = "Also pinned to ${otherDestination.displayLabel().lowercase()}"
+                text = when (otherDestination) {
+                    ShortcutDestination.WIDGET_STRIP -> "Also pinned to widget strip"
+                    ShortcutDestination.APP_LIST -> "Also pinned to application list"
+                }
                 textSize = 12f
                 setTextColor(secondary)
                 alpha = 0.7f

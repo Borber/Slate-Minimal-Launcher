@@ -235,19 +235,24 @@ class OnboardingActivity : AppCompatActivity() {
         checkPrivacy = findViewById(R.id.checkPrivacy)
         val label = findViewById<TextView>(R.id.labelPrivacyAcceptance)
 
-        val text = "I've read the Privacy Policy"
-        val linkStart = text.indexOf("Privacy Policy")
-        val span = SpannableString(text)
-        span.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                PrivacyPolicyDialog.show(this@OnboardingActivity)
-            }
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.color = Color.parseColor(LINK_COLOR)
-                ds.isUnderlineText = true
-            }
-        }, linkStart, linkStart + "Privacy Policy".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        // The sentence takes the link text as its argument, so a translation decides where
+        // the link sits.
+        val link = "Privacy Policy"
+        val sentence = "I've read the %1\$s".format(link)
+        val linkStart = sentence.indexOf(link)
+        val span = SpannableString(sentence)
+        if (linkStart >= 0) {
+            span.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    PrivacyPolicyDialog.show(this@OnboardingActivity)
+                }
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.color = Color.parseColor(LINK_COLOR)
+                    ds.isUnderlineText = true
+                }
+            }, linkStart, linkStart + link.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
         label.text = span
         label.movementMethod = LinkMovementMethod.getInstance()
 
