@@ -57,7 +57,11 @@ object PrivacyPolicyDialog {
         accent: Int = Color.parseColor("#8888FF")
     ) {
         val markdown = loadMarkdown(activity) ?: run {
-            Toast.makeText(activity, "Opening privacy policy in browser…", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity,
+                activity.getString(R.string.privacy_opening_in_browser),
+                Toast.LENGTH_SHORT
+            ).show()
             openExternal(activity)
             return
         }

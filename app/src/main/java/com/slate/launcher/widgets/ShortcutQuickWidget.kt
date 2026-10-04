@@ -1,6 +1,7 @@
 package com.slate.launcher.widgets
 
 import android.content.Context
+import com.slate.launcher.R
 import com.slate.launcher.shortcuts.PinnedShortcut
 import com.slate.launcher.shortcuts.PinnedShortcutStore
 
@@ -14,10 +15,13 @@ import com.slate.launcher.shortcuts.PinnedShortcutStore
 class ShortcutQuickWidget(private val shortcut: PinnedShortcut) : QuickWidget() {
 
     override val id: String get() = shortcut.id
-    override val displayName: String get() = shortcut.pinnedLabel
+    override fun displayName(context: Context): String = shortcut.pinnedLabel
 
     override fun renderLabel(context: Context): WidgetLabel =
-        WidgetLabel("${shortcut.pinnedLabel} ↗", active = !PinnedShortcutStore.isLikelyStale(shortcut))
+        WidgetLabel(
+            context.getString(R.string.shortcut_label, shortcut.pinnedLabel),
+            active = !PinnedShortcutStore.isLikelyStale(shortcut)
+        )
 
     override fun onTap(context: Context) {
         val launcherApps = PinnedShortcutStore.launcherApps(context)

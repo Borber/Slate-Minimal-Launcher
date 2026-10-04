@@ -125,7 +125,8 @@ object WorkProfiles {
             WorkProfile(
                 handle = handle,
                 serial = serial,
-                label = if (index == 0) "Work" else "Work ${index + 1}",
+                label = if (index == 0) context.getString(R.string.work_profile_label)
+                else context.getString(R.string.work_profile_label_numbered, index + 1),
                 quiet = runCatching { userManager.isQuietModeEnabled(handle) }.getOrDefault(false)
             )
         }

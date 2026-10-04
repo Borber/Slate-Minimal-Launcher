@@ -46,7 +46,7 @@ class AlphaFastScroll @JvmOverloads constructor(
     var onTouchStateChanged: ((Boolean) -> Unit)? = null
 
     init {
-        contentDescription = "Alphabet fast scroll"
+        contentDescription = context.getString(R.string.home_fast_scroll_description)
         isHapticFeedbackEnabled = true
     }
 

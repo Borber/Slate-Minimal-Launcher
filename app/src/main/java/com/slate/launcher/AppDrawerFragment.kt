@@ -41,6 +41,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -210,7 +211,7 @@ class AppDrawerFragment : Fragment() {
                             prefs = prefs,
                             pinManager = PinManager(prefs),
                             enabled = prefs.lockLongPressMenusEnabled,
-                            title = "Home Menu",
+                            title = getString(R.string.pin_title_home_menu),
                             onSuccess = { showHomeLongPressDialog() }
                         )
                     }
@@ -1031,7 +1032,11 @@ class AppDrawerFragment : Fragment() {
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         runCatching { startActivity(intent) }
             .onFailure {
-                Toast.makeText(requireContext(), "No dialer installed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.home_no_dialer_installed),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -1066,7 +1071,7 @@ class AppDrawerFragment : Fragment() {
                     prefs = prefs,
                     pinManager = PinManager(prefs),
                     enabled = prefs.lockLongPressMenusEnabled,
-                    title = "Settings",
+                    title = getString(R.string.settings_title),
                     onSuccess = {
                         startActivity(Intent(requireContext(), SettingsActivity::class.java))
                     }
@@ -1367,12 +1372,10 @@ class AppDrawerFragment : Fragment() {
             contact.typeLabel?.takeIf { it.isNotBlank() }
                 ?.let { append(" (").append(it).append(')') }
         }
-        contentDescription = buildString {
-            append("Contact: ")
-            append(contact.displayName)
-            contact.typeLabel?.takeIf { it.isNotBlank() }?.let { append(", ").append(it) }
-            append(", double tap to dial")
-        }
+        val type = contact.typeLabel?.takeIf { it.isNotBlank() }
+        contentDescription =
+            if (type == null) getString(R.string.home_contact_description, contact.displayName)
+            else getString(R.string.home_contact_description_with_type, contact.displayName, type)
         textSize = size
         setTextColor(color)
         this.typeface = typeface
@@ -1414,7 +1417,7 @@ class AppDrawerFragment : Fragment() {
                 prefs = prefs,
                 pinManager = PinManager(prefs),
                 enabled = prefs.lockLongPressMenusEnabled,
-                title = "Folder Menu",
+                title = getString(R.string.pin_title_folder_menu),
                 onSuccess = { showFolderMenu(folder, this) }
             )
             true
@@ -1450,7 +1453,7 @@ class AppDrawerFragment : Fragment() {
         vPad: Int,
         gravity: Int
     ): TextView = TextView(requireContext()).apply {
-        text = "‹ back"
+        text = getString(R.string.folder_back)
         textSize = size
         setTextColor(color)
         this.typeface = typeface
@@ -1588,7 +1591,7 @@ class AppDrawerFragment : Fragment() {
                 prefs = prefs,
                 pinManager = PinManager(prefs),
                 enabled = prefs.lockLongPressMenusEnabled,
-                title = "App Menu",
+                title = getString(R.string.pin_title_app_menu),
                 onSuccess = { showAppMenu(app, this) }
             )
             true
@@ -1616,7 +1619,7 @@ class AppDrawerFragment : Fragment() {
         vPad: Int,
         gravity: Int
     ): TextView = TextView(requireContext()).apply {
-        text = "${shortcut.pinnedLabel} ↗"
+        text = getString(R.string.shortcut_label, shortcut.pinnedLabel)
         textSize = size
         setTextColor(defaultTextColor)
         alpha = if (PinnedShortcutStore.isLikelyStale(shortcut)) 0.5f else 1f
@@ -1631,7 +1634,7 @@ class AppDrawerFragment : Fragment() {
                 prefs = prefs,
                 pinManager = PinManager(prefs),
                 enabled = prefs.lockLongPressMenusEnabled,
-                title = "Shortcut Menu",
+                title = getString(R.string.pin_title_shortcut_menu),
                 onSuccess = { showShortcutMenu(shortcut, this) }
             )
             true
@@ -1720,17 +1723,21 @@ class AppDrawerFragment : Fragment() {
         if (isSearchOpen) closeSearch()
         val ok = PinnedShortcutStore.startShortcut(launcherApps(), shortcut)
         if (!ok) {
-            Toast.makeText(requireContext(), "This shortcut is no longer available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.shortcut_no_longer_available),
+                Toast.LENGTH_SHORT
+            ).show()
             PinnedShortcutStore.refreshOne(prefs, launcherApps(), shortcut)
             buildAppList()
         }
     }
 
     /** The entries of a pinned shortcut's menu. See [AppMenuAction]. */
-    private enum class ShortcutMenuAction(val label: String) {
-        REMOVE("Remove"),
-        REFRESH("Refresh"),
-        OPEN_SOURCE_APP("Open %s"),
+    private enum class ShortcutMenuAction(@param:StringRes val label: Int) {
+        REMOVE(R.string.shortcut_menu_remove),
+        REFRESH(R.string.shortcut_menu_refresh),
+        OPEN_SOURCE_APP(R.string.shortcut_menu_open_app),
     }
 
     private fun showShortcutMenu(shortcut: PinnedShortcut, anchor: View) {
@@ -1740,8 +1747,8 @@ class AppDrawerFragment : Fragment() {
             context = requireContext(),
             title = shortcut.pinnedLabel,
             items = actions.map {
-                if (it == ShortcutMenuAction.OPEN_SOURCE_APP) it.label.format(sourceLabel)
-                else it.label
+                if (it == ShortcutMenuAction.OPEN_SOURCE_APP) getString(it.label, sourceLabel)
+                else getString(it.label)
             },
             bgColor = prefs.backgroundColor
         ) { index, _ ->
@@ -1765,7 +1772,11 @@ class AppDrawerFragment : Fragment() {
                     if (intent != null) {
                         runCatching { startActivity(intent) }
                     } else {
-                        Toast.makeText(requireContext(), "App not installed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.home_app_not_installed),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -1910,7 +1921,9 @@ class AppDrawerFragment : Fragment() {
                     null
                 )
             }.onFailure {
-                Toast.makeText(requireContext(), "App not installed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(), getString(R.string.home_app_not_installed), Toast.LENGTH_SHORT
+                ).show()
             }
             return
         }
@@ -1918,7 +1931,9 @@ class AppDrawerFragment : Fragment() {
         val intent = requireContext().packageManager
             .getLaunchIntentForPackage(app.packageName)
         if (intent == null) {
-            Toast.makeText(requireContext(), "App not installed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(), getString(R.string.home_app_not_installed), Toast.LENGTH_SHORT
+            ).show()
             return
         }
         // startActivity can still throw ActivityNotFoundException (app uninstalled between
@@ -1926,7 +1941,9 @@ class AppDrawerFragment : Fragment() {
         // Match launchHiddenApp's defensive pattern so neither path crashes the launcher.
         runCatching { startActivity(intent) }
             .onFailure {
-                Toast.makeText(requireContext(), "App not installed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(), getString(R.string.home_app_not_installed), Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -1934,18 +1951,18 @@ class AppDrawerFragment : Fragment() {
      * The entries of the app long-press menu. A menu is built as a list of these and the one
      * chosen is found by its position, so a label is only ever shown and never compared.
      */
-    private enum class AppMenuAction(val label: String) {
-        PIN("Pin to top"),
-        UNPIN("Unpin"),
-        APP_INFO("App Info"),
-        HIDE("Hide"),
-        UNINSTALL("Uninstall"),
-        MOVE_TO_FOLDER("Move to folder"),
-        MOVE_TO_ANOTHER_FOLDER("Move to another folder"),
-        REMOVE_FROM_FOLDER("Remove from folder"),
-        CUSTOM_COLOR("Custom color"),
-        RENAME("Rename"),
-        SELECT("Select"),
+    private enum class AppMenuAction(@param:StringRes val label: Int) {
+        PIN(R.string.menu_pin_to_top),
+        UNPIN(R.string.menu_unpin),
+        APP_INFO(R.string.menu_app_info),
+        HIDE(R.string.menu_hide),
+        UNINSTALL(R.string.menu_uninstall),
+        MOVE_TO_FOLDER(R.string.menu_move_to_folder),
+        MOVE_TO_ANOTHER_FOLDER(R.string.menu_move_to_another_folder),
+        REMOVE_FROM_FOLDER(R.string.menu_remove_from_folder),
+        CUSTOM_COLOR(R.string.menu_custom_color),
+        RENAME(R.string.menu_rename),
+        SELECT(R.string.menu_select),
     }
 
     private fun showAppMenu(app: AppInfo, anchor: View) {
@@ -1978,7 +1995,7 @@ class AppDrawerFragment : Fragment() {
             // app, so here it is the only thing confirming WHICH Gmail is about to be renamed or
             // hidden - and it is what explains the missing Uninstall entry just below.
             title = app.displayLabel(prefs.workMarkerStyle),
-            items = actions.map { it.label },
+            items = actions.map { getString(it.label) },
             bgColor = prefs.backgroundColor
         ) { index, _ ->
             when (actions[index]) {
@@ -2037,7 +2054,7 @@ class AppDrawerFragment : Fragment() {
                     if (pruned?.profileSerial != null) {
                         Toast.makeText(
                             requireContext(),
-                            "\"${pruned.name}\" removed. Slate won't group these apps again.",
+                            getString(R.string.folder_work_folder_removed, pruned.name),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -2062,14 +2079,14 @@ class AppDrawerFragment : Fragment() {
      * shortcut into an app the user just chose not to see would be a confusing loose end.
      */
     private fun showShortcutsRemovedForHiddenAppDialog(appName: String, count: Int) {
-        val plural = if (count == 1) "shortcut" else "shortcuts"
         SlateListDialog(
             context = requireContext(),
-            title = "Shortcuts removed",
+            title = getString(R.string.hidden_shortcuts_removed_title),
             items = listOf(
-                "Hiding $appName also removed $count pinned $plural from it - a hidden app's " +
-                    "shortcuts wouldn't be reachable from here either.",
-                "OK"
+                resources.getQuantityString(
+                    R.plurals.hidden_shortcuts_removed, count, appName, count
+                ),
+                getString(R.string.common_ok)
             ),
             bgColor = prefs.backgroundColor
         ) { _, _ -> }.show()
@@ -2086,10 +2103,10 @@ class AppDrawerFragment : Fragment() {
      */
     private fun showFolderPicker(onPicked: (folderId: String) -> Unit) {
         val existing = FolderStore.all(prefs)
-        val items = existing.map { it.name } + "+ New folder"
+        val items = existing.map { it.name } + getString(R.string.folder_new_option)
         SlateListDialog(
             context = requireContext(),
-            title = "Move to folder",
+            title = getString(R.string.menu_move_to_folder),
             items = items,
             bgColor = prefs.backgroundColor
         ) { index, _ ->
@@ -2118,7 +2135,7 @@ class AppDrawerFragment : Fragment() {
         removed.filter { it.profileSerial != null }.forEach { folder ->
             Toast.makeText(
                 requireContext(),
-                "\"${folder.name}\" removed. Slate won't group these apps again.",
+                getString(R.string.folder_work_folder_removed, folder.name),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -2189,7 +2206,8 @@ class AppDrawerFragment : Fragment() {
         row.layoutParams = params
         row.isSelected = selected
         row.contentDescription =
-            if (selected) "${row.text}, selected" else "${row.text}, not selected"
+            if (selected) getString(R.string.selection_row_selected, row.text)
+            else getString(R.string.selection_row_not_selected, row.text)
     }
 
     /**
@@ -2255,7 +2273,7 @@ class AppDrawerFragment : Fragment() {
     }
 
     private fun selectionCountLabel(count: Int): String =
-        if (count == 1) "1 selected" else "$count selected"
+        resources.getQuantityString(R.plurals.selection_count, count, count)
 
     /** Shows the bar with the current count while selecting, hides it otherwise. */
     private fun syncSelectionBar() {
@@ -2311,15 +2329,15 @@ class AppDrawerFragment : Fragment() {
         repository.getAllApps().filter { it.key in selectedKeys }
 
     /** The entries of the selection menu. See [AppMenuAction]. */
-    private enum class SelectionMenuAction(val label: String) {
-        PIN("Pin to top"),
-        UNPIN("Unpin"),
-        HIDE("Hide"),
-        UNINSTALL("Uninstall"),
-        MOVE_TO_FOLDER("Move to folder"),
-        REMOVE_FROM_FOLDER("Remove from folder"),
-        CUSTOM_COLOR("Custom color"),
-        SELECT_ALL("Select all"),
+    private enum class SelectionMenuAction(@param:StringRes val label: Int) {
+        PIN(R.string.menu_pin_to_top),
+        UNPIN(R.string.menu_unpin),
+        HIDE(R.string.menu_hide),
+        UNINSTALL(R.string.menu_uninstall),
+        MOVE_TO_FOLDER(R.string.menu_move_to_folder),
+        REMOVE_FROM_FOLDER(R.string.menu_remove_from_folder),
+        CUSTOM_COLOR(R.string.menu_custom_color),
+        SELECT_ALL(R.string.menu_select_all),
     }
 
     /**
@@ -2353,7 +2371,7 @@ class AppDrawerFragment : Fragment() {
         SlateListDialog(
             context = requireContext(),
             title = selectionCountLabel(apps.size),
-            items = actions.map { it.label },
+            items = actions.map { getString(it.label) },
             bgColor = prefs.backgroundColor
         ) { index, _ ->
             when (actions[index]) {
@@ -2391,7 +2409,7 @@ class AppDrawerFragment : Fragment() {
         val custom = keys.mapNotNull { prefs.getAppTextColor(it) }
         ColorPickerDialog(
             context = requireContext(),
-            title = if (count == 1) "1 app" else "$count apps",
+            title = resources.getQuantityString(R.plurals.selection_apps, count, count),
             initialColor = custom.distinct().singleOrNull() ?: prefs.appTextColor,
             bgColor = prefs.backgroundColor,
             showReset = custom.isNotEmpty(),
@@ -2417,17 +2435,11 @@ class AppDrawerFragment : Fragment() {
         else rerenderCurrentView()
     }
 
-    private fun countOf(count: Int, noun: String): String =
-        if (count == 1) "1 $noun" else "$count ${noun}s"
-
     private fun confirmHideSelection(apps: List<AppInfo>) {
-        val one = apps.size == 1
         showConfirmDialog(
-            title = "HIDE APPS",
-            body = "Hide ${countOf(apps.size, "app")}? ${if (one) "It leaves" else "They leave"} " +
-                "the home screen and search. You can open or unhide " +
-                "${if (one) "it" else "them"} from Hidden Apps.",
-            confirmLabel = "Hide"
+            title = getString(R.string.selection_hide_title),
+            body = resources.getQuantityString(R.plurals.selection_hide_body, apps.size, apps.size),
+            confirmLabel = getString(R.string.menu_hide)
         ) { hideSelection(apps) }
     }
 
@@ -2447,15 +2459,15 @@ class AppDrawerFragment : Fragment() {
         if (shortcuts > 0) quickStrip?.bind()
         finishSelection()
         if (shortcuts == 0) return
-        val one = apps.size == 1
+        val notice =
+            if (apps.size == 1) R.plurals.selection_shortcuts_removed_one_app
+            else R.plurals.selection_shortcuts_removed_several_apps
         SlateListDialog(
             context = requireContext(),
-            title = "Shortcuts removed",
+            title = getString(R.string.hidden_shortcuts_removed_title),
             items = listOf(
-                "Hiding ${if (one) "this app" else "these apps"} also removed " +
-                    "${countOf(shortcuts, "pinned shortcut")} from ${if (one) "it" else "them"} - " +
-                    "a hidden app's shortcuts wouldn't be reachable from here either.",
-                "OK"
+                resources.getQuantityString(notice, shortcuts, shortcuts),
+                getString(R.string.common_ok)
             ),
             bgColor = prefs.backgroundColor
         ) { _, _ -> }.show()
@@ -2482,17 +2494,25 @@ class AppDrawerFragment : Fragment() {
 
     private fun confirmUninstallSelection(packages: List<String>, skipped: Int) {
         val body = buildString {
-            append("Uninstall ${countOf(packages.size, "app")}? ")
             append(
-                if (packages.size == 1) "Android will ask you to confirm it."
-                else "Android will ask you to confirm each one. Cancelling a prompt stops the rest."
+                resources.getQuantityString(
+                    R.plurals.selection_uninstall_body, packages.size, packages.size
+                )
             )
             if (skipped > 0) {
-                append(" ${countOf(skipped, "selected app")} can't be uninstalled from here ")
-                append("and will be skipped.")
+                append(' ')
+                append(
+                    resources.getQuantityString(
+                        R.plurals.selection_uninstall_skipped, skipped, skipped
+                    )
+                )
             }
         }
-        showConfirmDialog(title = "UNINSTALL APPS", body = body, confirmLabel = "Uninstall") {
+        showConfirmDialog(
+            title = getString(R.string.selection_uninstall_title),
+            body = body,
+            confirmLabel = getString(R.string.menu_uninstall)
+        ) {
             finishSelection()
             uninstallQueue.clear()
             uninstallQueue.addAll(packages)
@@ -2587,12 +2607,12 @@ class AppDrawerFragment : Fragment() {
     }
 
     /** The entries of the folder menu. See [AppMenuAction]. */
-    private enum class FolderMenuAction(val label: String) {
-        PIN("Pin to top"),
-        UNPIN("Unpin"),
-        RENAME("Rename"),
-        CUSTOM_COLOR("Custom color"),
-        DELETE("Delete folder"),
+    private enum class FolderMenuAction(@param:StringRes val label: Int) {
+        PIN(R.string.menu_pin_to_top),
+        UNPIN(R.string.menu_unpin),
+        RENAME(R.string.menu_rename),
+        CUSTOM_COLOR(R.string.menu_custom_color),
+        DELETE(R.string.menu_delete_folder),
     }
 
     /** Long-press on a folder label - Pin / Rename / Delete / Custom color. */
@@ -2608,7 +2628,7 @@ class AppDrawerFragment : Fragment() {
         SlateListDialog(
             context = requireContext(),
             title = folder.name,
-            items = actions.map { it.label },
+            items = actions.map { getString(it.label) },
             bgColor = prefs.backgroundColor
         ) { index, _ ->
             when (actions[index]) {
@@ -2625,7 +2645,7 @@ class AppDrawerFragment : Fragment() {
     private fun showFolderNameDialog(
         title: String,
         initial: String = "",
-        confirmLabel: String = "Save",
+        confirmLabel: String = getString(R.string.common_save),
         onConfirm: (String) -> Unit
     ) {
         val ctx = requireContext()
@@ -2660,7 +2680,7 @@ class AppDrawerFragment : Fragment() {
             textSize = 17f
             setTextColor(primary)
             setHintTextColor(secondary)
-            hint = "Folder name"
+            hint = getString(R.string.folder_name_hint)
             background = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
                 setColor(inputFill)
@@ -2690,7 +2710,7 @@ class AppDrawerFragment : Fragment() {
             setPadding(hPad, 0, hPad, (16 * density).toInt())
         }
         buttonRow.addView(TextView(ctx).apply {
-            text = "Cancel"
+            text = getString(R.string.common_cancel)
             textSize = 15f
             setTextColor(secondary)
             setPadding(bHPad, bVPad, bHPad, bVPad)
@@ -2704,7 +2724,9 @@ class AppDrawerFragment : Fragment() {
             setOnClickListener {
                 val typed = input.text.toString().trim()
                 if (typed.isEmpty()) {
-                    Toast.makeText(ctx, "Name can't be empty", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        ctx, getString(R.string.folder_name_empty), Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 }
                 dialog.dismiss()
@@ -2737,14 +2759,18 @@ class AppDrawerFragment : Fragment() {
     }
 
     private fun showCreateFolderDialog(onCreated: (String) -> Unit) {
-        showFolderNameDialog(title = "New folder", confirmLabel = "Create", onConfirm = onCreated)
+        showFolderNameDialog(
+            title = getString(R.string.folder_new_title),
+            confirmLabel = getString(R.string.folder_create),
+            onConfirm = onCreated
+        )
     }
 
     private fun showRenameFolderDialog(folder: Folder) {
         showFolderNameDialog(
-            title = "Rename folder",
+            title = getString(R.string.folder_rename_title),
             initial = folder.name,
-            confirmLabel = "Save"
+            confirmLabel = getString(R.string.common_save)
         ) { newName ->
             FolderStore.rename(prefs, folder.id, newName)
             buildAppList()
@@ -2754,7 +2780,7 @@ class AppDrawerFragment : Fragment() {
     private fun showFolderColorPicker(folder: Folder) {
         ColorPickerDialog(
             context = requireContext(),
-            title = "Folder color",
+            title = getString(R.string.folder_color_title),
             // Open on the color the folder is showing, which is the Settings default when the
             // folder has none of its own.
             initialColor = folder.color ?: prefs.folderTextColor ?: prefs.appTextColor,
@@ -2803,16 +2829,14 @@ class AppDrawerFragment : Fragment() {
             cornerRadius = density * 12
         }
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "DELETE FOLDER"
+            text = getString(R.string.folder_delete_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
             text = if (folder.profileSerial != null) {
-                "Delete \"${folder.name}\"? Its apps will return to the main list, and Slate " +
-                    "won't group this profile's apps again unless you use " +
-                    "Settings > Group work apps."
+                getString(R.string.folder_delete_body_work, folder.name)
             } else {
-                "Delete \"${folder.name}\"? Its apps will return to the main list."
+                getString(R.string.folder_delete_body, folder.name)
             }
             setTextColor(primary)
         }
@@ -2822,7 +2846,7 @@ class AppDrawerFragment : Fragment() {
             setOnClickListener { dialog.dismiss() }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Delete"
+            text = getString(R.string.folder_delete_confirm)
             setTextColor(accent)
             setOnClickListener {
                 dialog.dismiss()
@@ -2857,7 +2881,7 @@ class AppDrawerFragment : Fragment() {
 
         // Title
         root.addView(TextView(ctx).apply {
-            text = "Rename ${app.name}"
+            text = getString(R.string.menu_rename_title, app.name)
             textSize = 15f
             setTextColor(accent)
             setPadding(hPad, vPad, hPad, vPad)
@@ -2942,7 +2966,7 @@ class AppDrawerFragment : Fragment() {
 
         if (hasCustomName) {
             buttonRow.addView(
-                pillButton("Reset to Default", resetBg, secondary) {
+                pillButton(getString(R.string.menu_rename_reset), resetBg, secondary) {
                     prefs.clearAppCustomName(app.key)
                     buildAppList()
                 }.also {
@@ -2955,7 +2979,7 @@ class AppDrawerFragment : Fragment() {
         }
 
         buttonRow.addView(
-            pillButton("Save", saveBg, Color.WHITE) {
+            pillButton(getString(R.string.common_save), saveBg, Color.WHITE) {
                 val newName = input.text.toString().trim()
                 if (newName.isNotEmpty()) {
                     prefs.setAppCustomName(app.key, newName)
@@ -3020,7 +3044,11 @@ class AppDrawerFragment : Fragment() {
         SlateListDialog(
             context = requireContext(),
             title = "",
-            items = listOf("Customize", "Hidden Apps", "FAQ"),
+            items = listOf(
+                getString(R.string.home_menu_customize),
+                getString(R.string.home_hidden_apps),
+                getString(R.string.home_faq)
+            ),
             bgColor = prefs.backgroundColor
         ) { index, _ ->
             when (index) {
@@ -3029,7 +3057,7 @@ class AppDrawerFragment : Fragment() {
                     activity = requireActivity(),
                     prefs = prefs,
                     pinManager = PinManager(prefs),
-                    title = "Hidden Apps",
+                    title = getString(R.string.home_hidden_apps),
                     onSuccess = { showHiddenAppsDialog() }
                 )
                 2 -> showFaqDialog()
@@ -3039,98 +3067,57 @@ class AppDrawerFragment : Fragment() {
 
     private fun showFaqDialog() {
         val faqs = listOf(
-            "Why does Slate need Accessibility permission?" to
-                "Accessibility is used only for the \"double tap to lock screen\" feature. It calls a single system API (GLOBAL_ACTION_LOCK_SCREEN) to lock the device while keeping biometric unlock available.\n\nSlate cannot read screen content, monitor app usage, or collect any data via this permission.",
+            getString(R.string.faq_accessibility_question) to
+                getString(R.string.faq_accessibility_answer),
 
-            "Why does Slate need Notification access?" to
-                "Notification access is optional and used only for the notification highlight feature - it changes the color of an app's name when it has a pending notification.\n\nSlate only checks which packages have active notifications. Notification content (titles, messages, senders) is never read or stored.",
+            getString(R.string.faq_notification_access_question) to
+                getString(R.string.faq_notification_access_answer),
 
-            "Does Slate collect any data?" to
-                "No. Slate is 100% offline and collects zero data.\n\nThere is no analytics, no crash reporting, no tracking, and no network requests of any kind. All settings, usage counts, and customizations are stored locally on your device using Android's SharedPreferences and never leave it.",
+            getString(R.string.faq_data_question) to
+                getString(R.string.faq_data_answer),
 
-            "Does Slate read my contacts?" to
-                "Only if you turn on \"Search contacts\" in Settings → Search. With that off (the default), Slate has no contacts permission at all. With it on, Slate reads your contact list each time you type a search query - to find matches alongside your apps. Nothing is stored, indexed, or sent anywhere. Quitting and relaunching the launcher starts with no contact data in memory.\n\nWork-profile contacts are not visible (Android isolates them from third-party launchers). Contacts without a phone number are skipped, since tapping a contact opens the dialer.\n\nIf the same person appears multiple times - they often do, because the same contact can exist under more than one source (Google, WhatsApp, Telegram, SIM, OEM contacts, etc.) - turn on \"Google contacts only\" in the same settings page to filter to your Google address book and skip the duplicates.",
+            getString(R.string.faq_contacts_question) to
+                getString(R.string.faq_contacts_answer),
 
-            "What other permissions does Slate use?" to
-                "• EXPAND_STATUS_BAR - swipe-down notification panel gesture\n• ACCESS_WIFI_STATE / CHANGE_WIFI_STATE - Wi-Fi toggle gesture (Android 10+: opens system panel)\n• BLUETOOTH / BLUETOOTH_ADMIN - Bluetooth toggle on Android 11 and below\n• QUERY_ALL_PACKAGES - required to list all installed apps (Android 11+)\n• REQUEST_DELETE_PACKAGES - initiates the system uninstall flow when you choose to uninstall an app\n• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS - used only when you tap \"Fix this\" on the battery restriction warning in Settings, to request that the system exempt Slate from battery optimization so background features keep working\n• USE_BIOMETRIC - declared by the AndroidX Biometric library; only requested when you opt into biometric unlock for hidden apps. Biometric data is processed by the OS and never reaches Slate.",
+            getString(R.string.faq_permissions_question) to
+                getString(R.string.faq_permissions_answer),
 
-            "How does the hidden apps lock work?" to
-                "Turning on \"Lock hidden apps\" in Settings → Security asks you to set a 4–8 digit PIN. After that, opening the Hidden Apps dialog from the home long-press menu requires PIN (or biometric, if you opt in).\n\nYour PIN is never stored in plain text. Slate stores a salted PBKDF2-HMAC-SHA256 hash with 120,000 iterations and a per-device random 16-byte salt. The hash is a one-way verifier - even with the file, an attacker would have to brute-force the PIN.\n\nBiometric is optional. When enabled, Slate uses Android's BiometricPrompt to show the standard fingerprint/face dialog. Biometric data stays inside the OS and Slate only sees a success/fail signal.\n\nAfter 5 wrong PIN attempts you're locked out for 30 seconds; 10 wrong for 5 minutes; 15 wrong for 15 minutes. There is no PIN recovery - clearing app data is the only reset. When restoring a backup that includes hidden apps, you'll be asked for the backup's PIN. If you don't know it, the rest of your settings still restore and your current PIN and hidden apps stay as they were.",
+            getString(R.string.faq_hidden_lock_question) to
+                getString(R.string.faq_hidden_lock_answer),
 
-            "How does the long-press menu lock work?" to
-                "Turning on \"Lock long-press\" in Settings → Security asks you to " +
-                "set a 4–8 digit PIN, the same one \"Lock hidden apps\" uses if you also " +
-                "turn that on. Once it's on, opening the home long-press menu (Customize / " +
-                "Hidden Apps / FAQ), an app's long-press menu (Pin, Hide, Rename, Uninstall, " +
-                "and the rest), a folder's or a pinned shortcut's long-press menu, or a " +
-                "gesture bound to \"Open settings\" asks for that PIN " +
-                "first.\n\n" +
-                "This lock is PIN-only. It never uses biometric, even if you've turned on " +
-                "biometric unlock for hidden apps elsewhere on this screen, so you'll always " +
-                "be asked to type the PIN here.\n\n" +
-                "The PIN itself is the exact same one described above: a salted " +
-                "PBKDF2-HMAC-SHA256 hash, never stored in plain text, with the same " +
-                "5/10/15-attempt lockout schedule shared across both locks. If you don't have " +
-                "a PIN yet, turning this on walks you through setting one first, exactly like " +
-                "\"Lock hidden apps\" does.\n\n" +
-                "The two locks are independent otherwise. Turning this one off does not touch " +
-                "\"Lock hidden apps,\" your PIN, or your hidden apps; it only stops asking for " +
-                "a PIN before the long-press menus and the gesture above.",
+            getString(R.string.faq_long_press_lock_question) to
+                getString(R.string.faq_long_press_lock_answer),
 
-            "Do hidden apps appear in the Recents (Overview) screen?" to
-                "When you open a hidden app from Slate, it's launched in a way that keeps it off the Android Recents / Overview screen - so someone glancing at Recents won't see what hidden app you opened.\n\nOne caveat Android can't avoid: if the app already had a task in Recents from before (because you opened it from another launcher, or because it uses Android's \"single task\" mode like Chrome on some devices), Slate can't remove that existing entry. Swipe it away from Recents once, and from then on Slate's launches stay invisible.",
+            getString(R.string.faq_recents_question) to
+                getString(R.string.faq_recents_answer),
 
-            "How do folders work?" to
-                "Long-press any app and choose \"Move to folder\" to add it to an existing folder, or pick \"+ New folder\" to create one on the spot. Folders appear on the home screen with a marker (chevron, bullet, brackets, slash, count, or plain - pick your style in Settings → Typography → Folder style). Tap to expand inline - the home list is replaced by the folder's apps with a leading ‹ back row. Tap back (or press the system back gesture) to return.\n\nEach app lives in at most one folder. Apps inside a folder are hidden from the main list to reduce clutter - search still finds them globally, and the folder name itself also appears in search results.\n\nLong-press a folder label to rename, set a custom color, or delete. Deleting a folder returns its apps to the main list; the apps themselves are never removed. Pinning an app automatically removes it from any folder it was in. If you uninstall an app, it disappears from its folder; empty folders are pruned automatically.",
+            getString(R.string.faq_folders_question) to
+                getString(R.string.faq_folders_answer),
 
-            "How do I change several apps at once?" to
-                "Long-press any app and choose \"Select\". Tap more apps to tick them, " +
-                "including apps inside folders and in search results. A bar under the list " +
-                "shows how many are selected. Tap \"actions\" to pin, hide, uninstall, move " +
-                "or recolor them in one go, or \"cancel\" to stop. Selecting also ends when " +
-                "you press Back or leave the home screen.\n\n" +
-                "Uninstalling asks Android to confirm each app, and work and system apps " +
-                "are skipped. Pick the marker in Settings → Typography → Selection style.",
+            getString(R.string.faq_several_apps_question) to
+                getString(R.string.faq_several_apps_answer),
 
-            "Why are widgets shown as text, not icons?" to
-                "Slate is text-only by design - apps are listed by name, and the widget strip follows the same rule. A label like \"Wi-Fi\" reads as a word rather than a symbol you recognise on autopilot, so opening or toggling something stays a small deliberate choice instead of a reflex.\n\nEach widget shows its name with the current value when there is one to show (Battery: 67%, Volume: 60%, Time: 14:32) or just the name for simple on/off toggles (Wi-Fi, Bluetooth). Active widgets render at full opacity; inactive ones are dimmed to 40% so you can see at a glance whether something is on without needing icons or colour.",
+            getString(R.string.faq_widgets_as_text_question) to
+                getString(R.string.faq_widgets_as_text_answer),
 
-            "Why doesn't the Wi-Fi widget show my network name?" to
-                "On Android 10 and above, an app can only read the connected Wi-Fi network's name (SSID) if you grant it a sensitive runtime permission - on most devices that's the precise location permission (ACCESS_FINE_LOCATION) - and have location services turned on.\n\nSlate is offline-only and never asks for a permission it doesn't strictly need for a feature, so the widget shows just \"Wi-Fi\" with active/inactive dimming instead. Tapping it opens the system Wi-Fi panel, which lists the connected network natively without needing Slate to ask for anything.",
+            getString(R.string.faq_wifi_name_question) to
+                getString(R.string.faq_wifi_name_answer),
 
-            "Why can't Slate toggle Wi-Fi or Bluetooth directly?" to
-                "Android removed direct toggle access for these from third-party apps:\n\n• Wi-Fi: since Android 10, apps cannot switch Wi-Fi on or off programmatically. Tapping the widget opens the inline system Wi-Fi panel as a bottom-sheet overlay - one tap to flip Wi-Fi on or off without leaving the launcher view.\n\n• Bluetooth: since Android 12, toggling Bluetooth requires the runtime BLUETOOTH_CONNECT permission, which also grants access to the names and addresses of every paired device and the ability to connect to them - far more than just on/off.\n\n• Mobile data, Airplane mode, NFC: toggling these requires signature-level permissions that Android only grants to system apps.\n\nSlate could ask for BLUETOOTH_CONNECT to get a one-tap Bluetooth toggle, but it would mean holding a permission that no other feature needs. Deep-linking into the system panels is the trade-off - one extra tap, no unnecessary access to your device.",
+            getString(R.string.faq_toggles_question) to
+                getString(R.string.faq_toggles_answer),
 
-            "Is Slate open source?" to
-                "Yes. Slate is open source under the MIT licence.\n\nSource code: github.com/roufsyed/Slate-Minimal-Launcher",
+            getString(R.string.faq_open_source_question) to
+                getString(R.string.faq_open_source_answer),
 
             // Unconditional, deliberately. This was once shown only on devices with a work
             // profile, but the Settings rows are always visible, so hiding their explanation
             // from the very people most likely to wonder what they do had it backwards.
-            "How do work apps work?" to
-                "Apps in your work profile appear alongside your personal apps, each " +
-                "carrying a marker, for example \"Gmail [Work]\". Settings → Work " +
-                "profile → Work app marker turns that into a symbol, or removes it.\n\n" +
-                "The first time Slate sees a work profile it gathers those apps into a " +
-                "folder for you, once. For a profile you have had a while the folder " +
-                "appears straight away. For one that was only just set up, Slate waits " +
-                "about a minute, because a new work profile installs its apps gradually " +
-                "and Slate would otherwise group only the first one or two.\n\n" +
-                "After that the folder is an ordinary folder. Rename it, recolour it, " +
-                "pin it, move apps out, or put personal apps in - all of it sticks, and " +
-                "Slate never rearranges it again. A work app you install later appears " +
-                "in the main list like any other new app; use Settings → Work profile " +
-                "→ Group work apps to file it away.\n\n" +
-                "Deleting the folder is permanent - the apps return to the main list and " +
-                "Slate won't group them again unless you ask. Hidden work apps are never " +
-                "grouped. Work apps you've paused in Android appear dimmed; tapping one " +
-                "lets Android offer to turn them back on.\n\n" +
-                "Uninstall isn't offered for a work app, because Android only lets your " +
-                "organisation remove those. App Info still opens the system page."
+            getString(R.string.faq_work_apps_question) to
+                getString(R.string.faq_work_apps_answer)
         )
         SlateListDialog(
             context = requireContext(),
-            title = "FAQ",
+            title = getString(R.string.home_faq),
             items = faqs.map { it.first },
             bgColor = prefs.backgroundColor
         ) { index, _ ->
@@ -3166,7 +3153,7 @@ class AppDrawerFragment : Fragment() {
         // answer body so the user can always return to the FAQ list mid-read.
         val mutedColor = if (isLight) Color.parseColor("#666666") else Color.parseColor("#888888")
         container.addView(TextView(ctx).apply {
-            text = "← FAQ"
+            text = getString(R.string.faq_back)
             textSize = 13f
             setTextColor(mutedColor)
             setPadding((4 * density).toInt(), (10 * density).toInt(), (20 * density).toInt(), (10 * density).toInt())
@@ -3252,8 +3239,8 @@ class AppDrawerFragment : Fragment() {
         if (hidden.isEmpty()) {
             SlateListDialog(
                 context = requireContext(),
-                title = "Hidden Apps",
-                items = listOf("No hidden apps"),
+                title = getString(R.string.home_hidden_apps),
+                items = listOf(getString(R.string.hidden_none)),
                 bgColor = prefs.backgroundColor
             ) { _, _ -> }.show()
             return
@@ -3265,7 +3252,7 @@ class AppDrawerFragment : Fragment() {
         var parent: SlateListDialog? = null
         parent = SlateListDialog(
             context = requireContext(),
-            title = "Hidden Apps - tap to open, hold to unhide",
+            title = getString(R.string.hidden_title_with_hint),
             items = hidden.map { it.first },
             bgColor = prefs.backgroundColor,
             onItemLongPress = { index, _ ->
@@ -3301,7 +3288,9 @@ class AppDrawerFragment : Fragment() {
         val intent = requireContext().packageManager
             .getLaunchIntentForPackage(AppKey.packageOf(key))
         if (intent == null) {
-            Toast.makeText(requireContext(), "App not installed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(), getString(R.string.home_app_not_installed), Toast.LENGTH_SHORT
+            ).show()
             return
         }
         // Privacy: keep hidden-app launches off the system Recents / Overview screen so a
@@ -3321,7 +3310,9 @@ class AppDrawerFragment : Fragment() {
         }
         runCatching { startActivity(intent) }
             .onFailure {
-                Toast.makeText(requireContext(), "App not installed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(), getString(R.string.home_app_not_installed), Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -3359,11 +3350,11 @@ class AppDrawerFragment : Fragment() {
             cornerRadius = density * 12
         }
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "UNHIDE APP"
+            text = getString(R.string.hidden_unhide_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Unhide \"$name\"? It will return to your main app list."
+            text = getString(R.string.hidden_unhide_body, name)
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.visibility = View.GONE
@@ -3372,7 +3363,7 @@ class AppDrawerFragment : Fragment() {
             setOnClickListener { dialog.dismiss() }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Unhide"
+            text = getString(R.string.hidden_unhide_confirm)
             setTextColor(accent)
             setOnClickListener {
                 dialog.dismiss()

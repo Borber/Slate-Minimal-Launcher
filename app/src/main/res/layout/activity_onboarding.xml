@@ -23,7 +23,7 @@
             android:id="@+id/labelAppName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="slate"
+            android:text="@string/wordmark"
             android:textSize="56sp"
             android:textColor="#FFFFFF"
             android:fontFamily="sans-serif-light"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="a minimal launcher"
+            android:text="@string/onboarding_tagline"
             android:textSize="15sp"
             android:textColor="#666666"
             android:letterSpacing="0.05" />
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:layout_marginBottom="16dp"
-            android:text="CHOOSE A THEME"
+            android:text="@string/onboarding_choose_a_theme"
             android:textSize="11sp"
             android:textColor="#555555"
             android:textAllCaps="true"
@@ -74,7 +74,7 @@
                     android:id="@+id/labelDark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DARK"
+                    android:text="@string/onboarding_dark"
                     android:textSize="11sp"
                     android:textColor="#8888FF"
                     android:textAllCaps="true"
@@ -85,14 +85,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="messages"
+                    android:text="@string/onboarding_sample_messages"
                     android:textSize="20sp"
                     android:textColor="#808080" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="maps"
+                    android:text="@string/onboarding_sample_maps"
                     android:textSize="16sp"
                     android:textColor="#808080"
                     android:layout_marginTop="10dp" />
@@ -100,7 +100,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="camera"
+                    android:text="@string/onboarding_sample_camera"
                     android:textSize="14sp"
                     android:textColor="#808080"
                     android:layout_marginTop="8dp" />
@@ -108,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="photos"
+                    android:text="@string/onboarding_sample_photos"
                     android:textSize="13sp"
                     android:textColor="#808080"
                     android:layout_marginTop="7dp" />
@@ -130,7 +130,7 @@
                     android:id="@+id/labelLight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LIGHT"
+                    android:text="@string/onboarding_light"
                     android:textSize="11sp"
                     android:textColor="#333399"
                     android:textAllCaps="true"
@@ -141,14 +141,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="messages"
+                    android:text="@string/onboarding_sample_messages"
                     android:textSize="20sp"
                     android:textColor="#333333" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="maps"
+                    android:text="@string/onboarding_sample_maps"
                     android:textSize="16sp"
                     android:textColor="#333333"
                     android:layout_marginTop="10dp" />
@@ -156,7 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="camera"
+                    android:text="@string/onboarding_sample_camera"
                     android:textSize="14sp"
                     android:textColor="#333333"
                     android:layout_marginTop="8dp" />
@@ -164,7 +164,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="photos"
+                    android:text="@string/onboarding_sample_photos"
                     android:textSize="13sp"
                     android:textColor="#333333"
                     android:layout_marginTop="7dp" />
@@ -180,7 +180,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="16dp"
-            android:text="CHOOSE A LAYOUT"
+            android:text="@string/onboarding_choose_a_layout"
             android:textSize="11sp"
             android:textColor="#555555"
             android:textAllCaps="true"
@@ -213,7 +213,7 @@
                     android:id="@+id/labelFlow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FLOW"
+                    android:text="@string/onboarding_flow"
                     android:textSize="11sp"
                     android:textAllCaps="true"
                     android:letterSpacing="0.15"
@@ -231,7 +231,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="4dp"
                         android:paddingVertical="1dp"
-                        android:text="mail"
+                        android:text="@string/onboarding_sample_mail"
                         android:textSize="12sp" />
 
                     <TextView
@@ -239,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="4dp"
                         android:paddingVertical="1dp"
-                        android:text="maps"
+                        android:text="@string/onboarding_sample_maps"
                         android:textSize="17sp" />
 
                     <TextView
@@ -247,7 +247,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="4dp"
                         android:paddingVertical="1dp"
-                        android:text="web"
+                        android:text="@string/onboarding_sample_web"
                         android:textSize="12sp" />
 
                     <TextView
@@ -255,7 +255,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="4dp"
                         android:paddingVertical="1dp"
-                        android:text="camera"
+                        android:text="@string/onboarding_sample_camera"
                         android:textSize="13sp" />
 
                     <TextView
@@ -263,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="4dp"
                         android:paddingVertical="1dp"
-                        android:text="clock"
+                        android:text="@string/onboarding_sample_clock"
                         android:textSize="12sp" />
 
                     <TextView
@@ -271,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="4dp"
                         android:paddingVertical="1dp"
-                        android:text="files"
+                        android:text="@string/onboarding_sample_files"
                         android:textSize="15sp" />
 
                     <TextView
@@ -279,7 +279,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="4dp"
                         android:paddingVertical="1dp"
-                        android:text="phone"
+                        android:text="@string/onboarding_sample_phone"
                         android:textSize="12sp" />
 
                 </com.google.android.flexbox.FlexboxLayout>
@@ -290,7 +290,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="names grow with use"
+                    android:text="@string/onboarding_names_grow_with_use"
                     android:textSize="10sp"
                     android:alpha="0.7" />
 
@@ -311,7 +311,7 @@
                     android:id="@+id/labelList"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MINIMAL LIST"
+                    android:text="@string/onboarding_minimal_list"
                     android:textSize="11sp"
                     android:textAllCaps="true"
                     android:letterSpacing="0.15"
@@ -327,27 +327,27 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="mail"
+                        android:text="@string/onboarding_sample_mail"
                         android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="maps"
+                        android:text="@string/onboarding_sample_maps"
                         android:textSize="14sp"
                         android:layout_marginTop="4dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="web"
+                        android:text="@string/onboarding_sample_web"
                         android:textSize="14sp"
                         android:layout_marginTop="4dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="camera"
+                        android:text="@string/onboarding_sample_camera"
                         android:textSize="14sp"
                         android:layout_marginTop="4dp" />
 
@@ -381,7 +381,7 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 android:paddingStart="0dp"
-                android:contentDescription="I have read the privacy policy" />
+                android:contentDescription="@string/onboarding_privacy_checkbox_description" />
 
             <TextView
                 android:id="@+id/labelPrivacyAcceptance"
@@ -402,7 +402,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Set as default launcher"
+            android:text="@string/onboarding_set_as_default_launcher"
             android:textSize="16sp"
             android:textColor="#FFFFFF"
             android:gravity="center"
@@ -413,7 +413,7 @@
             android:id="@+id/btnSkip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Skip for now"
+            android:text="@string/onboarding_skip_for_now"
             android:textSize="14sp"
             android:textColor="#555555"
             android:gravity="center"
@@ -431,7 +431,7 @@
             android:id="@+id/btnImportSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Import previous settings"
+            android:text="@string/onboarding_import_previous_settings"
             android:textSize="14sp"
             android:textColor="#8888FF"
             android:gravity="center"
@@ -441,7 +441,7 @@
             android:id="@+id/labelImportHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Restore from a slate_backup.json file"
+            android:text="@string/onboarding_restore_from_a_slate_backup_json"
             android:textSize="12sp"
             android:textColor="#444444"
             android:gravity="center" />

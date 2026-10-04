@@ -37,7 +37,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Background activity restricted"
+                    android:text="@string/settings_background_activity_restricted"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -47,7 +47,7 @@
                     android:id="@+id/btnBatteryDismiss"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#x2715;"
+                    android:text="@string/symbol_close"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:padding="8dp"
@@ -59,7 +59,7 @@
                 android:id="@+id/batteryBannerMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Notification highlight and screen lock may stop working."
+                android:text="@string/settings_battery_banner_message"
                 android:textColor="#FFD5A8"
                 android:textSize="13sp"
                 android:paddingTop="3dp"
@@ -71,7 +71,7 @@
                 android:id="@+id/btnUnrestrict"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FIX THIS"
+                android:text="@string/settings_fix_this"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -94,7 +94,7 @@
             <TextView
                 android:id="@+id/labelGeneral"
                 style="@style/SectionLabel"
-                android:text="General" />
+                android:text="@string/settings_general" />
 
             <!-- Double tap to lock screen -->
             <LinearLayout
@@ -114,14 +114,14 @@
                         android:id="@+id/labelDoubleTap"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Double tap to lock screen"
+                        android:text="@string/settings_double_tap_to_lock_screen"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelDoubleTapSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Requires accessibility service permission"
+                        android:text="@string/settings_double_tap_to_lock_screen_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -149,14 +149,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sort by most used"
+                        android:text="@string/settings_sort_by_most_used"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelSortByUsageSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Most launched apps appear first"
+                        android:text="@string/settings_sort_by_most_used_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -189,14 +189,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show most used at"
+                        android:text="@string/settings_show_most_used_at"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelMostUsedPositionSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Turn on Sort by most used to enable"
+                        android:text="@string/settings_turn_on_sort_by_most_used"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -225,13 +225,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lock screen rotation"
+                        android:text="@string/settings_lock_screen_rotation"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Keep launcher in portrait"
+                        android:text="@string/settings_lock_screen_rotation_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -259,13 +259,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Notification highlight"
+                        android:text="@string/settings_notification_highlight"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change app or folder color when notification arrives"
+                        android:text="@string/settings_notification_highlight_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -292,7 +292,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Highlight color"
+                    android:text="@string/settings_highlight_color"
                     android:textSize="15sp" />
 
                 <View
@@ -329,13 +329,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ignore silenced notifications"
+                        android:text="@string/settings_ignore_silenced_notifications"
                         android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Skip apps you set to Silent in Android settings"
+                        android:text="@string/settings_skip_apps_you_set_to_silent"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -363,13 +363,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hide status bar"
+                        android:text="@string/settings_hide_status_bar"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Full-screen launcher, swipe down to peek"
+                        android:text="@string/settings_hide_status_bar_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -399,13 +399,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Homescreen view"
+                        android:text="@string/settings_homescreen_view"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Choose how apps are laid out"
+                        android:text="@string/settings_homescreen_view_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -437,14 +437,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Alphabetical fast scroll"
+                        android:text="@string/settings_alphabetical_fast_scroll"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelAlphaFastScrollSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Side index to jump letters (sorts A–Z)"
+                        android:text="@string/settings_alphabetical_fast_scroll_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -475,14 +475,14 @@
                         android:id="@+id/labelDefaultLauncher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Set as default launcher"
+                        android:text="@string/settings_set_as_default_launcher"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelDefaultLauncherSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Open system launcher picker"
+                        android:text="@string/settings_set_as_default_launcher_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -490,7 +490,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -515,7 +515,7 @@
             <TextView
                 android:id="@+id/labelTextSize"
                 style="@style/SectionLabel"
-                android:text="Text Size" />
+                android:text="@string/settings_text_size_heading" />
 
             <LinearLayout
                 android:id="@+id/rowMinFontSize"
@@ -529,7 +529,7 @@
                     android:id="@+id/labelMinimum"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Minimum"
+                    android:text="@string/settings_minimum"
                     android:textSize="17sp" />
 
                 <SeekBar
@@ -558,7 +558,7 @@
                     android:id="@+id/labelMaximum"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Maximum"
+                    android:text="@string/settings_maximum"
                     android:textSize="17sp" />
 
                 <SeekBar
@@ -587,7 +587,7 @@
                     android:id="@+id/labelLineSpacing"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Line gap"
+                    android:text="@string/settings_line_gap"
                     android:textSize="17sp" />
 
                 <SeekBar
@@ -615,7 +615,7 @@
                     android:id="@+id/labelWordSpacing"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Word gap"
+                    android:text="@string/settings_word_gap"
                     android:textSize="17sp" />
 
                 <SeekBar
@@ -654,7 +654,7 @@
             <TextView
                 android:id="@+id/labelTypography"
                 style="@style/SectionLabel"
-                android:text="Typography" />
+                android:text="@string/settings_typography" />
 
             <LinearLayout
                 android:id="@+id/rowFont"
@@ -669,7 +669,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Font"
+                    android:text="@string/settings_font"
                     android:textSize="17sp" />
 
                 <TextView
@@ -692,7 +692,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Weight"
+                    android:text="@string/settings_weight"
                     android:textSize="17sp" />
 
                 <TextView
@@ -715,7 +715,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alignment"
+                    android:text="@string/settings_alignment"
                     android:textSize="17sp" />
 
                 <TextView
@@ -743,13 +743,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Folder style"
+                        android:text="@string/settings_folder_style"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="How folder labels appear on the home screen"
+                        android:text="@string/settings_folder_style_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -779,13 +779,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Selection style"
+                        android:text="@string/settings_selection_style"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="How selected apps are marked"
+                        android:text="@string/settings_selection_style_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -818,7 +818,7 @@
             <TextView
                 android:id="@+id/labelColors"
                 style="@style/SectionLabel"
-                android:text="Colors" />
+                android:text="@string/settings_colors" />
 
             <!-- Background row - tap to open picker -->
             <LinearLayout
@@ -836,7 +836,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Background"
+                    android:text="@string/settings_background"
                     android:textSize="17sp" />
 
                 <View
@@ -868,7 +868,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="App text"
+                    android:text="@string/settings_app_text"
                     android:textSize="17sp" />
 
                 <View
@@ -901,7 +901,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Folder text"
+                    android:text="@string/settings_folder_text"
                     android:textSize="17sp" />
 
                 <View
@@ -922,7 +922,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PRESETS"
+                android:text="@string/settings_presets"
                 android:textSize="11sp"
                 android:textAllCaps="true"
                 android:letterSpacing="0.15"
@@ -942,7 +942,7 @@
                     android:layout_height="52dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:text="Aa"
+                    android:text="@string/sample_letters"
                     android:gravity="center"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -953,7 +953,7 @@
                     android:layout_height="52dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:text="Aa"
+                    android:text="@string/sample_letters"
                     android:gravity="center"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -964,7 +964,7 @@
                     android:layout_height="52dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:text="Aa"
+                    android:text="@string/sample_letters"
                     android:gravity="center"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -974,7 +974,7 @@
                     android:layout_width="0dp"
                     android:layout_height="52dp"
                     android:layout_weight="1"
-                    android:text="Aa"
+                    android:text="@string/sample_letters"
                     android:gravity="center"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -999,13 +999,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Apply to lockscreen"
+                        android:text="@string/settings_apply_to_lockscreen"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fills your lockscreen with the same solid color as the launcher background for a uniform look"
+                        android:text="@string/settings_apply_to_lockscreen_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1033,13 +1033,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Follow system theme"
+                        android:text="@string/settings_follow_system_theme"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Switch colors with system dark mode"
+                        android:text="@string/settings_follow_system_theme_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1071,7 +1071,7 @@
             <TextView
                 android:id="@+id/labelGestures"
                 style="@style/SectionLabel"
-                android:text="Gestures" />
+                android:text="@string/settings_gestures" />
 
             <!-- Directional gesture rows - populated programmatically -->
             <LinearLayout
@@ -1101,7 +1101,7 @@
             <TextView
                 android:id="@+id/labelSearch"
                 style="@style/SectionLabel"
-                android:text="Search" />
+                android:text="@string/settings_search" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -1120,14 +1120,14 @@
                         android:id="@+id/labelSearchToggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Enable search"
+                        android:text="@string/settings_enable_search"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelSearchSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Swipe up to open search bar"
+                        android:text="@string/settings_enable_search_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1159,14 +1159,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Position"
+                        android:text="@string/settings_position"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelSearchBarPositionSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Top or bottom of the screen"
+                        android:text="@string/settings_top_or_bottom_of_the_screen"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1196,14 +1196,14 @@
                         android:id="@+id/labelSearchOnHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show on home screen"
+                        android:text="@string/settings_show_on_home_screen"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelSearchOnHomeSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Keep search bar visible, closes with keyboard"
+                        android:text="@string/settings_show_on_home_screen_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1234,14 +1234,14 @@
                         android:id="@+id/labelContactSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Search contacts"
+                        android:text="@string/settings_search_contacts"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelContactSearchSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show matching contacts when you type"
+                        android:text="@string/settings_search_contacts_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1276,14 +1276,14 @@
                         android:id="@+id/labelGoogleContactsOnly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Google contacts only"
+                        android:text="@string/settings_google_contacts_only"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelGoogleContactsOnlySub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hide duplicates from WhatsApp, Telegram, SIM, and other sources"
+                        android:text="@string/settings_google_contacts_only_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1316,7 +1316,7 @@
                 style="@style/SectionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quick toggles" />
+                android:text="@string/settings_quick_toggles" />
 
             <!-- Master toggle -->
             <LinearLayout
@@ -1335,13 +1335,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show toggles strip"
+                        android:text="@string/settings_show_toggles_strip"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="A row of status/quick-toggle labels at the bottom of home"
+                        android:text="@string/settings_show_toggles_strip_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1373,7 +1373,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Choose widgets"
+                        android:text="@string/settings_choose_widgets"
                         android:textSize="17sp" />
 
                     <TextView
@@ -1387,7 +1387,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -1412,13 +1412,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Arrange widgets"
+                        android:text="@string/settings_arrange_widgets"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reorder the enabled widgets"
+                        android:text="@string/settings_arrange_widgets_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1426,7 +1426,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -1453,13 +1453,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Position"
+                        android:text="@string/settings_position"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Top or bottom of the home screen"
+                        android:text="@string/settings_top_or_bottom_of_the_home"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1492,13 +1492,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Direct call"
+                        android:text="@string/settings_direct_call"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Place calls immediately when tapped or long-pressed, instead of opening the dialer"
+                        android:text="@string/settings_direct_call_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1533,13 +1533,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trigger"
+                        android:text="@string/settings_trigger"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Choose which gesture places the call directly"
+                        android:text="@string/settings_trigger_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1571,13 +1571,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show divider"
+                        android:text="@string/settings_show_divider"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="A hairline between the strip and the app list - just a visual touch"
+                        android:text="@string/settings_show_divider_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1593,7 +1593,7 @@
                 android:id="@+id/widgetPreviewHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Preview"
+                android:text="@string/settings_preview"
                 android:textSize="13sp"
                 android:alpha="0.6"
                 android:layout_marginTop="16dp"
@@ -1635,7 +1635,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Font"
+                    android:text="@string/settings_font"
                     android:textSize="17sp" />
 
                 <TextView
@@ -1661,7 +1661,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Weight"
+                    android:text="@string/settings_weight"
                     android:textSize="17sp" />
 
                 <TextView
@@ -1687,7 +1687,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alignment"
+                    android:text="@string/settings_alignment"
                     android:textSize="17sp" />
 
                 <TextView
@@ -1712,7 +1712,7 @@
                 <TextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Text size"
+                    android:text="@string/settings_text_size"
                     android:textSize="17sp" />
 
                 <SeekBar
@@ -1744,7 +1744,7 @@
                 <TextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Line gap"
+                    android:text="@string/settings_line_gap"
                     android:textSize="17sp" />
 
                 <SeekBar
@@ -1776,7 +1776,7 @@
                 <TextView
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="Word gap"
+                    android:text="@string/settings_word_gap"
                     android:textSize="17sp" />
 
                 <SeekBar
@@ -1816,7 +1816,7 @@
                 style="@style/SectionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="App shortcuts" />
+                android:text="@string/settings_app_shortcuts" />
 
             <LinearLayout
                 android:id="@+id/rowAddShortcutToStrip"
@@ -1836,13 +1836,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add to widget strip"
+                        android:text="@string/settings_add_to_widget_strip"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pin another app's shortcut into the toggles strip"
+                        android:text="@string/settings_add_to_widget_strip_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1850,7 +1850,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -1872,13 +1872,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add to application list"
+                        android:text="@string/settings_add_to_application_list"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pin another app's shortcut as an entry in your app list"
+                        android:text="@string/settings_add_to_application_list_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1886,7 +1886,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -1916,7 +1916,7 @@
 
             <TextView
                 style="@style/SectionLabel"
-                android:text="Work profile" />
+                android:text="@string/settings_work_profile" />
 
             <LinearLayout
                 android:id="@+id/rowShowWorkApps"
@@ -1935,13 +1935,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show work apps"
+                        android:text="@string/settings_show_work_apps"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nothing is lost when off - everything returns as it was"
+                        android:text="@string/settings_show_work_apps_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1970,13 +1970,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Group work apps"
+                        android:text="@string/settings_group_work_apps"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="File work apps into a folder, now"
+                        android:text="@string/settings_group_work_apps_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -1984,7 +1984,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -2006,13 +2006,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Work app marker"
+                        android:text="@string/settings_work_app_marker"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="How work apps are marked in the app list"
+                        android:text="@string/settings_work_app_marker_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2040,13 +2040,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hide marker in work folders"
+                        android:text="@string/settings_hide_marker_in_work_folders"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Skip it inside a folder holding only work apps"
+                        android:text="@string/settings_hide_marker_in_work_folders_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2078,7 +2078,7 @@
             <TextView
                 android:id="@+id/labelBackup"
                 style="@style/SectionLabel"
-                android:text="Backup" />
+                android:text="@string/settings_backup" />
 
             <LinearLayout
                 android:id="@+id/rowExportBackup"
@@ -2093,13 +2093,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Export settings"
+                    android:text="@string/settings_export_settings"
                     android:textSize="17sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -2116,13 +2116,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Import settings"
+                    android:text="@string/settings_import_settings"
                     android:textSize="17sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -2146,13 +2146,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Include hidden apps in backups"
+                        android:text="@string/settings_include_hidden_apps_in_backups"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Off by default. Backups skip your hidden apps, PIN, and biometric setting."
+                        android:text="@string/settings_include_hidden_apps_in_backups_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2185,7 +2185,7 @@
                 style="@style/SectionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Security" />
+                android:text="@string/settings_security" />
 
             <!-- Master toggle: Hidden apps security -->
             <LinearLayout
@@ -2204,13 +2204,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lock hidden apps"
+                        android:text="@string/settings_lock_hidden_apps"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Require PIN to view or unhide apps"
+                        android:text="@string/settings_lock_hidden_apps_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2241,14 +2241,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Use biometric"
+                        android:text="@string/settings_use_biometric"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/labelBiometricSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Unlock with fingerprint or face; PIN remains as fallback"
+                        android:text="@string/settings_use_biometric_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2278,13 +2278,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change PIN"
+                        android:text="@string/settings_change_pin"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Verify current PIN, then set a new one"
+                        android:text="@string/settings_change_pin_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2292,7 +2292,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -2317,13 +2317,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Keep hidden apps in Recents"
+                        android:text="@string/settings_keep_hidden_apps_in_recents"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Stops Android closing them when you switch away, but they show in Recents"
+                        android:text="@string/settings_keep_hidden_apps_in_recents_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2350,13 +2350,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lock long-press menus on homescreen"
+                        android:text="@string/settings_lock_long_press_menus_on_homescreen"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Require PIN to open them. Biometric isn\'t used here."
+                        android:text="@string/settings_lock_long_press_menus_on_homescreen_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2389,7 +2389,7 @@
                 style="@style/SectionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="About" />
+                android:text="@string/settings_about" />
 
             <!-- Show guided tour -->
             <LinearLayout
@@ -2410,13 +2410,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show guided tour"
+                        android:text="@string/settings_show_guided_tour"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Walk through the launcher's gestures and features again"
+                        android:text="@string/settings_show_guided_tour_summary"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2424,7 +2424,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -2447,13 +2447,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Source &amp; License"
+                        android:text="@string/settings_source_license"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="github.com/roufsyed/Slate-Minimal-Launcher"
+                        android:text="@string/github_address"
                         android:textSize="13sp"
                         android:alpha="0.6" />
                 </LinearLayout>
@@ -2461,7 +2461,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="→"
+                    android:text="@string/symbol_arrow_right"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -2477,7 +2477,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Version"
+                    android:text="@string/settings_version"
                     android:textSize="17sp" />
 
                 <TextView

@@ -8,15 +8,16 @@ import android.content.IntentFilter
 import android.provider.AlarmClock
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
+import com.slate.launcher.R
 import java.util.Calendar
 
 object ClockWidget : QuickWidget() {
     override val id = "clock"
-    override val displayName = "Clock"
+    override fun displayName(context: Context) = context.getString(R.string.widget_clock_name)
     override fun renderLabel(context: Context): WidgetLabel {
         val pattern = if (DateFormat.is24HourFormat(context)) "H:mm" else "h:mm a"
         val text = DateFormat.format(pattern, Calendar.getInstance()).toString()
-        return WidgetLabel("Time: $text", active = true)
+        return WidgetLabel(context.getString(R.string.widget_clock_value, text), active = true)
     }
     override fun onTap(context: Context) {
         runCatching {
@@ -46,10 +47,10 @@ object ClockWidget : QuickWidget() {
 
 object DateWidget : QuickWidget() {
     override val id = "date"
-    override val displayName = "Date"
+    override fun displayName(context: Context) = context.getString(R.string.widget_date_name)
     override fun renderLabel(context: Context): WidgetLabel {
         val text = DateFormat.format("EEE d MMM", Calendar.getInstance()).toString()
-        return WidgetLabel("Date: $text", active = true)
+        return WidgetLabel(context.getString(R.string.widget_date_value, text), active = true)
     }
     override fun onTap(context: Context) {
         runCatching {
@@ -81,13 +82,15 @@ object DateWidget : QuickWidget() {
 
 object NextAlarmWidget : QuickWidget() {
     override val id = "next_alarm"
-    override val displayName = "Next alarm"
+    override fun displayName(context: Context) = context.getString(R.string.widget_alarm_name)
     override fun renderLabel(context: Context): WidgetLabel {
         val am = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val next = am.nextAlarmClock ?: return WidgetLabel("Alarm: none", active = false)
+        val next = am.nextAlarmClock ?: return WidgetLabel(
+            context.getString(R.string.widget_alarm_none), active = false
+        )
         val pattern = if (DateFormat.is24HourFormat(context)) "H:mm" else "h:mm a"
         val text = DateFormat.format(pattern, next.triggerTime).toString()
-        return WidgetLabel("Alarm: $text", active = true)
+        return WidgetLabel(context.getString(R.string.widget_alarm_value, text), active = true)
     }
     override fun onTap(context: Context) {
         runCatching {

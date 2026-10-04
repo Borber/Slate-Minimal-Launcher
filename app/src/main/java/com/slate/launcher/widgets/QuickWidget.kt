@@ -14,7 +14,7 @@ abstract class QuickWidget {
     abstract val id: String
 
     /** Human-readable name shown in the widget picker in Settings. */
-    abstract val displayName: String
+    abstract fun displayName(context: Context): String
 
     /** When true, enabling the widget triggers a special-access flow (e.g., DND policy access). */
     open val requiresSpecialAccess: Boolean = false
@@ -26,7 +26,7 @@ abstract class QuickWidget {
      * for OEM-inconsistent system readings. Independent of [requiresSpecialAccess]: a widget can
      * have both a permission requirement AND a behaviour caveat, surfaced as separate sub-labels.
      */
-    open val pickerNote: String? = null
+    open fun pickerNote(context: Context): String? = null
 
     /** Skip the widget if the device lacks the hardware/API (e.g., NFC on a phone with no NFC). */
     open fun isAvailable(context: Context): Boolean = true

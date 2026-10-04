@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import com.slate.launcher.PreferencesManager
+import com.slate.launcher.R
 
 /**
  * Tap: dispatches to the system dialer (ACTION_DIAL) by default. When the user opts in via
@@ -15,8 +16,10 @@ import com.slate.launcher.PreferencesManager
  */
 class CallShortcutWidget(private val shortcut: ContactShortcut) : QuickWidget() {
     override val id: String get() = shortcut.id
-    override val displayName: String get() = "Call ${shortcut.displayName}"
-    override fun renderLabel(context: Context) = WidgetLabel("Call ${shortcut.displayName}")
+    override fun displayName(context: Context): String =
+        context.getString(R.string.widget_call_contact, shortcut.displayName)
+    override fun renderLabel(context: Context) =
+        WidgetLabel(context.getString(R.string.widget_call_contact, shortcut.displayName))
 
     /**
      * Standard tap handler. Direct-calls only when the user has chosen "tap" as the trigger
@@ -62,8 +65,10 @@ class CallShortcutWidget(private val shortcut: ContactShortcut) : QuickWidget() 
 /** Tap → `ACTION_SENDTO` with `smsto:` URI opens the default SMS composer to this number. */
 class SmsShortcutWidget(private val shortcut: ContactShortcut) : QuickWidget() {
     override val id: String get() = shortcut.id
-    override val displayName: String get() = "Text ${shortcut.displayName}"
-    override fun renderLabel(context: Context) = WidgetLabel("Text ${shortcut.displayName}")
+    override fun displayName(context: Context): String =
+        context.getString(R.string.widget_text_contact, shortcut.displayName)
+    override fun renderLabel(context: Context) =
+        WidgetLabel(context.getString(R.string.widget_text_contact, shortcut.displayName))
 
     override fun onTap(context: Context) {
         val smsUri = Uri.parse("smsto:${Uri.encode(shortcut.number)}")

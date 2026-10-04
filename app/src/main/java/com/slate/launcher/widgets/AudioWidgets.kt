@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import androidx.core.content.ContextCompat
+import com.slate.launcher.R
 
 private fun openSoundSettings(context: Context) {
     runCatching {
@@ -22,13 +23,13 @@ private fun openSoundSettings(context: Context) {
 
 object DndWidget : QuickWidget() {
     override val id = "dnd"
-    override val displayName = "Do not disturb"
+    override fun displayName(context: Context) = context.getString(R.string.widget_dnd_name)
     override fun renderLabel(context: Context): WidgetLabel {
         val nm = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
         val filter = nm?.currentInterruptionFilter ?: NotificationManager.INTERRUPTION_FILTER_ALL
         val on = filter != NotificationManager.INTERRUPTION_FILTER_ALL &&
                 filter != NotificationManager.INTERRUPTION_FILTER_UNKNOWN
-        return WidgetLabel("DND", active = on)
+        return WidgetLabel(context.getString(R.string.widget_dnd), active = on)
     }
     override fun onTap(context: Context) {
         // Scope A: don't write the policy (would require ACCESS_NOTIFICATION_POLICY special access).
@@ -67,13 +68,16 @@ object DndWidget : QuickWidget() {
 
 object MediaVolumeWidget : QuickWidget() {
     override val id = "media_vol"
-    override val displayName = "Media volume"
+    override fun displayName(context: Context) =
+        context.getString(R.string.widget_media_volume_name)
     override fun renderLabel(context: Context): WidgetLabel {
         val am = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         val current = am.getStreamVolume(AudioManager.STREAM_MUSIC)
         val max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC).coerceAtLeast(1)
         val pct = (100 * current / max)
-        return WidgetLabel("Volume: ${pct}%", active = current > 0)
+        return WidgetLabel(
+            context.getString(R.string.widget_media_volume_value, pct), active = current > 0
+        )
     }
     override fun onTap(context: Context) = openSoundSettings(context)
     override fun startObserving(context: Context, onChanged: () -> Unit): WidgetSubscription {
@@ -94,13 +98,13 @@ object MediaVolumeWidget : QuickWidget() {
 
 object RingerModeWidget : QuickWidget() {
     override val id = "ringer"
-    override val displayName = "Ringer mode"
+    override fun displayName(context: Context) = context.getString(R.string.widget_ringer_name)
     override fun renderLabel(context: Context): WidgetLabel {
         val am = context.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         val text = when (am.ringerMode) {
-            AudioManager.RINGER_MODE_SILENT -> "Silent"
-            AudioManager.RINGER_MODE_VIBRATE -> "Vibrate"
-            else -> "Ring"
+            AudioManager.RINGER_MODE_SILENT -> context.getString(R.string.widget_ringer_silent)
+            AudioManager.RINGER_MODE_VIBRATE -> context.getString(R.string.widget_ringer_vibrate)
+            else -> context.getString(R.string.widget_ringer_ring)
         }
         val active = am.ringerMode != AudioManager.RINGER_MODE_NORMAL
         return WidgetLabel(text, active = active)

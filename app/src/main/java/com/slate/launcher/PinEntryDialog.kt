@@ -26,7 +26,7 @@ class PinEntryDialog(
     private val bgColor: String,
     private val title: String,
     private val message: String,
-    private val confirmLabel: String = "OK",
+    private val confirmLabel: String = context.getString(R.string.common_ok),
     private val onConfirm: (CharArray) -> Unit,
     private val onCancel: () -> Unit = {}
 ) : Dialog(context, R.style.SlateDialogTheme) {

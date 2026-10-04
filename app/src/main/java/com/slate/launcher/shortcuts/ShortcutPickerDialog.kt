@@ -109,7 +109,7 @@ class ShortcutPickerDialog private constructor(
             setPadding(0, (20 * density).toInt(), 0, 0)
         }
         closeRow.addView(TextView(context).apply {
-            text = "Done"
+            text = context.getString(R.string.common_done)
             textSize = 15f
             setTypeface(typeface, Typeface.BOLD)
             setTextColor(accent)
@@ -132,12 +132,16 @@ class ShortcutPickerDialog private constructor(
         listContainer.removeAllViews()
 
         if (!PinnedShortcutStore.hasShortcutHostPermissionSafe(launcherApps)) {
-            listContainer.addView(emptyRow("Set Slate as your default launcher to add shortcuts"))
+            listContainer.addView(
+                emptyRow(context.getString(R.string.shortcut_needs_default_launcher))
+            )
             return
         }
         val shortcuts = PinnedShortcutStore.queryShortcuts(launcherApps, sourcePackage)
         if (shortcuts.isEmpty()) {
-            listContainer.addView(emptyRow("No shortcuts found for $sourceAppName"))
+            listContainer.addView(
+                emptyRow(context.getString(R.string.shortcut_none_found_for, sourceAppName))
+            )
             return
         }
         shortcuts.forEach { info -> listContainer.addView(createShortcutRow(info)) }
@@ -186,8 +190,12 @@ class ShortcutPickerDialog private constructor(
         if (existing != null && otherDestination in existing.destinations) {
             labelGroup.addView(TextView(context).apply {
                 text = when (otherDestination) {
-                    ShortcutDestination.WIDGET_STRIP -> "Also pinned to widget strip"
-                    ShortcutDestination.APP_LIST -> "Also pinned to application list"
+                    ShortcutDestination.WIDGET_STRIP -> context.getString(
+                        R.string.shortcut_also_pinned_to_widget_strip
+                    )
+                    ShortcutDestination.APP_LIST -> context.getString(
+                        R.string.shortcut_also_pinned_to_app_list
+                    )
                 }
                 textSize = 12f
                 setTextColor(secondary)

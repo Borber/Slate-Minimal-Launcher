@@ -101,7 +101,9 @@ class OnboardingActivity : AppCompatActivity() {
         // Re-verify consent - the picker callback can fire after the user has unchecked the box
         // (e.g., they backgrounded onboarding while the picker was open).
         if (!hasAcceptedPrivacy()) {
-            Toast.makeText(this, "Please accept the privacy policy first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this, getString(R.string.onboarding_accept_privacy_first), Toast.LENGTH_SHORT
+            ).show()
             return@registerForActivityResult
         }
         try {
@@ -116,12 +118,16 @@ class OnboardingActivity : AppCompatActivity() {
             // private bundle through the standard PIN-verify path.
             val skippedNote =
                 if (contents.privateBundle != null)
-                    "Settings restored. Re-import from Settings to restore hidden apps."
-                else "Settings restored"
+                    getString(R.string.onboarding_restored_reimport_note)
+                else getString(R.string.backup_settings_restored)
             Toast.makeText(this, skippedNote, Toast.LENGTH_LONG).show()
             finishOnboarding()
         } catch (e: Exception) {
-            Toast.makeText(this, "Import failed: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                getString(R.string.common_import_failed, importErrorText(this, e)),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -237,8 +243,8 @@ class OnboardingActivity : AppCompatActivity() {
 
         // The sentence takes the link text as its argument, so a translation decides where
         // the link sits.
-        val link = "Privacy Policy"
-        val sentence = "I've read the %1\$s".format(link)
+        val link = getString(R.string.onboarding_privacy_link)
+        val sentence = getString(R.string.onboarding_privacy_consent, link)
         val linkStart = sentence.indexOf(link)
         val span = SpannableString(sentence)
         if (linkStart >= 0) {

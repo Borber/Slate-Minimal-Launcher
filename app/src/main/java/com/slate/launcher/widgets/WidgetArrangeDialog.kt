@@ -86,7 +86,7 @@ class WidgetArrangeDialog(
         )
 
         root.addView(TextView(context).apply {
-            text = "ARRANGE WIDGETS"
+            text = context.getString(R.string.widget_arrange_title)
             textSize = 13f
             setTextColor(accent)
             setTypeface(typeface, Typeface.BOLD)
@@ -114,7 +114,7 @@ class WidgetArrangeDialog(
             setPadding(0, (20 * density).toInt(), 0, 0)
         }
         closeRow.addView(TextView(context).apply {
-            text = "Done"
+            text = context.getString(R.string.common_done)
             textSize = 15f
             setTypeface(typeface, Typeface.BOLD)
             setTextColor(accent)
@@ -158,7 +158,7 @@ class WidgetArrangeDialog(
         val density = context.resources.displayMetrics.density
         val id = orderedIds[index]
         val widget = WidgetCatalog.byId(prefs, id)
-        val displayName = widget?.displayName ?: id
+        val displayName = widget?.displayName(context) ?: id
 
         val row = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -175,13 +175,25 @@ class WidgetArrangeDialog(
         })
 
         // Up button - disabled on first row.
-        row.addView(arrowButton("↑", "Move up", enabled = index > 0) {
-            swap(index, index - 1)
-        })
+        row.addView(
+            arrowButton(
+                context.getString(R.string.symbol_arrow_up),
+                context.getString(R.string.widget_move_up),
+                enabled = index > 0
+            ) {
+                swap(index, index - 1)
+            }
+        )
         // Down button - disabled on last row.
-        row.addView(arrowButton("↓", "Move down", enabled = index < orderedIds.size - 1) {
-            swap(index, index + 1)
-        })
+        row.addView(
+            arrowButton(
+                context.getString(R.string.symbol_arrow_down),
+                context.getString(R.string.widget_move_down),
+                enabled = index < orderedIds.size - 1
+            ) {
+                swap(index, index + 1)
+            }
+        )
         return row
     }
 

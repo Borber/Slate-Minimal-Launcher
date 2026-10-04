@@ -100,14 +100,14 @@
             android:exported="false"
             android:excludeFromRecents="true"
             android:taskAffinity=""
-            android:label="Welcome" />
+            android:label="@string/onboarding_title" />
 
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:excludeFromRecents="true"
             android:taskAffinity=""
-            android:label="Settings"
+            android:label="@string/settings_title"
             android:parentActivityName=".MainActivity" />
 
         <service

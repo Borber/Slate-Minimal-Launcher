@@ -93,7 +93,7 @@ class WidgetPickerDialog(
         )
 
         root.addView(TextView(context).apply {
-            text = "CHOOSE WIDGETS"
+            text = context.getString(R.string.widget_choose_title)
             textSize = 13f
             setTextColor(accent)
             setTypeface(typeface, Typeface.BOLD)
@@ -121,7 +121,7 @@ class WidgetPickerDialog(
             setPadding(0, (20 * density).toInt(), 0, 0)
         }
         closeRow.addView(TextView(context).apply {
-            text = "Done"
+            text = context.getString(R.string.common_done)
             textSize = 15f
             setTypeface(typeface, Typeface.BOLD)
             setTextColor(accent)
@@ -145,20 +145,30 @@ class WidgetPickerDialog(
         val currentSelection = prefs.quickStripWidgets.toMutableList()
 
         // Section 1: add-shortcut action rows
-        listContainer.addView(addActionRow("+ Add call shortcut", ContactShortcut.Type.CALL))
-        listContainer.addView(addActionRow("+ Add SMS shortcut", ContactShortcut.Type.SMS))
+        listContainer.addView(
+            addActionRow(
+                context.getString(R.string.widget_add_call_shortcut), ContactShortcut.Type.CALL
+            )
+        )
+        listContainer.addView(
+            addActionRow(
+                context.getString(R.string.widget_add_sms_shortcut), ContactShortcut.Type.SMS
+            )
+        )
 
         // Section 2: pinned contact shortcuts (with delete)
         val shortcuts = ContactShortcutStore.all(prefs)
         if (shortcuts.isNotEmpty()) {
-            listContainer.addView(sectionLabel("CONTACT SHORTCUTS"))
+            listContainer.addView(
+                sectionLabel(context.getString(R.string.widget_section_contact_shortcuts))
+            )
             shortcuts.forEach { shortcut ->
                 listContainer.addView(createShortcutRow(shortcut, currentSelection))
             }
         }
 
         // Section 3: static widgets
-        listContainer.addView(sectionLabel("WIDGETS"))
+        listContainer.addView(sectionLabel(context.getString(R.string.widget_section_widgets)))
         WidgetCatalog.staticWidgets.forEach { widget ->
             if (!widget.isAvailable(context)) return@forEach
             listContainer.addView(createWidgetRow(widget, currentSelection))
@@ -207,9 +217,11 @@ class WidgetPickerDialog(
             layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .apply { weight = 1f }
         }
-        val verb = if (shortcut.type == ContactShortcut.Type.CALL) "Call" else "Text"
+        val label =
+            if (shortcut.type == ContactShortcut.Type.CALL) R.string.widget_call_contact
+            else R.string.widget_text_contact
         labelGroup.addView(TextView(context).apply {
-            text = "$verb ${shortcut.displayName}"
+            text = context.getString(label, shortcut.displayName)
             textSize = 16f
             setTextColor(primary)
         })
@@ -226,7 +238,7 @@ class WidgetPickerDialog(
 
         // Delete button
         row.addView(TextView(context).apply {
-            text = "✕"
+            text = context.getString(R.string.symbol_close)
             textSize = 16f
             setTextColor(secondary)
             val pad = (12 * density).toInt()
@@ -263,19 +275,19 @@ class WidgetPickerDialog(
                 .apply { weight = 1f }
         }
         labelGroup.addView(TextView(context).apply {
-            text = widget.displayName
+            text = widget.displayName(context)
             textSize = 16f
             setTextColor(primary)
         })
         if (widget.requiresSpecialAccess) {
             labelGroup.addView(TextView(context).apply {
-                text = "Requires special access"
+                text = context.getString(R.string.widget_requires_special_access)
                 textSize = 12f
                 setTextColor(secondary)
                 alpha = 0.7f
             })
         }
-        widget.pickerNote?.let { note ->
+        widget.pickerNote(context)?.let { note ->
             labelGroup.addView(TextView(context).apply {
                 text = note
                 textSize = 12f

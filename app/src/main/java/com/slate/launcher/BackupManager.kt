@@ -1,9 +1,13 @@
 package com.slate.launcher
 
+import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 
 class BackupManager(private val prefs: PreferencesManager) {
+
+    /** The backup was written by a version this build cannot read. */
+    class UnsupportedVersionException : IllegalArgumentException("Unsupported backup version")
 
     private companion object {
         /** The only color form ColorPickerDialog produces, so the only one import accepts. */
@@ -227,7 +231,7 @@ class BackupManager(private val prefs: PreferencesManager) {
     fun parse(json: String): BackupContents {
         val root = JSONObject(json)
         if (root.optInt("version", 0) < 1) {
-            throw IllegalArgumentException("Unsupported backup version")
+            throw UnsupportedVersionException()
         }
 
         // Detect a structurally-complete private bundle. Anything less than all-three-PIN-
@@ -509,3 +513,11 @@ class BackupManager(private val prefs: PreferencesManager) {
         prefs.pinLockoutUntilElapsedMs = 0L
     }
 }
+
+/** What to tell the user about a failed import: Slate's own wording where it has one. */
+fun importErrorText(context: Context, e: Exception): String? =
+    if (e is BackupManager.UnsupportedVersionException) {
+        context.getString(R.string.backup_unsupported_version)
+    } else {
+        e.message
+    }

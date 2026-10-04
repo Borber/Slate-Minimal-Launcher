@@ -29,6 +29,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.flexbox.AlignItems
@@ -95,28 +96,26 @@ class SettingsActivity : AppCompatActivity() {
         private val WIDGET_LINE_GAPS  = (0..20).toList()
         private val WIDGET_WORD_GAPS  = (2..28).toList()
 
-        // Fixed sample labels for the Settings preview. Chosen to span the four widget label
-        // shapes used on the home strip: short state toggle, long state toggle, Name:value with
-        // a time, Name:value with a percentage. Kept identical in style to live home-screen
-        // labels so the preview is faithful - what the user sees here is what they get there.
-        // Independent of the user's actual widget selection so the preview is deterministic.
-        private val PREVIEW_SAMPLE_LABELS =
-            listOf("Wi-Fi", "Bluetooth", "Time: 12:34", "Battery: 65%")
-
         private val GESTURE_SLOTS = listOf(
-            Triple(1, Direction.UP,    "1 finger  ↑"),
-            Triple(1, Direction.DOWN,  "1 finger  ↓"),
-            Triple(1, Direction.LEFT,  "1 finger  ←"),
-            Triple(1, Direction.RIGHT, "1 finger  →"),
+            Triple(1, Direction.UP,    R.string.settings_gesture_one_finger_up),
+            Triple(1, Direction.DOWN,  R.string.settings_gesture_one_finger_down),
+            Triple(1, Direction.LEFT,  R.string.settings_gesture_one_finger_left),
+            Triple(1, Direction.RIGHT, R.string.settings_gesture_one_finger_right),
         )
 
         /**
          * (saved value, picker label) for the choices that are saved as a word. A picker takes
          * the value from here by position and never works it out from the label.
          */
-        private val ALIGNMENT_LABELS =
-            listOf("left" to "Left", "center" to "Center", "right" to "Right")
-        private val EDGE_LABELS = listOf("top" to "Top", "bottom" to "Bottom")
+        private val ALIGNMENT_LABELS = listOf(
+            "left" to R.string.common_left,
+            "center" to R.string.common_center,
+            "right" to R.string.common_right,
+        )
+        private val EDGE_LABELS = listOf(
+            "top" to R.string.common_top,
+            "bottom" to R.string.common_bottom,
+        )
 
         data class FontOption(val key: String, val displayName: String)
 
@@ -132,10 +131,10 @@ class SettingsActivity : AppCompatActivity() {
             FontOption("cursive",                   "Cursive"),
         )
         val WEIGHTS = listOf(
-            300 to "Light",
-            400 to "Regular",
-            500 to "Medium",
-            700 to "Bold",
+            300 to R.string.settings_weight_light,
+            400 to R.string.settings_weight_regular,
+            500 to R.string.settings_weight_medium,
+            700 to R.string.settings_weight_bold,
         )
 
         data class ColorPreset(val bg: String, val text: String)
@@ -148,13 +147,13 @@ class SettingsActivity : AppCompatActivity() {
 
         // (pref value, picker label) - order here drives picker order and the default-on-unknown
         // fallback in `folderStyleDisplayLabel`. Keep Chevron first so it doubles as the default.
-        val FOLDER_STYLE_LABELS: List<Pair<String, String>> = listOf(
-            PreferencesManager.FOLDER_STYLE_CHEVRON  to "Chevron",
-            PreferencesManager.FOLDER_STYLE_SLASH    to "Slash",
-            PreferencesManager.FOLDER_STYLE_BULLET   to "Bullet",
-            PreferencesManager.FOLDER_STYLE_BRACKETS to "Brackets",
-            PreferencesManager.FOLDER_STYLE_COUNT    to "Count",
-            PreferencesManager.FOLDER_STYLE_PLAIN    to "Plain",
+        val FOLDER_STYLE_LABELS: List<Pair<String, Int>> = listOf(
+            PreferencesManager.FOLDER_STYLE_CHEVRON  to R.string.settings_folder_style_chevron,
+            PreferencesManager.FOLDER_STYLE_SLASH    to R.string.settings_folder_style_slash,
+            PreferencesManager.FOLDER_STYLE_BULLET   to R.string.settings_folder_style_bullet,
+            PreferencesManager.FOLDER_STYLE_BRACKETS to R.string.settings_folder_style_brackets,
+            PreferencesManager.FOLDER_STYLE_COUNT    to R.string.settings_folder_style_count,
+            PreferencesManager.FOLDER_STYLE_PLAIN    to R.string.settings_folder_style_plain,
         )
 
         /**
@@ -162,15 +161,15 @@ class SettingsActivity : AppCompatActivity() {
          * FOLDER_STYLE_LABELS. One of the four hand-maintained enumerations of these eight
          * values; see the constants in PreferencesManager for the other three.
          */
-        val WORK_MARKER_LABELS: List<Pair<String, String>> = listOf(
-            PreferencesManager.WORK_MARKER_BRACKETS to "Brackets",
-            PreferencesManager.WORK_MARKER_WORD     to "Word",
-            PreferencesManager.WORK_MARKER_DAGGER   to "Dagger",
-            PreferencesManager.WORK_MARKER_STAR     to "Star",
-            PreferencesManager.WORK_MARKER_DOT      to "Dot",
-            PreferencesManager.WORK_MARKER_SQUARE   to "Square",
-            PreferencesManager.WORK_MARKER_DIAMOND  to "Diamond",
-            PreferencesManager.WORK_MARKER_NONE     to "None",
+        val WORK_MARKER_LABELS: List<Pair<String, Int>> = listOf(
+            PreferencesManager.WORK_MARKER_BRACKETS to R.string.settings_work_marker_brackets,
+            PreferencesManager.WORK_MARKER_WORD     to R.string.settings_work_marker_word,
+            PreferencesManager.WORK_MARKER_DAGGER   to R.string.settings_work_marker_dagger,
+            PreferencesManager.WORK_MARKER_STAR     to R.string.settings_work_marker_star,
+            PreferencesManager.WORK_MARKER_DOT      to R.string.settings_work_marker_dot,
+            PreferencesManager.WORK_MARKER_SQUARE   to R.string.settings_work_marker_square,
+            PreferencesManager.WORK_MARKER_DIAMOND  to R.string.settings_work_marker_diamond,
+            PreferencesManager.WORK_MARKER_NONE     to R.string.settings_work_marker_none,
         )
     }
 
@@ -238,8 +237,11 @@ class SettingsActivity : AppCompatActivity() {
             rowTrigger.visibility =
                 if (granted && prefs.quickStripEnabled) View.VISIBLE else View.GONE
             if (!granted) {
-                Toast.makeText(this, "Permission required for direct call", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.settings_permission_required_for_direct_call),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -273,7 +275,7 @@ class SettingsActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this,
-                        "Permission required to enable contact search",
+                        getString(R.string.settings_permission_required_to_enable_contact_search),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -449,9 +451,9 @@ class SettingsActivity : AppCompatActivity() {
     private fun updateDefaultLauncherRow() {
         val sub = findViewById<TextView>(R.id.labelDefaultLauncherSub) ?: return
         sub.text = if (isAlreadyDefaultLauncher())
-            "Slate is your default launcher"
+            getString(R.string.settings_slate_is_your_default_launcher)
         else
-            "Open system launcher picker"
+            getString(R.string.settings_set_as_default_launcher_summary)
     }
 
     // ── Background ───────────────────────────────────────────────
@@ -470,7 +472,7 @@ class SettingsActivity : AppCompatActivity() {
         val secondary = if (isLight) Color.parseColor("#555555") else Color.parseColor("#AAAAAA")
         val accent    = if (isLight) Color.parseColor("#333399") else Color.parseColor("#8888FF")
 
-        val title = SpannableString("Settings").apply {
+        val title = SpannableString(getString(R.string.settings_title)).apply {
             setSpan(ForegroundColorSpan(primary), 0, length, 0)
         }
         supportActionBar?.title = title
@@ -580,12 +582,12 @@ class SettingsActivity : AppCompatActivity() {
         minSeekBar.max = MIN_SIZES.size - 1
         minSeekBar.progress = MIN_SIZES.indexOf(prefs.minFontSize)
             .takeIf { it >= 0 } ?: MIN_SIZES.indexOf(PreferencesManager.DEFAULT_MIN_FONT_SIZE).coerceAtLeast(0)
-        minLabel.text = "${prefs.minFontSize}sp"
+        minLabel.text = getString(R.string.unit_sp, prefs.minFontSize)
 
         maxSeekBar.max = MAX_SIZES.size - 1
         maxSeekBar.progress = MAX_SIZES.indexOf(prefs.maxFontSize)
             .takeIf { it >= 0 } ?: MAX_SIZES.indexOf(PreferencesManager.DEFAULT_MAX_FONT_SIZE).coerceAtLeast(0)
-        maxLabel.text = "${prefs.maxFontSize}sp"
+        maxLabel.text = getString(R.string.unit_sp, prefs.maxFontSize)
 
         // Cross-clamp: when the user drags Min above Max (or Max below Min), pull the other
         // slider along visibly. The two slider ranges overlap in 20–24 sp, so the indexOf
@@ -600,21 +602,21 @@ class SettingsActivity : AppCompatActivity() {
         minSeekBar.setOnSeekBarChangeListener(seekBarListener { p ->
             val newMin = MIN_SIZES[p]
             prefs.minFontSize = newMin
-            minLabel.text = "${newMin}sp"
+            minLabel.text = getString(R.string.unit_sp, newMin)
             if (newMin > prefs.maxFontSize) {
                 prefs.maxFontSize = newMin
                 maxSeekBar.progress = MAX_SIZES.indexOf(newMin).coerceAtLeast(0)
-                maxLabel.text = "${newMin}sp"
+                maxLabel.text = getString(R.string.unit_sp, newMin)
             }
         })
         maxSeekBar.setOnSeekBarChangeListener(seekBarListener { p ->
             val newMax = MAX_SIZES[p]
             prefs.maxFontSize = newMax
-            maxLabel.text = "${newMax}sp"
+            maxLabel.text = getString(R.string.unit_sp, newMax)
             if (newMax < prefs.minFontSize) {
                 prefs.minFontSize = newMax
                 minSeekBar.progress = MIN_SIZES.indexOf(newMax).coerceAtLeast(0)
-                minLabel.text = "${newMax}sp"
+                minLabel.text = getString(R.string.unit_sp, newMax)
             }
         })
 
@@ -626,18 +628,20 @@ class SettingsActivity : AppCompatActivity() {
         lineSeekBar.max = LINE_SPACINGS.size - 1
         lineSeekBar.progress = LINE_SPACINGS.indexOf(prefs.lineSpacing)
             .takeIf { it >= 0 } ?: LINE_SPACINGS.indexOf(PreferencesManager.DEFAULT_LINE_SPACING).coerceAtLeast(0)
-        lineLabel.text = "${prefs.lineSpacing}dp"
+        lineLabel.text = getString(R.string.unit_dp, prefs.lineSpacing)
 
         wordSeekBar.max = WORD_SPACINGS.size - 1
         wordSeekBar.progress = WORD_SPACINGS.indexOf(prefs.wordSpacing)
             .takeIf { it >= 0 } ?: WORD_SPACINGS.indexOf(PreferencesManager.DEFAULT_WORD_SPACING).coerceAtLeast(0)
-        wordLabel.text = "${prefs.wordSpacing}dp"
+        wordLabel.text = getString(R.string.unit_dp, prefs.wordSpacing)
 
         lineSeekBar.setOnSeekBarChangeListener(seekBarListener { p ->
-            prefs.lineSpacing = LINE_SPACINGS[p]; lineLabel.text = "${LINE_SPACINGS[p]}dp"
+            prefs.lineSpacing = LINE_SPACINGS[p]
+            lineLabel.text = getString(R.string.unit_dp, LINE_SPACINGS[p])
         })
         wordSeekBar.setOnSeekBarChangeListener(seekBarListener { p ->
-            prefs.wordSpacing = WORD_SPACINGS[p]; wordLabel.text = "${WORD_SPACINGS[p]}dp"
+            prefs.wordSpacing = WORD_SPACINGS[p]
+            wordLabel.text = getString(R.string.unit_dp, WORD_SPACINGS[p])
         })
 
         applyHomescreenViewToTextSize()
@@ -653,7 +657,7 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<View>(R.id.rowMinFontSize)?.visibility =
             if (isList) View.GONE else View.VISIBLE
         findViewById<TextView>(R.id.labelMaximum)?.text =
-            if (isList) "Size" else "Maximum"
+            if (isList) getString(R.string.settings_size) else getString(R.string.settings_maximum)
     }
 
     private fun seekBarListener(onChanged: (Int) -> Unit) = object : SeekBar.OnSeekBarChangeListener {
@@ -675,14 +679,19 @@ class SettingsActivity : AppCompatActivity() {
         weightValue.setTextColor(secondary)
 
         fontValue.text = fontDisplayName(prefs.fontFamily)
-        weightValue.text = WEIGHTS.find { it.first == prefs.fontWeight }?.second ?: "Regular"
+        weightValue.text = getString(
+            WEIGHTS.find { it.first == prefs.fontWeight }?.second
+                ?: R.string.settings_weight_regular
+        )
 
-        val fontItems = FONTS.map { it.displayName } + listOf("Import from storage…")
+        val fontItems = FONTS.map { it.displayName } + listOf(
+            getString(R.string.settings_font_import_from_storage)
+        )
 
         findViewById<android.view.View>(R.id.rowFont).setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Font",
+                title = getString(R.string.settings_font),
                 items = fontItems,
                 bgColor = prefs.backgroundColor
             ) { index, label ->
@@ -704,8 +713,8 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<android.view.View>(R.id.rowAlignment).setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Alignment",
-                items = ALIGNMENT_LABELS.map { it.second },
+                title = getString(R.string.settings_alignment),
+                items = ALIGNMENT_LABELS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor
             ) { index, label ->
                 prefs.textAlignment = ALIGNMENT_LABELS[index].first
@@ -716,8 +725,8 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<android.view.View>(R.id.rowWeight).setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Weight",
-                items = WEIGHTS.map { it.second },
+                title = getString(R.string.settings_weight),
+                items = WEIGHTS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor
             ) { index, label ->
                 prefs.fontWeight = WEIGHTS[index].first
@@ -733,8 +742,8 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<android.view.View>(R.id.rowFolderStyle).setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Folder style",
-                items = FOLDER_STYLE_LABELS.map { it.second },
+                title = getString(R.string.settings_folder_style),
+                items = FOLDER_STYLE_LABELS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor,
                 // Right-column preview shows exactly how the marker renders for a folder named
                 // "Work". Order MUST match FOLDER_STYLE_LABELS one-for-one - the dialog falls
@@ -752,17 +761,19 @@ class SettingsActivity : AppCompatActivity() {
         // Selection style - labels, keys and previews all come from SelectionMarker.STYLES.
         val selectionStyleValue = findViewById<TextView>(R.id.selectionStyleValue)
         selectionStyleValue.setTextColor(secondary)
-        selectionStyleValue.text = SelectionMarker.styleFor(prefs.selectionStyle).label
+        selectionStyleValue.text = getString(SelectionMarker.styleFor(prefs.selectionStyle).label)
 
         findViewById<android.view.View>(R.id.rowSelectionStyle).setOnClickListener {
             val styles = SelectionMarker.STYLES
             val paint = android.graphics.Paint()
             SlateListDialog(
                 context = this,
-                title = "Selection style",
-                items = styles.map { it.label },
+                title = getString(R.string.settings_selection_style),
+                items = styles.map { getString(it.label) },
                 bgColor = prefs.backgroundColor,
-                secondaryItems = styles.map { "${SelectionMarker.glyphFor(it, paint)} Gmail" }
+                secondaryItems = styles.map {
+                    "${SelectionMarker.glyphFor(it, paint)} ${getString(R.string.sample_app_name)}"
+                }
             ) { index, label ->
                 prefs.selectionStyle = styles[index].key
                 selectionStyleValue.text = label
@@ -776,21 +787,40 @@ class SettingsActivity : AppCompatActivity() {
      * produce - WorkMarker's `else` arm is brackets too.
      */
     private fun workMarkerDisplayLabel(value: String): String =
-        WORK_MARKER_LABELS.firstOrNull { it.first == value }?.second
-            ?: WORK_MARKER_LABELS.first().second
+        getString(
+            WORK_MARKER_LABELS.firstOrNull { it.first == value }?.second
+                ?: WORK_MARKER_LABELS.first().second
+        )
 
     /** The label of a saved alignment. An unknown value reads as Center, as it renders. */
-    private fun alignmentLabel(value: String): String =
+    private fun alignmentLabel(value: String): String = getString(
         (ALIGNMENT_LABELS.firstOrNull { it.first == value } ?: ALIGNMENT_LABELS[1]).second
+    )
 
     /** The label of a saved screen edge. An unknown value reads as Top, as it renders. */
     private fun edgeLabel(value: String): String =
-        (EDGE_LABELS.firstOrNull { it.first == value } ?: EDGE_LABELS[0]).second
+        getString((EDGE_LABELS.firstOrNull { it.first == value } ?: EDGE_LABELS[0]).second)
+
+    /**
+     * Fixed sample labels for the Settings preview. Chosen to span the four widget label
+     * shapes used on the home strip: short state toggle, long state toggle, Name:value with
+     * a time, Name:value with a percentage. They are the widgets' own strings, so the preview
+     * is faithful - what the user sees here is what they get there. Independent of the user's
+     * actual widget selection so the preview is deterministic.
+     */
+    private fun previewSampleLabels(): List<String> = listOf(
+        getString(R.string.widget_wifi),
+        getString(R.string.widget_bluetooth),
+        getString(R.string.widget_clock_value, "12:34"),
+        getString(R.string.widget_battery_value, 65),
+    )
 
     /** Resolve the persisted pref value to the user-visible row label. */
     private fun folderStyleDisplayLabel(value: String): String =
-        FOLDER_STYLE_LABELS.firstOrNull { it.first == value }?.second
-            ?: FOLDER_STYLE_LABELS.first().second
+        getString(
+            FOLDER_STYLE_LABELS.firstOrNull { it.first == value }?.second
+                ?: FOLDER_STYLE_LABELS.first().second
+        )
 
     /**
      * Sample render of each folder marker style for the picker preview column. Mirrors the
@@ -799,15 +829,17 @@ class SettingsActivity : AppCompatActivity() {
      * bullet/count styles - orphan-wrap protection only matters in Flow's wrapping paragraph,
      * not inside a single dialog row.
      */
-    private fun folderStylePreview(styleKey: String): String =
-        when (styleKey) {
-            PreferencesManager.FOLDER_STYLE_SLASH    -> "Work/"
-            PreferencesManager.FOLDER_STYLE_BULLET   -> "• Work"
-            PreferencesManager.FOLDER_STYLE_BRACKETS -> "[Work]"
-            PreferencesManager.FOLDER_STYLE_COUNT    -> "Work (5)"
-            PreferencesManager.FOLDER_STYLE_PLAIN    -> "Work"
-            else                                     -> "Work ›"
+    private fun folderStylePreview(styleKey: String): String {
+        val name = getString(R.string.work_profile_label)
+        return when (styleKey) {
+            PreferencesManager.FOLDER_STYLE_SLASH    -> "$name/"
+            PreferencesManager.FOLDER_STYLE_BULLET   -> "• $name"
+            PreferencesManager.FOLDER_STYLE_BRACKETS -> "[$name]"
+            PreferencesManager.FOLDER_STYLE_COUNT    -> "$name (5)"
+            PreferencesManager.FOLDER_STYLE_PLAIN    -> name
+            else                                     -> "$name ›"
         }
+    }
 
     /** Which font preference an asynchronously-completed [importFont] should write to. */
     private enum class FontTarget { APP, WIDGET }
@@ -821,7 +853,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun fontDisplayName(key: String): String = when {
         key.startsWith("/") -> File(key).nameWithoutExtension
-        else -> FONTS.find { it.key == key }?.displayName ?: "Default"
+        else -> FONTS.find { it.key == key }?.displayName ?: getString(R.string.common_default)
     }
 
     private fun importFont(uri: Uri, target: FontTarget) {
@@ -850,9 +882,13 @@ class SettingsActivity : AppCompatActivity() {
                     pendingWidgetFontRefresh?.invoke()
                 }
             }
-            Toast.makeText(this, "Font imported: $displayName", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this, getString(R.string.settings_font_imported, displayName), Toast.LENGTH_SHORT
+            ).show()
         } catch (e: Exception) {
-            Toast.makeText(this, "Import failed: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this, getString(R.string.common_import_failed, e.message), Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -915,14 +951,18 @@ class SettingsActivity : AppCompatActivity() {
         fun syncLockscreenIfNeeded(colorInt: Int) {
             if (!prefs.syncToLockscreen) return
             val ok = MainActivity.applyColorToLockscreen(this, colorInt)
-            if (!ok) Toast.makeText(this, "Could not set lockscreen wallpaper", Toast.LENGTH_SHORT).show()
+            if (!ok) Toast.makeText(
+                this,
+                getString(R.string.settings_could_not_set_lockscreen_wallpaper),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         // Entire row opens the picker - no keyboard input
         fun openBgPicker() {
             ColorPickerDialog(
                 context = this,
-                title = "Background",
+                title = getString(R.string.settings_background),
                 initialColor = prefs.backgroundColor,
                 bgColor = prefs.backgroundColor
             ) { hex ->
@@ -938,7 +978,7 @@ class SettingsActivity : AppCompatActivity() {
         fun openTextPicker() {
             ColorPickerDialog(
                 context = this,
-                title = "App Text",
+                title = getString(R.string.settings_app_text_title),
                 initialColor = prefs.appTextColor,
                 bgColor = prefs.backgroundColor
             ) { hex ->
@@ -955,7 +995,7 @@ class SettingsActivity : AppCompatActivity() {
         fun openFolderTextPicker() {
             ColorPickerDialog(
                 context = this,
-                title = "Folder Text",
+                title = getString(R.string.settings_folder_text_title),
                 initialColor = prefs.folderTextColor ?: prefs.appTextColor,
                 bgColor = prefs.backgroundColor,
                 // Reset is the way back to "same as App text", offered only once there is a
@@ -995,7 +1035,11 @@ class SettingsActivity : AppCompatActivity() {
             if (checked) {
                 val ok = MainActivity.applyColorToLockscreen(this, parseColorSafe(prefs.backgroundColor))
                 if (!ok) {
-                    Toast.makeText(this, "Could not set lockscreen wallpaper", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.settings_could_not_set_lockscreen_wallpaper),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     prefs.syncToLockscreen = false
                     switchSyncToLockscreen.isChecked = false
                 }
@@ -1060,19 +1104,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "FOLLOW SYSTEM THEME"
+            text = getString(R.string.settings_follow_system_theme_title)
             setTextColor(accent)
         }
 
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "This will override your current background and text colors " +
-                    "to match your system's dark or light mode.\n\n" +
-                    "Your custom color selections will be replaced and cannot be restored automatically."
+            text = getString(R.string.settings_follow_system_theme_body)
             setTextColor(primary)
         }
 
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "You can turn this off at any time and pick new colors manually."
+            text = getString(R.string.settings_follow_system_theme_note)
             setTextColor(secondary)
         }
 
@@ -1082,7 +1124,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Enable"
+            text = getString(R.string.settings_enable)
             setTextColor(accent)
             setOnClickListener {
                 dialog.dismiss()
@@ -1129,7 +1171,7 @@ class SettingsActivity : AppCompatActivity() {
             val labelView = row.findViewById<TextView>(R.id.gestureLabel)
             val actionView = row.findViewById<TextView>(R.id.gestureAction)
 
-            labelView.text = label
+            labelView.text = getString(label)
             actionView.text = resolveGestureLabel(prefs.getGestureAction(fingers, dir))
 
             val isLight = isColorLight(parseColorSafe(prefs.backgroundColor))
@@ -1185,14 +1227,12 @@ class SettingsActivity : AppCompatActivity() {
         dialog.findViewById<TextView>(R.id.dialogTitle)?.setTextColor(accent)
 
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Double-tap to lock uses Android's Accessibility Service to lock your screen.\n\n" +
-                    "On the next screen, find \"Slate\" in the list and enable it."
+            text = getString(R.string.settings_accessibility_body)
             setTextColor(primary)
         }
 
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Slate only uses this permission to lock the screen. " +
-                    "No data is collected, read, or sent anywhere."
+            text = getString(R.string.settings_accessibility_privacy)
             setTextColor(secondary)
         }
 
@@ -1258,16 +1298,17 @@ class SettingsActivity : AppCompatActivity() {
         // label explains how to unlock it. Pattern matches the Sort-by-usage × Fast-scroll
         // gate added earlier - keeps the dependency self-documenting instead of relying on a
         // silent auto-enable (the old behaviour, which surprised users).
-        val defaultOnHomeSub = "Keep search bar visible, closes with keyboard"
-        val blockedOnHomeSub = "Turn on Search to enable"
-        val defaultContactSub = "Show matching contacts when you type"
-        val blockedContactSub = "Turn on Search to enable"
-        val defaultPositionSub = "Top or bottom of the screen"
-        val blockedPositionSub = "Turn on Search to enable"
+        val defaultOnHomeSub = getString(R.string.settings_show_on_home_screen_summary)
+        val blockedOnHomeSub = getString(R.string.settings_turn_on_search_to_enable)
+        val defaultContactSub = getString(R.string.settings_search_contacts_summary)
+        val blockedContactSub = getString(R.string.settings_turn_on_search_to_enable)
+        val defaultPositionSub = getString(R.string.settings_top_or_bottom_of_the_screen)
+        val blockedPositionSub = getString(R.string.settings_turn_on_search_to_enable)
         val defaultGoogleOnlySub =
-            "Hide duplicates from WhatsApp, Telegram, SIM, and other sources"
-        val blockedGoogleOnlyMasterSub = "Turn on Search to enable"
-        val blockedGoogleOnlyParentSub = "Turn on Search contacts to enable"
+            getString(R.string.settings_google_contacts_only_summary)
+        val blockedGoogleOnlyMasterSub = getString(R.string.settings_turn_on_search_to_enable)
+        val blockedGoogleOnlyParentSub =
+            getString(R.string.settings_turn_on_search_contacts_to_enable)
         fun refreshSearchGates() {
             val masterOn = prefs.searchEnabled
             switchOnHome.isEnabled = masterOn
@@ -1349,8 +1390,8 @@ class SettingsActivity : AppCompatActivity() {
         rowPosition.setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Search bar position",
-                items = EDGE_LABELS.map { it.second },
+                title = getString(R.string.settings_search_bar_position),
+                items = EDGE_LABELS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor
             ) { index, label ->
                 prefs.searchBarPosition = EDGE_LABELS[index].first
@@ -1471,17 +1512,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "GOOGLE CONTACTS ONLY?"
+            text = getString(R.string.settings_google_contacts_only_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Show contact matches from your Google account only. " +
-                    "Hides duplicates from WhatsApp, Telegram, SIM, and other sources."
+            text = getString(R.string.settings_google_contacts_only_body)
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "If you don't sync contacts with Google, search may show none. " +
-                    "Turn off any time."
+            text = getString(R.string.settings_google_contacts_only_note)
             setTextColor(secondary)
         }
 
@@ -1495,7 +1534,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Turn on"
+            text = getString(R.string.settings_turn_on)
             setTextColor(accent)
             setOnClickListener {
                 consumed = true
@@ -1540,18 +1579,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "SEARCH CONTACTS?"
+            text = getString(R.string.settings_search_contacts_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Turn this on to find contacts when you type in the search bar. " +
-                    "Matching contacts appear next to apps; tap one to open the dialer with their number."
+            text = getString(R.string.settings_search_contacts_body)
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Slate reads your contacts only at the moment you type a search query. " +
-                    "Nothing is stored on disk, sent anywhere, or remembered between searches. " +
-                    "Restarting the launcher starts fresh."
+            text = getString(R.string.settings_search_contacts_privacy)
             setTextColor(secondary)
         }
 
@@ -1565,7 +1601,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Turn on"
+            text = getString(R.string.settings_turn_on)
             setTextColor(accent)
             setOnClickListener {
                 consumed = true
@@ -1610,16 +1646,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "PERMISSION NEEDED"
+            text = getString(R.string.settings_permission_needed_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Slate needs Contacts permission to search them. You can enable it in " +
-                    "system Settings."
+            text = getString(R.string.settings_permission_needed_body)
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Tap Open Settings to grant the permission. You can revoke it any time."
+            text = getString(R.string.settings_permission_needed_note)
             setTextColor(secondary)
         }
         dialog.findViewById<TextView>(R.id.btnCancel)?.apply {
@@ -1627,7 +1662,7 @@ class SettingsActivity : AppCompatActivity() {
             setOnClickListener { dialog.dismiss() }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Open Settings"
+            text = getString(R.string.dialog_open_settings)
             setTextColor(accent)
             setOnClickListener {
                 dialog.dismiss()
@@ -1687,10 +1722,12 @@ class SettingsActivity : AppCompatActivity() {
         dir: Direction,
         actionView: TextView
     ) {
-        val labels = GestureAction.staticActions.map { it.staticLabel } + listOf("Open app…")
+        val labels = GestureAction.staticActions.map { it.staticLabel(this) } + listOf(
+            getString(R.string.settings_gesture_open_app)
+        )
         SlateListDialog(
             context = this,
-            title = "Gesture Action",
+            title = getString(R.string.settings_gesture_action),
             items = labels,
             bgColor = prefs.backgroundColor
         ) { index, _ ->
@@ -1699,7 +1736,7 @@ class SettingsActivity : AppCompatActivity() {
             } else {
                 val action = GestureAction.staticActions[index]
                 prefs.setGestureAction(fingers, dir, action)
-                actionView.text = action.staticLabel
+                actionView.text = action.staticLabel(this)
             }
         }.show()
     }
@@ -1708,7 +1745,7 @@ class SettingsActivity : AppCompatActivity() {
         val apps = AppRepository(this, prefs).getAllApps()
         SlateListDialog(
             context = this,
-            title = "Choose App",
+            title = getString(R.string.settings_choose_app),
             items = apps.map { it.name },
             bgColor = prefs.backgroundColor
         ) { index, _ ->
@@ -1725,7 +1762,7 @@ class SettingsActivity : AppCompatActivity() {
                 val info = packageManager.getApplicationInfo(action.key, 0)
                 packageManager.getApplicationLabel(info).toString()
             } catch (_: Exception) { action.key }
-            else -> action.staticLabel
+            else -> action.staticLabel(this)
         }
 
     // ── Backup & Restore ─────────────────────────────────────────
@@ -1788,9 +1825,13 @@ class SettingsActivity : AppCompatActivity() {
         try {
             val json = BackupManager(prefs).toJson()
             contentResolver.openOutputStream(uri)?.bufferedWriter()?.use { it.write(json) }
-            Toast.makeText(this, "Backup saved", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this, getString(R.string.backup_saved), Toast.LENGTH_SHORT
+            ).show()
         } catch (e: Exception) {
-            Toast.makeText(this, "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this, getString(R.string.common_export_failed, e.message), Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -1816,7 +1857,11 @@ class SettingsActivity : AppCompatActivity() {
                 ?.bufferedReader()?.use { it.readText() } ?: return
             contents = mgr.parse(json)
         } catch (e: Exception) {
-            Toast.makeText(this, "Import failed: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                getString(R.string.common_import_failed, importErrorText(this, e)),
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
@@ -1884,19 +1929,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "INCLUDE HIDDEN APPS?"
+            text = getString(R.string.settings_include_hidden_apps_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "By default, your hidden apps list, PIN, and biometric setting stay on this device. " +
-                    "Backups skip them so they cannot be carried to another device or shared by mistake."
+            text = getString(R.string.settings_include_hidden_apps_body)
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Turn this on if you want hidden apps to come back when restoring a backup - " +
-                    "for example, when setting up a new phone. The backup will then contain your " +
-                    "hidden-apps list and a hashed verifier of your PIN. A short PIN is easier to " +
-                    "guess if someone gets the backup file."
+            text = getString(R.string.settings_include_hidden_apps_note)
             setTextColor(secondary)
         }
 
@@ -1910,7 +1951,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Turn on"
+            text = getString(R.string.settings_turn_on)
             setTextColor(accent)
             setOnClickListener {
                 consumed = true
@@ -1969,18 +2010,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "REPLACE YOUR PIN?"
+            text = getString(R.string.settings_replace_pin_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "This backup contains hidden apps protected by a different PIN. " +
-                    "Restoring will replace your current PIN, biometric setting, and hidden-apps " +
-                    "list with the backup's."
+            text = getString(R.string.settings_replace_pin_body)
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Your current settings are already in place - pick Cancel to keep them and " +
-                    "skip the backup's hidden apps."
+            text = getString(R.string.settings_replace_pin_note)
             setTextColor(secondary)
         }
 
@@ -1994,7 +2032,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "Restore"
+            text = getString(R.string.settings_restore)
             setTextColor(accent)
             setOnClickListener {
                 consumed = true
@@ -2080,10 +2118,9 @@ class SettingsActivity : AppCompatActivity() {
         PinEntryDialog(
             context = this,
             bgColor = prefs.backgroundColor,
-            title = "RESTORE HIDDEN APPS",
-            message = "This backup contains hidden apps protected by a PIN. Enter the PIN to restore them. " +
-                    "Three wrong attempts will refuse the import entirely - your current settings won't change.",
-            confirmLabel = "Verify",
+            title = getString(R.string.settings_restore_hidden_apps_title),
+            message = getString(R.string.settings_restore_hidden_apps_body),
+            confirmLabel = getString(R.string.settings_verify),
             onConfirm = onConfirm,
             onCancel = onCancel,
         ).show()
@@ -2101,7 +2138,6 @@ class SettingsActivity : AppCompatActivity() {
         maxAttempts: Int
     ) {
         val remaining = maxAttempts - attemptsSoFar
-        val plural = if (remaining == 1) "attempt" else "attempts"
         var attempts = attemptsSoFar
         var settled = false
         val mgr = BackupManager(prefs)
@@ -2109,13 +2145,12 @@ class SettingsActivity : AppCompatActivity() {
         val dialog = PinEntryDialog(
             context = this,
             bgColor = prefs.backgroundColor,
-            title = "RESTORE HIDDEN APPS",
+            title = getString(R.string.settings_restore_hidden_apps_title),
             // Body stays static across retries - the wrong-PIN feedback lives in the inline
             // error line (red) via setError below, which is the conventional pattern for form
             // validation errors and lets the user keep their bearings between attempts.
-            message = "This backup contains hidden apps protected by a PIN. Enter the PIN to restore them. " +
-                    "Three wrong attempts will refuse the import entirely - your current settings won't change.",
-            confirmLabel = "Verify",
+            message = getString(R.string.settings_restore_hidden_apps_body),
+            confirmLabel = getString(R.string.settings_verify),
             onConfirm = { pin ->
                 attempts++
                 val ok = PinManager.verifyAgainst(
@@ -2146,7 +2181,11 @@ class SettingsActivity : AppCompatActivity() {
         dialog.show()
         // setError must run AFTER show() - the dialog's content view is inflated lazily inside
         // show() → onCreate(), so the error TextView isn't findable until then.
-        dialog.setError("Wrong PIN. $remaining $plural left.")
+        dialog.setError(
+            resources.getQuantityString(
+                R.plurals.settings_wrong_pin_attempts_left, remaining, remaining
+            )
+        )
     }
 
     /**
@@ -2184,21 +2223,21 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "IMPORT REFUSED"
+            text = getString(R.string.settings_import_refused_title)
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Three wrong PIN attempts. Your settings were not changed."
+            text = getString(R.string.settings_import_refused_body)
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Try again with the correct PIN, or import a different backup."
+            text = getString(R.string.settings_import_refused_note)
             setTextColor(secondary)
         }
         // Single-OK refusal: Cancel button has no useful semantic here.
         dialog.findViewById<TextView>(R.id.btnCancel)?.visibility = View.GONE
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = "OK"
+            text = getString(R.string.common_ok)
             setTextColor(accent)
             setOnClickListener { dialog.dismiss() }
         }
@@ -2216,9 +2255,9 @@ class SettingsActivity : AppCompatActivity() {
      */
     private fun finishImport(outcome: ImportOutcome) {
         val msg = when (outcome) {
-            ImportOutcome.SETTINGS_RESTORED -> "Settings restored"
-            ImportOutcome.PRIVATE_SKIPPED -> "Settings restored. Hidden apps not imported."
-            ImportOutcome.PRIVATE_RESTORED -> "Hidden apps restored"
+            ImportOutcome.SETTINGS_RESTORED -> getString(R.string.backup_settings_restored)
+            ImportOutcome.PRIVATE_SKIPPED -> getString(R.string.backup_restored_hidden_apps_skipped)
+            ImportOutcome.PRIVATE_RESTORED -> getString(R.string.backup_hidden_apps_restored)
         }
         // Every applyNonPrivate() call site funnels here, so this is the single place to
         // re-assert restored pinned shortcuts at the OS level. A no-op if permission is
@@ -2257,20 +2296,20 @@ class SettingsActivity : AppCompatActivity() {
         // Sort by usage is off (matches Search bar position's style), full opacity + clickable
         // when on. Also keeps the "Sort by most used" sub-label itself direction-aware, since
         // every comparable sub-label in this file already changes dynamically.
-        val defaultSortUsageSub = "Most launched apps appear first"
+        val defaultSortUsageSub = getString(R.string.settings_sort_by_most_used_summary)
         fun refreshMostUsedPositionGate() {
             val enabled = prefs.sortByUsage
             rowMostUsedPosition.alpha = if (enabled) 1f else 0.4f
             rowMostUsedPosition.isClickable = enabled
             labelMostUsedPositionSub.text =
-                if (enabled) "Where the most-used apps land in the list"
-                else "Turn on Sort by most used to enable"
+                if (enabled) getString(R.string.settings_show_most_used_at_summary)
+                else getString(R.string.settings_turn_on_sort_by_most_used)
             mostUsedPositionValue.text = edgeLabel(prefs.mostUsedPosition)
             labelSortByUsageSub.text = if (enabled) {
                 if (prefs.mostUsedPosition == "bottom")
-                    "Most launched apps appear at the bottom"
+                    getString(R.string.settings_most_used_appear_at_bottom)
                 else
-                    "Most launched apps appear at the top"
+                    getString(R.string.settings_most_used_appear_at_top)
             } else {
                 defaultSortUsageSub
             }
@@ -2279,8 +2318,8 @@ class SettingsActivity : AppCompatActivity() {
         rowMostUsedPosition.setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Show most used at",
-                items = EDGE_LABELS.map { it.second },
+                title = getString(R.string.settings_show_most_used_at),
+                items = EDGE_LABELS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor
             ) { index, _ ->
                 prefs.mostUsedPosition = EDGE_LABELS[index].first
@@ -2336,7 +2375,7 @@ class SettingsActivity : AppCompatActivity() {
         rowNotifHighlight.setOnClickListener {
             ColorPickerDialog(
                 context = this,
-                title = "Highlight color",
+                title = getString(R.string.settings_highlight_color),
                 initialColor = prefs.notificationHighlightColor,
                 bgColor = prefs.backgroundColor
             ) { hex ->
@@ -2372,8 +2411,8 @@ class SettingsActivity : AppCompatActivity() {
         // The pref value `alphabeticalFastScroll` is PRESERVED across both transitions so the
         // toggle re-lights at the user's previous position when they switch back to alphabetical
         // sort. Matches how `notificationHighlightColor` persists when highlight is off.
-        val defaultSubLabel = "Side index to jump letters (sorts A–Z)"
-        val blockedSubLabel = "Turn off Sort by most used to enable"
+        val defaultSubLabel = getString(R.string.settings_alphabetical_fast_scroll_summary)
+        val blockedSubLabel = getString(R.string.settings_turn_off_sort_by_most_used)
         fun refreshAlphaFastScrollGate() {
             val isList = prefs.homescreenView == PreferencesManager.VIEW_LIST
             rowAlphaFastScroll.visibility = if (isList) View.VISIBLE else View.GONE
@@ -2389,8 +2428,10 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<View>(R.id.rowHomescreenView).setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Homescreen view",
-                items = listOf("Flow", "Minimal List"),
+                title = getString(R.string.settings_homescreen_view),
+                items = listOf(
+                    getString(R.string.settings_flow), getString(R.string.settings_minimal_list)
+                ),
                 bgColor = prefs.backgroundColor
             ) { index, label ->
                 prefs.homescreenView =
@@ -2426,8 +2467,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun homescreenViewLabel(mode: String): String = when (mode) {
-        PreferencesManager.VIEW_LIST -> "Minimal List"
-        else -> "Flow"
+        PreferencesManager.VIEW_LIST -> getString(R.string.settings_minimal_list)
+        else -> getString(R.string.settings_flow)
     }
 
     private fun setupNotifListener(switchNotif: MaterialSwitch) {
@@ -2469,19 +2510,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "NOTIFICATION ACCESS"
+            text = getString(R.string.settings_notification_access_title)
             setTextColor(accent)
         }
 
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Notification highlight reads your active notifications to tint app names on the home screen.\n\n" +
-                    "On the next screen, find \"Slate\" and enable it."
+            text = getString(R.string.settings_notification_access_body)
             setTextColor(primary)
         }
 
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Slate only reads which apps have notifications. " +
-                    "Message content is never accessed, stored, or sent anywhere."
+            text = getString(R.string.settings_notification_access_privacy)
             setTextColor(secondary)
         }
 
@@ -2512,8 +2551,11 @@ class SettingsActivity : AppCompatActivity() {
         if (isAlreadyDefaultLauncher()) {
             SlateListDialog(
                 context = this,
-                title = "Already the default launcher",
-                items = listOf("Slate is your home. Thank you for using it.", "OK"),
+                title = getString(R.string.settings_already_the_default_launcher),
+                items = listOf(
+                    getString(R.string.settings_already_default_body),
+                    getString(R.string.common_ok)
+                ),
                 bgColor = prefs.backgroundColor
             ) { _, _ -> }.show()
             return
@@ -2581,16 +2623,16 @@ class SettingsActivity : AppCompatActivity() {
 
         fun refreshChooseValueLabel() {
             val count = prefs.quickStripWidgets.size
-            labelChooseValue.text = when (count) {
-                0 -> "None selected"
-                1 -> "1 widget enabled"
-                else -> "$count widgets enabled"
-            }
+            labelChooseValue.text =
+                if (count == 0) getString(R.string.settings_widgets_none_selected)
+                else resources.getQuantityString(R.plurals.settings_widgets_enabled, count, count)
             labelChooseValue.setTextColor(secondary())
         }
 
         fun refreshPositionValue() {
-            positionValue.text = if (prefs.quickStripPosition == "top") "Top" else "Bottom"
+            positionValue.text =
+                if (prefs.quickStripPosition == "top") getString(R.string.common_top)
+                else getString(R.string.common_bottom)
             positionValue.setTextColor(secondary())
         }
 
@@ -2635,8 +2677,8 @@ class SettingsActivity : AppCompatActivity() {
         rowPosition.setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Position",
-                items = EDGE_LABELS.map { it.second },
+                title = getString(R.string.settings_position),
+                items = EDGE_LABELS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor
             ) { index, _ ->
                 prefs.quickStripPosition = EDGE_LABELS[index].first
@@ -2667,8 +2709,8 @@ class SettingsActivity : AppCompatActivity() {
 
         // ── Direct call ────────────────────────────────────────────────
         fun directCallTriggerLabel(value: String) = when (value) {
-            "longPress" -> "Long press"
-            else -> "Tap"
+            "longPress" -> getString(R.string.settings_long_press)
+            else -> getString(R.string.settings_tap)
         }
         fun refreshDirectCallTriggerValue() {
             directCallTriggerValue.text = directCallTriggerLabel(prefs.directCallTrigger)
@@ -2682,8 +2724,10 @@ class SettingsActivity : AppCompatActivity() {
         rowDirectCallTrigger.setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Trigger",
-                items = listOf("Tap", "Long press"),
+                title = getString(R.string.settings_trigger),
+                items = listOf(
+                    getString(R.string.settings_tap), getString(R.string.settings_long_press)
+                ),
                 bgColor = prefs.backgroundColor
             ) { index, _ ->
                 prefs.directCallTrigger = if (index == 0) "tap" else "longPress"
@@ -2719,7 +2763,7 @@ class SettingsActivity : AppCompatActivity() {
                 prefs.appTextColor,
                 if (isColorLight(bg)) Color.BLACK else Color.WHITE
             )
-            PREVIEW_SAMPLE_LABELS.forEach { sample ->
+            previewSampleLabels().forEach { sample ->
                 previewLayout.addView(TextView(this).apply {
                     text = sample
                     setTextColor(textColor)
@@ -2735,13 +2779,12 @@ class SettingsActivity : AppCompatActivity() {
         // labels. `widgetFontFamily=""` and `widgetFontWeight=0` are sentinels meaning "use theme
         // default" - both render as "Default" in the row value.
         fun widgetFontDisplayName(key: String): String = when {
-            key.isEmpty() -> "Default"
+            key.isEmpty() -> getString(R.string.common_default)
             key.startsWith("/") -> File(key).nameWithoutExtension
-            else -> FONTS.find { it.key == key }?.displayName ?: "Default"
+            else -> FONTS.find { it.key == key }?.displayName ?: getString(R.string.common_default)
         }
         fun widgetWeightDisplayName(weight: Int): String =
-            if (weight == 0) "Default"
-            else WEIGHTS.find { it.first == weight }?.second ?: "Default"
+            getString(WEIGHTS.find { it.first == weight }?.second ?: R.string.common_default)
 
         fun refreshFontValueLabel() {
             fontValueLabel.text = widgetFontDisplayName(prefs.widgetFontFamily)
@@ -2772,11 +2815,11 @@ class SettingsActivity : AppCompatActivity() {
         // not refresh here: the file is chosen asynchronously, so importFont refreshes instead
         // via pendingWidgetFontRefresh once the copy has actually landed.
         rowFont.setOnClickListener {
-            val items = listOf("Default") + FONTS.map { it.displayName } +
-                listOf("Import from storage…")
+            val items = listOf(getString(R.string.common_default)) + FONTS.map { it.displayName } +
+                listOf(getString(R.string.settings_font_import_from_storage))
             SlateListDialog(
                 context = this,
-                title = "Font",
+                title = getString(R.string.settings_font),
                 items = items,
                 bgColor = prefs.backgroundColor
             ) { index, _ ->
@@ -2793,10 +2836,11 @@ class SettingsActivity : AppCompatActivity() {
 
         // Weight picker - same Default-prepend pattern as the font picker.
         rowWeight.setOnClickListener {
-            val items = listOf("Default") + WEIGHTS.map { it.second }
+            val items =
+                listOf(getString(R.string.common_default)) + WEIGHTS.map { getString(it.second) }
             SlateListDialog(
                 context = this,
-                title = "Weight",
+                title = getString(R.string.settings_weight),
                 items = items,
                 bgColor = prefs.backgroundColor
             ) { index, _ ->
@@ -2811,8 +2855,8 @@ class SettingsActivity : AppCompatActivity() {
         rowAlignment.setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Alignment",
-                items = ALIGNMENT_LABELS.map { it.second },
+                title = getString(R.string.settings_alignment),
+                items = ALIGNMENT_LABELS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor
             ) { index, _ ->
                 prefs.widgetTextAlignment = ALIGNMENT_LABELS[index].first
@@ -2831,37 +2875,43 @@ class SettingsActivity : AppCompatActivity() {
             values: List<Int>,
             current: Int,
             default: Int,
-            unit: String
+            @StringRes unit: Int
         ) {
             seekBar.max = values.size - 1
             seekBar.progress = values.indexOf(current)
                 .takeIf { it >= 0 } ?: values.indexOf(default).coerceAtLeast(0)
-            label.text = "$current$unit"
+            label.text = getString(unit, current)
         }
 
         initSlider(
             sbTextSize, lbTextSize, WIDGET_TEXT_SIZES,
-            prefs.widgetTextSize, PreferencesManager.DEFAULT_WIDGET_TEXT_SIZE, "sp"
+            prefs.widgetTextSize, PreferencesManager.DEFAULT_WIDGET_TEXT_SIZE, R.string.unit_sp
         )
         initSlider(
             sbLineGap, lbLineGap, WIDGET_LINE_GAPS,
-            prefs.widgetLineGap, PreferencesManager.DEFAULT_WIDGET_LINE_GAP, "dp"
+            prefs.widgetLineGap, PreferencesManager.DEFAULT_WIDGET_LINE_GAP, R.string.unit_dp
         )
         initSlider(
             sbWordGap, lbWordGap, WIDGET_WORD_GAPS,
-            prefs.widgetWordGap, PreferencesManager.DEFAULT_WIDGET_WORD_GAP, "dp"
+            prefs.widgetWordGap, PreferencesManager.DEFAULT_WIDGET_WORD_GAP, R.string.unit_dp
         )
 
         sbTextSize.setOnSeekBarChangeListener(seekBarListener { p ->
-            val v = WIDGET_TEXT_SIZES[p]; prefs.widgetTextSize = v; lbTextSize.text = "${v}sp"
+            val v = WIDGET_TEXT_SIZES[p]
+            prefs.widgetTextSize = v
+            lbTextSize.text = getString(R.string.unit_sp, v)
             refreshPreview()
         })
         sbLineGap.setOnSeekBarChangeListener(seekBarListener { p ->
-            val v = WIDGET_LINE_GAPS[p]; prefs.widgetLineGap = v; lbLineGap.text = "${v}dp"
+            val v = WIDGET_LINE_GAPS[p]
+            prefs.widgetLineGap = v
+            lbLineGap.text = getString(R.string.unit_dp, v)
             refreshPreview()
         })
         sbWordGap.setOnSeekBarChangeListener(seekBarListener { p ->
-            val v = WIDGET_WORD_GAPS[p]; prefs.widgetWordGap = v; lbWordGap.text = "${v}dp"
+            val v = WIDGET_WORD_GAPS[p]
+            prefs.widgetWordGap = v
+            lbWordGap.text = getString(R.string.unit_dp, v)
             refreshPreview()
         })
 
@@ -2910,7 +2960,9 @@ class SettingsActivity : AppCompatActivity() {
         runCatching { pickContactLauncher.launch(intent) }
             .onFailure {
                 pendingShortcutType = null
-                Toast.makeText(this, "No contacts app available", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, getString(R.string.settings_no_contacts_app_available), Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -2939,7 +2991,11 @@ class SettingsActivity : AppCompatActivity() {
         }.getOrDefault(Triple(null, null, null))
 
         if (number.isNullOrBlank() || displayName.isNullOrBlank() || lookupKey.isNullOrBlank()) {
-            Toast.makeText(this, "Couldn't read the selected contact", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                getString(R.string.settings_couldnt_read_the_selected_contact),
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -2978,10 +3034,10 @@ class SettingsActivity : AppCompatActivity() {
         if (launcherApps == null || !PinnedShortcutStore.hasShortcutHostPermissionSafe(launcherApps)) {
             SlateListDialog(
                 context = this,
-                title = "Set Slate as your default launcher",
+                title = getString(R.string.settings_set_slate_as_your_default_launcher),
                 items = listOf(
-                    "Slate needs to be your default launcher to read another app's shortcuts.",
-                    "Open launcher settings"
+                    getString(R.string.settings_needs_default_launcher_body),
+                    getString(R.string.settings_open_launcher_settings)
                 ),
                 bgColor = prefs.backgroundColor
             ) { index, _ ->
@@ -3044,9 +3100,9 @@ class SettingsActivity : AppCompatActivity() {
             }
             switchBio.isEnabled = bioAvailable
             labelBioSub.text = if (bioAvailable) {
-                "Unlock with fingerprint or face; PIN remains as fallback"
+                getString(R.string.settings_use_biometric_summary)
             } else {
-                "No biometric enrolled on this device"
+                getString(R.string.settings_no_biometric_enrolled_on_this_device)
             }
         }
 
@@ -3074,7 +3130,7 @@ class SettingsActivity : AppCompatActivity() {
                             activity = this,
                             prefs = prefs,
                             pinManager = pinManager,
-                            message = "Choose a 4–8 digit PIN. You'll need it to view hidden apps.",
+                            message = getString(R.string.settings_set_pin_for_hidden_apps),
                             onComplete = {
                                 prefs.hiddenAppsSecurityEnabled = true
                                 setMasterSilently(true)
@@ -3088,7 +3144,7 @@ class SettingsActivity : AppCompatActivity() {
                         activity = this,
                         prefs = prefs,
                         pinManager = pinManager,
-                        title = "Disable Lock",
+                        title = getString(R.string.settings_disable_lock),
                         onSuccess = {
                             prefs.hiddenAppsSecurityEnabled = false
                             prefs.biometricEnabled = false
@@ -3111,7 +3167,11 @@ class SettingsActivity : AppCompatActivity() {
             switchBio.setOnCheckedChangeListener { _, checked ->
                 if (checked) {
                     if (!AuthGate.canUseBiometric(this)) {
-                        Toast.makeText(this, "No biometric enrolled on this device", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.settings_no_biometric_enrolled_on_this_device),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         setBioSilently(false)
                         return@setOnCheckedChangeListener
                     }
@@ -3121,12 +3181,12 @@ class SettingsActivity : AppCompatActivity() {
                         activity = this,
                         prefs = prefs,
                         pinManager = pinManager,
-                        title = "Enable biometric",
+                        title = getString(R.string.settings_enable_biometric),
                         onSuccess = {
                             AuthGate.verifyBiometric(
                                 activity = this,
-                                title = "Enable biometric",
-                                subtitle = "Confirm biometric to enable",
+                                title = getString(R.string.settings_enable_biometric),
+                                subtitle = getString(R.string.settings_confirm_biometric_to_enable),
                                 onSuccess = {
                                     prefs.biometricEnabled = true
                                     setBioSilently(true)
@@ -3157,7 +3217,9 @@ class SettingsActivity : AppCompatActivity() {
                 prefs = prefs,
                 pinManager = pinManager,
                 onComplete = {
-                    Toast.makeText(this, "PIN changed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this, getString(R.string.settings_pin_changed), Toast.LENGTH_SHORT
+                    ).show()
                 }
             )
         }
@@ -3210,8 +3272,7 @@ class SettingsActivity : AppCompatActivity() {
                             activity = this,
                             prefs = prefs,
                             pinManager = pinManager,
-                            message = "Choose a 4–8 digit PIN. You'll need it to open the " +
-                                "long-press menus.",
+                            message = getString(R.string.settings_set_pin_for_long_press),
                             onComplete = {
                                 prefs.lockLongPressMenusEnabled = true
                                 setSilently(true)
@@ -3225,7 +3286,7 @@ class SettingsActivity : AppCompatActivity() {
                         activity = this,
                         prefs = prefs,
                         pinManager = pinManager,
-                        title = "Disable Long-Press Lock",
+                        title = getString(R.string.settings_disable_long_press_lock),
                         onSuccess = {
                             prefs.lockLongPressMenusEnabled = false
                             // Hidden Apps' own master toggle, its biometric flag, and the PIN
@@ -3285,14 +3346,18 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<View>(R.id.rowWorkMarker).setOnClickListener {
             SlateListDialog(
                 context = this,
-                title = "Work app marker",
-                items = WORK_MARKER_LABELS.map { it.second },
+                title = getString(R.string.settings_work_app_marker),
+                items = WORK_MARKER_LABELS.map { getString(it.second) },
                 bgColor = prefs.backgroundColor,
                 // The preview calls the REAL composer, not a copy of its branch table, which is
                 // why WorkMarker.decorate takes plain strings. folderStylePreview duplicates
                 // folderLabel's branches and the two can silently drift; this cannot.
                 secondaryItems = WORK_MARKER_LABELS.map { (key, _) ->
-                    WorkMarker.decorate("Gmail", "Work", key)
+                    WorkMarker.decorate(
+                        getString(R.string.sample_app_name),
+                        getString(R.string.work_profile_label),
+                        key
+                    )
                 }
             ) { index, label ->
                 prefs.workMarkerStyle = WORK_MARKER_LABELS[index].first
@@ -3310,7 +3375,9 @@ class SettingsActivity : AppCompatActivity() {
             val repository = AppRepository(this, prefs)
             val work = repository.workAppsForGrouping()
             if (work.isEmpty()) {
-                Toast.makeText(this, "No work apps to group", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, getString(R.string.settings_no_work_apps_to_group), Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             val before = FolderStore.keysInAnyFolder(prefs)
@@ -3318,8 +3385,10 @@ class SettingsActivity : AppCompatActivity() {
             val moved = FolderStore.keysInAnyFolder(prefs).size - before.size
             Toast.makeText(
                 this,
-                if (moved > 0) "Grouped $moved work app${if (moved == 1) "" else "s"}"
-                else "Work apps are already in folders",
+                if (moved > 0) resources.getQuantityString(
+                    R.plurals.settings_grouped_work_apps, moved, moved
+                )
+                else getString(R.string.settings_work_apps_already_in_folders),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -3426,22 +3495,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = "SHOW IN RECENTS?"
+            text = getString(R.string.settings_show_in_recents_title)
             setTextColor(accent)
         }
 
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = "Hidden apps you open from Slate are normally kept out of the Recents " +
-                    "screen. Turn this on and every hidden app shows there like any other, " +
-                    "usually with a preview of what was on screen."
+            text = getString(R.string.settings_show_in_recents_body)
             setTextColor(primary)
         }
 
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Why you might want this: an app kept out of Recents gets closed as soon " +
-                    "as you go home and open something else, so it restarts and loses " +
-                    "whatever you typed. Turning this back off later won't clear apps already " +
-                    "in Recents - swipe those away once."
+            text = getString(R.string.settings_show_in_recents_note)
             setTextColor(secondary)
         }
 
@@ -3453,7 +3517,7 @@ class SettingsActivity : AppCompatActivity() {
         // target. A separate label plus a row click listener reads as a generic clickable with
         // no checkable state.
         check?.apply {
-            text = "I understand what this does"
+            text = getString(R.string.settings_i_understand_what_this_does)
             setTextColor(primary)
             buttonTintList = ColorStateList.valueOf(accent)
             // The tick is a separate drawable from the box, tinted by buttonIconTint, which
@@ -3465,7 +3529,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         confirm?.apply {
-            text = "Turn on"
+            text = getString(R.string.settings_turn_on)
             setTextColor(accent)
             isEnabled = false
             alpha = 0.4f  // same greyed-out value the gated Settings rows use
@@ -3549,17 +3613,16 @@ class SettingsActivity : AppCompatActivity() {
 
         banner.visibility = View.VISIBLE
 
-        val oemExtra = when {
-            Build.MANUFACTURER.lowercase().let {
-                it.contains("xiaomi") || it.contains("redmi") || it.contains("huawei") ||
-                it.contains("honor") || it.contains("samsung") || it.contains("oppo") ||
-                it.contains("vivo") || it.contains("oneplus")
-            } -> "\n\nOn your device, you may also need to enable autostart or disable battery optimization in your device's battery settings."
-            else -> ""
+        val needsMakerNote = Build.MANUFACTURER.lowercase().let {
+            it.contains("xiaomi") || it.contains("redmi") || it.contains("huawei") ||
+            it.contains("honor") || it.contains("samsung") || it.contains("oppo") ||
+            it.contains("vivo") || it.contains("oneplus")
         }
 
-        findViewById<android.widget.TextView>(R.id.batteryBannerMessage)?.text =
-            "Notification highlight and screen lock may stop working.$oemExtra"
+        findViewById<android.widget.TextView>(R.id.batteryBannerMessage)?.text = getString(
+            if (needsMakerNote) R.string.settings_battery_banner_message_with_maker_note
+            else R.string.settings_battery_banner_message
+        )
     }
 
     private fun requestBatteryExemption() {
@@ -3608,23 +3671,22 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<android.widget.TextView>(R.id.dialogTitle)?.apply {
-            text = "HIDE WARNING"
+            text = getString(R.string.settings_hide_warning_title)
             setTextColor(accent)
         }
 
         dialog.findViewById<android.widget.TextView>(R.id.dialogBody)?.apply {
-            text = "Would you like to permanently hide this battery restriction warning?"
+            text = getString(R.string.settings_hide_warning_body)
             setTextColor(primary)
         }
 
         dialog.findViewById<android.widget.TextView>(R.id.dialogPrivacy)?.apply {
-            text = "Features may still stop working if background activity remains restricted. " +
-                    "You can always fix this manually in your device's battery settings."
+            text = getString(R.string.settings_hide_warning_note)
             setTextColor(secondary)
         }
 
         dialog.findViewById<android.widget.TextView>(R.id.btnCancel)?.apply {
-            text = "Dismiss once"
+            text = getString(R.string.settings_dismiss_once)
             setTextColor(secondary)
             setOnClickListener {
                 dialog.dismiss()
@@ -3633,7 +3695,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<android.widget.TextView>(R.id.btnContinue)?.apply {
-            text = "Don't remind again"
+            text = getString(R.string.settings_dont_remind_again)
             setTextColor(accent)
             setOnClickListener {
                 dialog.dismiss()
@@ -3655,7 +3717,7 @@ class SettingsActivity : AppCompatActivity() {
             packageManager.getPackageInfo(packageName, 0).versionName
         } catch (_: Exception) { "-" }
         findViewById<TextView>(R.id.labelAppVersion)?.apply {
-            text = "v$versionName"
+            text = getString(R.string.settings_version_value, versionName)
             setTextColor(secondary)
         }
 

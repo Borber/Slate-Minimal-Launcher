@@ -11,6 +11,7 @@ import android.os.Build
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import androidx.core.content.ContextCompat
+import com.slate.launcher.R
 
 /** BluetoothAdapter resolved via BluetoothManager - getDefaultAdapter() is deprecated API 31+. */
 private fun bluetoothAdapter(context: Context): BluetoothAdapter? {
@@ -44,11 +45,11 @@ private fun safeStart(context: Context, intent: Intent) {
 
 object WifiWidget : QuickWidget() {
     override val id = "wifi"
-    override val displayName = "Wi-Fi"
+    override fun displayName(context: Context) = context.getString(R.string.widget_wifi)
     override fun renderLabel(context: Context): WidgetLabel {
         val mgr = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
         val on = mgr?.isWifiEnabled == true
-        return WidgetLabel("Wi-Fi", active = on)
+        return WidgetLabel(context.getString(R.string.widget_wifi), active = on)
     }
     override fun onTap(context: Context) {
         // A29+: the inline Settings.Panel is the only sanctioned way for 3P apps to surface Wi-Fi
@@ -66,12 +67,12 @@ object WifiWidget : QuickWidget() {
 
 object BluetoothWidget : QuickWidget() {
     override val id = "bt"
-    override val displayName = "Bluetooth"
+    override fun displayName(context: Context) = context.getString(R.string.widget_bluetooth)
     override fun isAvailable(context: Context): Boolean =
         bluetoothAdapter(context) != null
     override fun renderLabel(context: Context): WidgetLabel {
         val on = bluetoothAdapter(context)?.isEnabled == true
-        return WidgetLabel("Bluetooth", active = on)
+        return WidgetLabel(context.getString(R.string.widget_bluetooth), active = on)
     }
     override fun onTap(context: Context) {
         safeStart(context, Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
@@ -82,7 +83,7 @@ object BluetoothWidget : QuickWidget() {
 
 object MobileDataWidget : QuickWidget() {
     override val id = "data"
-    override val displayName = "Mobile data"
+    override fun displayName(context: Context) = context.getString(R.string.widget_mobile_data)
     override fun isAvailable(context: Context): Boolean {
         // Reading isDataEnabled() requires READ_BASIC_PHONE_STATE (normal) on API 33+.
         // On older Android the only safe read needs the dangerous READ_PHONE_STATE - we won't
@@ -98,7 +99,7 @@ object MobileDataWidget : QuickWidget() {
         } catch (_: SecurityException) {
             false
         }
-        return WidgetLabel("Mobile data", active = on)
+        return WidgetLabel(context.getString(R.string.widget_mobile_data), active = on)
     }
     override fun onTap(context: Context) {
         safeStart(context, Intent(Settings.ACTION_DATA_USAGE_SETTINGS))
@@ -108,12 +109,12 @@ object MobileDataWidget : QuickWidget() {
 
 object AirplaneWidget : QuickWidget() {
     override val id = "airplane"
-    override val displayName = "Airplane mode"
+    override fun displayName(context: Context) = context.getString(R.string.widget_airplane_mode)
     override fun renderLabel(context: Context): WidgetLabel {
         val on = Settings.Global.getInt(
             context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0
         ) != 0
-        return WidgetLabel("Airplane mode", active = on)
+        return WidgetLabel(context.getString(R.string.widget_airplane_mode), active = on)
     }
     override fun onTap(context: Context) {
         safeStart(context, Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS))

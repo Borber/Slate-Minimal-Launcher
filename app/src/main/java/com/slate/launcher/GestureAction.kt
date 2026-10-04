@@ -1,5 +1,7 @@
 package com.slate.launcher
 
+import android.content.Context
+
 enum class Direction { UP, DOWN, LEFT, RIGHT }
 
 sealed class GestureAction {
@@ -61,16 +63,16 @@ sealed class GestureAction {
 }
 
 /** Human-readable label for static actions. App names are resolved at the call site. */
-val GestureAction.staticLabel: String
-    get() = when (this) {
-        is GestureAction.None              -> "None"
-        is GestureAction.OpenNotifications -> "Open notifications"
-        is GestureAction.LockScreen        -> "Lock screen"
-        is GestureAction.OpenSettings      -> "Open settings"
-        is GestureAction.Search            -> "Search apps"
-        is GestureAction.ToggleWifi        -> "Toggle Wi-Fi"
-        is GestureAction.ToggleBluetooth   -> "Toggle Bluetooth"
-        is GestureAction.ToggleLocation    -> "Toggle location"
-        is GestureAction.OpenCamera        -> "Open camera"
+fun GestureAction.staticLabel(context: Context): String =
+    when (this) {
+        is GestureAction.None              -> context.getString(R.string.gesture_none)
+        is GestureAction.OpenNotifications -> context.getString(R.string.gesture_open_notifications)
+        is GestureAction.LockScreen        -> context.getString(R.string.gesture_lock_screen)
+        is GestureAction.OpenSettings      -> context.getString(R.string.gesture_open_settings)
+        is GestureAction.Search            -> context.getString(R.string.gesture_search_apps)
+        is GestureAction.ToggleWifi        -> context.getString(R.string.gesture_toggle_wifi)
+        is GestureAction.ToggleBluetooth   -> context.getString(R.string.gesture_toggle_bluetooth)
+        is GestureAction.ToggleLocation    -> context.getString(R.string.gesture_toggle_location)
+        is GestureAction.OpenCamera        -> context.getString(R.string.gesture_open_camera)
         is GestureAction.OpenApp           -> key          // resolved to app name in UI
     }

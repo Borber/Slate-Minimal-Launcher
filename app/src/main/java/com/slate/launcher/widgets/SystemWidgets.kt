@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import androidx.core.content.ContextCompat
+import com.slate.launcher.R
 
 /** Find the first camera that has a flash, or null if the device has none. */
 private fun firstFlashCameraId(context: Context): String? {
@@ -29,7 +30,7 @@ private fun firstFlashCameraId(context: Context): String? {
 
 object TorchWidget : QuickWidget() {
     override val id = "torch"
-    override val displayName = "Torch"
+    override fun displayName(context: Context) = context.getString(R.string.widget_torch)
 
     // The widget tracks the latest state from TorchCallback in a process-singleton so renderLabel
     // is cheap and synchronous. The callback is the only state source - CameraManager has no
@@ -39,7 +40,7 @@ object TorchWidget : QuickWidget() {
     override fun isAvailable(context: Context): Boolean = firstFlashCameraId(context) != null
 
     override fun renderLabel(context: Context): WidgetLabel =
-        WidgetLabel("Torch", active = lastKnownOn)
+        WidgetLabel(context.getString(R.string.widget_torch), active = lastKnownOn)
 
     override fun onTap(context: Context) {
         val mgr = context.applicationContext.getSystemService(Context.CAMERA_SERVICE) as? CameraManager
@@ -76,16 +77,18 @@ object TorchWidget : QuickWidget() {
 
 object BrightnessWidget : QuickWidget() {
     override val id = "brightness"
-    override val displayName = "Brightness"
+    override fun displayName(context: Context) = context.getString(R.string.widget_brightness_name)
     override fun renderLabel(context: Context): WidgetLabel {
         // Settings.System.SCREEN_BRIGHTNESS is 0..255 in legacy units. Read-only here - writing
         // would require WRITE_SETTINGS special access, which we don't take.
         val raw = runCatching {
             Settings.System.getInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
         }.getOrDefault(-1)
-        if (raw < 0) return WidgetLabel("Brightness: -", active = false)
+        if (raw < 0) return WidgetLabel(
+            context.getString(R.string.widget_brightness_unknown), active = false
+        )
         val pct = (raw * 100 / 255).coerceIn(0, 100)
-        return WidgetLabel("Brightness: ${pct}%", active = true)
+        return WidgetLabel(context.getString(R.string.widget_brightness_value, pct), active = true)
     }
     override fun onTap(context: Context) {
         runCatching {
@@ -110,7 +113,7 @@ object BrightnessWidget : QuickWidget() {
 
 object LocationWidget : QuickWidget() {
     override val id = "location"
-    override val displayName = "Location services"
+    override fun displayName(context: Context) = context.getString(R.string.widget_location_name)
     override fun renderLabel(context: Context): WidgetLabel {
         val lm = context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
         val on = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -120,7 +123,7 @@ object LocationWidget : QuickWidget() {
             lm?.isProviderEnabled(LocationManager.GPS_PROVIDER) == true ||
             lm?.isProviderEnabled(LocationManager.NETWORK_PROVIDER) == true
         }
-        return WidgetLabel("Location", active = on)
+        return WidgetLabel(context.getString(R.string.widget_location), active = on)
     }
     override fun onTap(context: Context) {
         runCatching {
@@ -150,13 +153,13 @@ object LocationWidget : QuickWidget() {
 
 object NfcWidget : QuickWidget() {
     override val id = "nfc"
-    override val displayName = "NFC"
+    override fun displayName(context: Context) = context.getString(R.string.widget_nfc)
     override fun isAvailable(context: Context): Boolean =
         NfcAdapter.getDefaultAdapter(context.applicationContext) != null
     override fun renderLabel(context: Context): WidgetLabel {
         val adapter = NfcAdapter.getDefaultAdapter(context.applicationContext)
         val on = adapter?.isEnabled == true
-        return WidgetLabel("NFC", active = on)
+        return WidgetLabel(context.getString(R.string.widget_nfc), active = on)
     }
     override fun onTap(context: Context) {
         runCatching {

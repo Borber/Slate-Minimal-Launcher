@@ -2,6 +2,7 @@ package com.slate.launcher
 
 import android.graphics.Paint
 import android.graphics.Rect
+import androidx.annotation.StringRes
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -19,13 +20,13 @@ import kotlin.math.roundToInt
  */
 object SelectionMarker {
 
-    class Style(val key: String, val label: String, val glyph: String)
+    class Style(val key: String, @param:StringRes val label: Int, val glyph: String)
 
     val STYLES: List<Style> = listOf(
-        Style("check", "Check", "\u2713"),
-        Style("dot", "Dot", "\u25CF"),
-        Style("radio", "Radio", "\u25C9"),
-        Style("square", "Square", "\u25A0"),
+        Style("check", R.string.settings_selection_style_check, "\u2713"),
+        Style("dot", R.string.settings_selection_style_dot, "\u25CF"),
+        Style("radio", R.string.settings_selection_style_radio, "\u25C9"),
+        Style("square", R.string.settings_selection_style_square, "\u25A0"),
     )
 
     /** Check. Also what [styleFor] resolves an unknown stored key to. */
