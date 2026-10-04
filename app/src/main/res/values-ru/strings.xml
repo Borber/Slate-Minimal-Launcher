@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="accessibility_service_description">Позволяет Slate блокировать экран двойным нажатием, сохраняя возможность биометрической разблокировки.</string>
+
+    <!-- Words used in many places -->
+    <string name="common_ok">ОК</string>
+    <string name="common_cancel">Отмена</string>
+    <string name="common_save">Сохранить</string>
+    <string name="common_done">Готово</string>
+    <string name="common_next">Далее</string>
+    <string name="common_default">По умолчанию</string>
+    <string name="common_left">Слева</string>
+    <string name="common_center">По центру</string>
+    <string name="common_right">Справа</string>
+    <string name="common_top">Сверху</string>
+    <string name="common_bottom">Снизу</string>
+    <string name="common_import_failed">Не удалось импортировать: %1$s</string>
+    <string name="common_export_failed">Не удалось экспортировать: %1$s</string>
+
+    <!-- Home screen -->
+    <string name="home_search_hint">поиск…</string>
+    <string name="home_fast_scroll_description">Быстрая прокрутка по алфавиту</string>
+    <string name="home_contact_description">Контакт: %1$s, нажмите дважды, чтобы позвонить</string>
+    <string name="home_contact_description_with_type">Контакт: %1$s, %2$s, нажмите дважды, чтобы позвонить</string>
+    <string name="home_app_not_installed">Приложение не установлено</string>
+    <string name="home_no_dialer_installed">Нет приложения для звонков</string>
+    <string name="home_menu_customize">Настроить</string>
+    <string name="home_hidden_apps">Скрытые приложения</string>
+    <string name="home_faq">Вопросы и ответы</string>
+
+    <!-- Home screen: menus -->
+    <string name="menu_pin_to_top">Закрепить сверху</string>
+    <string name="menu_unpin">Открепить</string>
+    <string name="menu_app_info">О приложении</string>
+    <string name="menu_hide">Скрыть</string>
+    <string name="menu_uninstall">Удалить</string>
+    <string name="menu_move_to_folder">Переместить в папку</string>
+    <string name="menu_move_to_another_folder">Переместить в другую папку</string>
+    <string name="menu_remove_from_folder">Убрать из папки</string>
+    <string name="menu_custom_color">Свой цвет</string>
+    <string name="menu_rename">Переименовать</string>
+    <string name="menu_select">Выбрать</string>
+    <string name="menu_select_all">Выбрать все</string>
+    <string name="menu_delete_folder">Удалить папку</string>
+    <string name="menu_rename_title">Переименовать: %1$s</string>
+    <string name="menu_rename_reset">Вернуть исходное название</string>
+
+    <!-- Home screen: selecting several apps -->
+    <string name="selection_actions">действия</string>
+    <string name="selection_cancel">отмена</string>
+    <plurals name="selection_count">
+        <item quantity="one">выбрано: %1$d</item>
+        <item quantity="few">выбрано: %1$d</item>
+        <item quantity="many">выбрано: %1$d</item>
+        <item quantity="other">выбрано: %1$d</item>
+    </plurals>
+    <string name="selection_row_selected">%1$s, выбрано</string>
+    <string name="selection_row_not_selected">%1$s, не выбрано</string>
+    <plurals name="selection_apps">
+        <item quantity="one">%1$d приложение</item>
+        <item quantity="few">%1$d приложения</item>
+        <item quantity="many">%1$d приложений</item>
+        <item quantity="other">%1$d приложения</item>
+    </plurals>
+    <string name="selection_hide_title">СКРЫТЬ ПРИЛОЖЕНИЯ</string>
+    <plurals name="selection_hide_body">
+        <item quantity="one">Скрыть %1$d приложение? Скрытое не показывается на главном экране и в поиске. Открыть или вернуть его можно в разделе «Скрытые приложения».</item>
+        <item quantity="few">Скрыть %1$d приложения? Скрытое не показывается на главном экране и в поиске. Открыть или вернуть его можно в разделе «Скрытые приложения».</item>
+        <item quantity="many">Скрыть %1$d приложений? Скрытое не показывается на главном экране и в поиске. Открыть или вернуть его можно в разделе «Скрытые приложения».</item>
+        <item quantity="other">Скрыть %1$d приложения? Скрытое не показывается на главном экране и в поиске. Открыть или вернуть его можно в разделе «Скрытые приложения».</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed_one_app">
+        <item quantity="one">Вместе с этим приложением убраны и его закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="few">Вместе с этим приложением убраны и его закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="many">Вместе с этим приложением убраны и его закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="other">Вместе с этим приложением убраны и его закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed_several_apps">
+        <item quantity="one">Вместе с этими приложениями убраны и их закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="few">Вместе с этими приложениями убраны и их закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="many">Вместе с этими приложениями убраны и их закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="other">Вместе с этими приложениями убраны и их закрепленные ярлыки: %1$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+    </plurals>
+    <string name="selection_uninstall_title">УДАЛИТЬ ПРИЛОЖЕНИЯ</string>
+    <plurals name="selection_uninstall_body">
+        <item quantity="one">Удалить %1$d приложение? Android попросит подтвердить удаление.</item>
+        <item quantity="few">Удалить %1$d приложения? Android попросит подтвердить каждое удаление. Если отменить запрос, оставшиеся удалены не будут.</item>
+        <item quantity="many">Удалить %1$d приложений? Android попросит подтвердить каждое удаление. Если отменить запрос, оставшиеся удалены не будут.</item>
+        <item quantity="other">Удалить %1$d приложения? Android попросит подтвердить каждое удаление. Если отменить запрос, оставшиеся удалены не будут.</item>
+    </plurals>
+    <plurals name="selection_uninstall_skipped">
+        <item quantity="one">Нельзя удалить отсюда, будет пропущено выбранных приложений: %1$d.</item>
+        <item quantity="few">Нельзя удалить отсюда, будет пропущено выбранных приложений: %1$d.</item>
+        <item quantity="many">Нельзя удалить отсюда, будет пропущено выбранных приложений: %1$d.</item>
+        <item quantity="other">Нельзя удалить отсюда, будет пропущено выбранных приложений: %1$d.</item>
+    </plurals>
+
+    <!-- Home screen: folders -->
+    <string name="folder_back">‹\u00A0назад</string>
+    <string name="folder_new_option">+ Новая папка</string>
+    <string name="folder_new_title">Новая папка</string>
+    <string name="folder_rename_title">Переименовать папку</string>
+    <string name="folder_name_hint">Название папки</string>
+    <string name="folder_name_empty">Название не может быть пустым</string>
+    <string name="folder_create">Создать</string>
+    <string name="folder_color_title">Цвет папки</string>
+    <string name="folder_delete_title">УДАЛИТЬ ПАПКУ</string>
+    <string name="folder_delete_body">Удалить папку «%1$s»? Ее приложения вернутся в основной список.</string>
+    <string name="folder_delete_body_work">Удалить папку «%1$s»? Ее приложения вернутся в основной список, и Slate больше не будет группировать приложения этого профиля, пока вы не воспользуетесь пунктом Настройки &gt; Сгруппировать рабочие приложения.</string>
+    <string name="folder_delete_confirm">Удалить</string>
+    <string name="folder_work_folder_removed">Папка «%1$s» удалена. Slate больше не будет группировать эти приложения.</string>
+
+    <!-- Home screen: hidden apps -->
+    <string name="hidden_none">Нет скрытых приложений</string>
+    <string name="hidden_title_with_hint">Скрытые приложения – нажмите, чтобы открыть, удерживайте, чтобы показать</string>
+    <string name="hidden_unhide_title">ПОКАЗАТЬ ПРИЛОЖЕНИЕ</string>
+    <string name="hidden_unhide_body">Показать «%1$s» снова? Приложение вернется в основной список.</string>
+    <string name="hidden_unhide_confirm">Показать</string>
+    <string name="hidden_shortcuts_removed_title">Ярлыки убраны</string>
+    <plurals name="hidden_shortcuts_removed">
+        <item quantity="one">Вместе с приложением «%1$s» убраны и его закрепленные ярлыки: %2$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="few">Вместе с приложением «%1$s» убраны и его закрепленные ярлыки: %2$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="many">Вместе с приложением «%1$s» убраны и его закрепленные ярлыки: %2$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+        <item quantity="other">Вместе с приложением «%1$s» убраны и его закрепленные ярлыки: %2$d. Ярлыки скрытого приложения все равно были бы отсюда недоступны.</item>
+    </plurals>
+
+    <!-- Pinned shortcuts -->
+    <string name="shortcut_menu_remove">Убрать</string>
+    <string name="shortcut_menu_refresh">Обновить</string>
+    <string name="shortcut_menu_open_app">Открыть %1$s</string>
+    <string name="shortcut_no_longer_available">Этот ярлык больше недоступен</string>
+    <string name="shortcut_destination_widget_strip">Панель виджетов</string>
+    <string name="shortcut_destination_app_list">Список приложений</string>
+    <string name="shortcut_choose_app_title">%1$s – выберите приложение</string>
+    <string name="shortcut_loading_apps">Загрузка приложений…</string>
+    <string name="shortcut_no_apps_with_shortcuts">Приложений с ярлыками не найдено</string>
+    <plurals name="shortcut_enabled_count">
+        <item quantity="one">включено: %1$d</item>
+        <item quantity="few">включено: %1$d</item>
+        <item quantity="many">включено: %1$d</item>
+        <item quantity="other">включено: %1$d</item>
+    </plurals>
+    <string name="shortcut_needs_default_launcher">Чтобы добавлять ярлыки, сделайте Slate лаунчером по умолчанию</string>
+    <string name="shortcut_none_found_for">Ярлыков не найдено: %1$s</string>
+    <string name="shortcut_also_pinned_to_widget_strip">Также закреплен на панели виджетов</string>
+    <string name="shortcut_also_pinned_to_app_list">Также закреплен в списке приложений</string>
+
+    <!-- FAQ -->
+    <string name="faq_back">← Вопросы и ответы</string>
+    <string name="faq_accessibility_question">Зачем Slate разрешение специальных возможностей?</string>
+    <string name="faq_accessibility_answer">Специальные возможности используются только для функции «Двойное нажатие для блокировки экрана». Вызывается один системный API (GLOBAL_ACTION_LOCK_SCREEN), чтобы заблокировать устройство и сохранить биометрическую разблокировку.\n\nС этим разрешением Slate не может читать содержимое экрана, следить за использованием приложений или собирать какие-либо данные.</string>
+    <string name="faq_notification_access_question">Зачем Slate доступ к уведомлениям?</string>
+    <string name="faq_notification_access_answer">Доступ к уведомлениям необязателен и нужен только для выделения уведомлений – оно меняет цвет названия приложения, когда у того есть ожидающее уведомление.\n\nSlate проверяет только, у каких пакетов есть активные уведомления. Содержимое уведомлений (заголовки, сообщения, отправители) никогда не читается и не сохраняется.</string>
+    <string name="faq_data_question">Собирает ли Slate какие-либо данные?</string>
+    <string name="faq_data_answer" formatted="false">Нет. Slate работает на 100\u00A0% офлайн и не собирает никаких данных.\n\nНет ни аналитики, ни отчетов о сбоях, ни отслеживания, ни каких-либо сетевых запросов. Все настройки, счетчики использования и пользовательские изменения хранятся локально на вашем устройстве в SharedPreferences Android и никогда его не покидают.</string>
+    <string name="faq_contacts_question">Читает ли Slate мои контакты?</string>
+    <string name="faq_contacts_answer">Только если вы включите «Поиск по контактам» в разделе Настройки → Поиск. Когда эта функция выключена (по умолчанию), у Slate вообще нет разрешения на контакты. Когда включена, Slate читает список контактов каждый раз, когда вы вводите запрос, – чтобы находить совпадения рядом с приложениями. Ничего не сохраняется, не индексируется и никуда не отправляется. После закрытия и повторного запуска лаунчера данных о контактах в памяти нет.\n\nКонтакты рабочего профиля не видны (Android изолирует их от сторонних лаунчеров). Контакты без номера телефона пропускаются, поскольку нажатие на контакт открывает приложение для звонков.\n\nЕсли один и тот же человек встречается несколько раз – так часто бывает, потому что контакт может существовать в нескольких источниках (Google, WhatsApp, Telegram, SIM, контакты OEM и т.\u00A0д.), – включите на той же странице настроек «Только контакты Google», чтобы искать только в адресной книге Google и пропускать дубликаты.</string>
+    <string name="faq_permissions_question">Какие еще разрешения использует Slate?</string>
+    <string name="faq_permissions_answer">• EXPAND_STATUS_BAR – жест, открывающий панель уведомлений движением вниз\n• ACCESS_WIFI_STATE / CHANGE_WIFI_STATE – жест переключения Wi-Fi (Android 10+: открывает системную панель)\n• BLUETOOTH / BLUETOOTH_ADMIN – переключение Bluetooth в Android 11 и более ранних версиях\n• QUERY_ALL_PACKAGES – нужно, чтобы показать все установленные приложения (Android 11+)\n• REQUEST_DELETE_PACKAGES – запускает системное удаление, когда вы решаете удалить приложение\n• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS – используется, только когда вы нажимаете «Исправить» в предупреждении об ограничении батареи в разделе «Настройки», чтобы попросить систему исключить Slate из экономии заряда – тогда фоновые функции продолжат работать\n• USE_BIOMETRIC – объявлено библиотекой AndroidX Biometric; запрашивается, только когда вы включаете биометрическую разблокировку для скрытых приложений. Биометрические данные обрабатывает система, и до Slate они никогда не доходят.</string>
+    <string name="faq_hidden_lock_question">Как работает блокировка скрытых приложений?</string>
+    <string name="faq_hidden_lock_answer">Когда вы включаете «Блокировать скрытые приложения» в разделе Настройки → Безопасность, вас попросят задать PIN-код из 4–8 цифр. После этого, чтобы открыть окно «Скрытые приложения» из меню долгого нажатия на главном экране, нужен PIN-код (или биометрия, если вы ее включите).\n\nВаш PIN-код никогда не хранится в открытом виде. Slate хранит хеш PBKDF2-HMAC-SHA256 с солью: 120\u00A0000 итераций и случайная 16-байтная соль, своя для каждого устройства. Хеш – это односторонняя проверка: даже имея файл, злоумышленнику пришлось бы подбирать PIN-код перебором.\n\nБиометрия необязательна. Когда она включена, Slate использует BiometricPrompt из Android, чтобы показать стандартное окно отпечатка пальца или лица. Биометрические данные остаются в системе, а Slate видит только сигнал об успехе или отказе.\n\nПосле 5 неверных попыток ввода PIN-кода вы заблокированы на 30 секунд; после 10 – на 5 минут; после 15 – на 15 минут. Восстановить PIN-код нельзя: единственный способ сброса – очистить данные приложения. При восстановлении резервной копии, содержащей скрытые приложения, у вас запросят PIN-код этой копии. Если вы его не знаете, остальные настройки все равно восстановятся, а ваш текущий PIN-код и скрытые приложения останутся прежними.</string>
+    <string name="faq_long_press_lock_question">Как работает блокировка меню долгого нажатия?</string>
+    <string name="faq_long_press_lock_answer">Когда вы включаете «Блокировать меню долгого нажатия на главном экране» в разделе Настройки → Безопасность, вас попросят задать PIN-код из 4–8 цифр – тот же, что использует «Блокировать скрытые приложения», если вы включите и эту функцию. После включения этот PIN-код сначала запрашивается, когда вы открываете меню долгого нажатия на главном экране (Настроить / Скрытые приложения / Вопросы и ответы), меню долгого нажатия приложения (Закрепить, Скрыть, Переименовать, Удалить и остальные пункты), меню папки или закрепленного ярлыка либо выполняете жест, назначенный на действие «Открыть настройки».\n\nЭта блокировка работает только с PIN-кодом. Она никогда не использует биометрию, даже если на этом экране вы включили биометрическую разблокировку для скрытых приложений, так что здесь вас всегда попросят ввести PIN-код.\n\nСам PIN-код – ровно тот, что описан выше: хеш PBKDF2-HMAC-SHA256 с солью, никогда не хранится в открытом виде, с той же схемой блокировки после 5/10/15 попыток, общей для обеих блокировок. Если PIN-кода у вас еще нет, при включении вам сначала предложат его задать, точно так же, как это делает «Блокировать скрытые приложения».\n\nВ остальном две блокировки независимы. Выключение этой не затрагивает «Блокировать скрытые приложения», ваш PIN-код и скрытые приложения; просто PIN-код перестает запрашиваться перед меню долгого нажатия и упомянутым жестом.</string>
+    <string name="faq_recents_question">Появляются ли скрытые приложения на экране «Недавние» (обзор)?</string>
+    <string name="faq_recents_answer">Когда вы открываете скрытое приложение из Slate, оно запускается так, чтобы не попадать на экран «Недавние» в Android, – тот, кто заглянет в недавние приложения, не увидит, какое скрытое приложение вы открывали.\n\nЕсть одно ограничение, которое Android не позволяет обойти: если у приложения уже была задача в недавних (потому что вы открывали его из другого лаунчера или потому что оно использует режим «single task» в Android, как Chrome на некоторых устройствах), Slate не может убрать эту запись. Смахните ее из недавних один раз, и с этого момента запуски из Slate останутся невидимыми.</string>
+    <string name="faq_folders_question">Как работают папки?</string>
+    <string name="faq_folders_answer">Нажмите и удерживайте любое приложение и выберите «Переместить в папку», чтобы добавить его в существующую папку, или «+ Новая папка», чтобы сразу создать новую. Папки показываются на главном экране с пометкой (шеврон, маркер, скобки, косая черта, количество или простой – выберите стиль в разделе Настройки → Типографика → Стиль папок). Нажмите на папку, чтобы раскрыть ее на месте, – основной список заменяется приложениями папки, а первой идет строка «‹\u00A0назад». Нажмите на нее (или используйте системный жест «Назад»), чтобы вернуться.\n\nКаждое приложение находится не более чем в одной папке. Приложения из папок не показываются в основном списке, чтобы он не разрастался, – поиск по-прежнему находит их везде, а само название папки тоже появляется в результатах поиска.\n\nНажмите и удерживайте название папки, чтобы переименовать ее, задать свой цвет или удалить. При удалении папки ее приложения возвращаются в основной список; сами приложения никогда не удаляются. Закрепленное приложение автоматически убирается из папки, в которой оно было. Если удалить приложение, оно исчезает из своей папки; пустые папки убираются автоматически.</string>
+    <string name="faq_several_apps_question">Как изменить несколько приложений сразу?</string>
+    <string name="faq_several_apps_answer">Нажмите и удерживайте любое приложение и выберите «Выбрать». Нажимайте на другие приложения, чтобы отметить их, в том числе в папках и в результатах поиска. Панель под списком показывает, сколько выбрано. Нажмите «действия», чтобы закрепить, скрыть, удалить, переместить их или изменить их цвет за один раз, или «отмена», чтобы прекратить. Выбор также завершается, когда вы нажимаете «Назад» или уходите с главного экрана.\n\nПри удалении Android просит подтвердить каждое приложение, а рабочие и системные приложения пропускаются. Пометку можно выбрать в разделе Настройки → Типографика → Стиль выбора.</string>
+    <string name="faq_widgets_as_text_question">Почему виджеты показаны текстом, а не значками?</string>
+    <string name="faq_widgets_as_text_answer" formatted="false">Slate намеренно использует только текст – приложения перечислены по названиям, и панель виджетов следует тому же правилу. Надпись вроде «Wi-Fi» читается как слово, а не как символ, который узнаешь не задумываясь, поэтому открыть или переключить что-то остается небольшим осознанным выбором, а не рефлексом.\n\nКаждый виджет показывает свое название с текущим значением, когда оно есть (Батарея: 67\u00A0%, Громкость: 60\u00A0%, Время: 14:32), или только название для простых переключателей (Wi-Fi, Bluetooth). Активные виджеты показываются без прозрачности; неактивные приглушаются до 40\u00A0%, чтобы с одного взгляда было видно, включено ли что-то, без значков и цвета.</string>
+    <string name="faq_wifi_name_question">Почему виджет Wi-Fi не показывает название моей сети?</string>
+    <string name="faq_wifi_name_answer">В Android 10 и более поздних версиях приложение может прочитать название подключенной сети Wi-Fi (SSID), только если вы дадите ему чувствительное разрешение во время работы – на большинстве устройств это разрешение на точное местоположение (ACCESS_FINE_LOCATION) – и включите службы геолокации.\n\nSlate работает только офлайн и никогда не запрашивает разрешение, без которого функция может обойтись, поэтому виджет показывает просто «Wi-Fi», ярче или приглушеннее в зависимости от состояния. Нажатие открывает системную панель Wi-Fi, где подключенная сеть показана самой системой, и Slate ничего запрашивать не нужно.</string>
+    <string name="faq_toggles_question">Почему Slate не может напрямую переключать Wi-Fi или Bluetooth?</string>
+    <string name="faq_toggles_answer">Android закрыл сторонним приложениям прямой доступ к этим переключателям:\n\n• Wi-Fi: начиная с Android 10 приложения не могут программно включать и выключать Wi-Fi. Нажатие на виджет открывает системную панель Wi-Fi поверх экрана снизу – одно нажатие, чтобы включить или выключить Wi-Fi, не покидая лаунчер.\n\n• Bluetooth: начиная с Android 12 для переключения Bluetooth нужно разрешение BLUETOOTH_CONNECT, которое также дает доступ к названиям и адресам всех сопряженных устройств и возможность к ним подключаться – намного больше, чем просто включение и выключение.\n\n• Мобильный интернет, Режим полета, NFC: для их переключения нужны разрешения уровня подписи, которые Android дает только системным приложениям.\n\nSlate мог бы запросить BLUETOOTH_CONNECT ради переключения Bluetooth одним нажатием, но тогда пришлось бы держать разрешение, которое не нужно ни одной другой функции. Переход в системные панели – это компромисс: одно лишнее нажатие, никакого лишнего доступа к вашему устройству.</string>
+    <string name="faq_open_source_question">Открыт ли исходный код Slate?</string>
+    <string name="faq_open_source_answer">Да. Исходный код Slate открыт по лицензии MIT.\n\nИсходный код: github.com/roufsyed/Slate-Minimal-Launcher</string>
+    <string name="faq_work_apps_question">Как работают рабочие приложения?</string>
+    <string name="faq_work_apps_answer">Приложения из рабочего профиля показываются рядом с личными, каждое с пометкой, например «Gmail [Работа]». Пункт Настройки → Рабочий профиль → Метка рабочих приложений превращает ее в символ или убирает.\n\nКогда Slate впервые видит рабочий профиль, он один раз собирает эти приложения в папку. Если профиль у вас уже давно, папка появляется сразу. Если он только что настроен, Slate ждет около минуты, потому что новый рабочий профиль устанавливает приложения постепенно и иначе Slate сгруппировал бы только первое или два.\n\nПосле этого папка становится обычной. Переименуйте ее, перекрасьте, закрепите, вынесите приложения или добавьте личные – все сохранится, и Slate больше никогда не будет ее перестраивать. Рабочее приложение, установленное позже, появится в основном списке, как любое новое; чтобы убрать его в папку, используйте Настройки → Рабочий профиль → Сгруппировать рабочие приложения.\n\nУдаление папки необратимо – приложения возвращаются в основной список, и Slate не будет группировать их снова, пока вы не попросите. Скрытые рабочие приложения никогда не группируются. Рабочие приложения, приостановленные в Android, показываются приглушенными; при нажатии на одно из них Android предложит снова их включить.\n\nДля рабочего приложения пункт «Удалить» не предлагается, потому что Android позволяет удалять их только вашей организации. Пункт «О приложении» по-прежнему открывает системную страницу.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_background_activity_restricted">Фоновая работа ограничена</string>
+    <string name="settings_battery_banner_message">Выделение уведомлений и блокировка экрана могут перестать работать.</string>
+    <string name="settings_battery_banner_message_with_maker_note">Выделение уведомлений и блокировка экрана могут перестать работать.\n\nНа вашем устройстве может также потребоваться разрешить автозапуск или отключить экономию заряда в настройках батареи.</string>
+    <string name="settings_fix_this">ИСПРАВИТЬ</string>
+    <string name="settings_hide_warning_title">СКРЫТЬ ПРЕДУПРЕЖДЕНИЕ</string>
+    <string name="settings_hide_warning_body">Скрыть это предупреждение об ограничении батареи навсегда?</string>
+    <string name="settings_hide_warning_note">Функции все равно могут перестать работать, пока фоновая работа ограничена. Вы всегда можете исправить это вручную в настройках батареи устройства.</string>
+    <string name="settings_dismiss_once">Скрыть сейчас</string>
+    <string name="settings_dont_remind_again">Больше не напоминать</string>
+    <string name="settings_turn_on">Включить</string>
+    <string name="settings_enable">Включить</string>
+
+    <!-- Settings: General -->
+    <string name="settings_general">Общие</string>
+    <string name="settings_double_tap_to_lock_screen">Двойное нажатие для блокировки экрана</string>
+    <string name="settings_double_tap_to_lock_screen_summary">Требуется разрешение службы специальных возможностей</string>
+    <string name="settings_accessibility_body">Блокировка двойным нажатием использует службу специальных возможностей Android, чтобы блокировать экран.\n\nНа следующем экране найдите в списке «Slate» и включите его.</string>
+    <string name="settings_accessibility_privacy">Slate использует это разрешение только для блокировки экрана. Никакие данные не собираются, не читаются и никуда не отправляются.</string>
+    <string name="settings_sort_by_most_used">Сортировать по частоте</string>
+    <string name="settings_sort_by_most_used_summary">Самые запускаемые приложения идут первыми</string>
+    <string name="settings_most_used_appear_at_top">Самые запускаемые приложения показаны сверху</string>
+    <string name="settings_most_used_appear_at_bottom">Самые запускаемые приложения показаны снизу</string>
+    <string name="settings_show_most_used_at">Частые показывать</string>
+    <string name="settings_show_most_used_at_summary">Где в списке оказываются самые используемые приложения</string>
+    <string name="settings_turn_on_sort_by_most_used">Чтобы включить, включите «Сортировать по частоте»</string>
+    <string name="settings_lock_screen_rotation">Запретить поворот экрана</string>
+    <string name="settings_lock_screen_rotation_summary">Держать лаунчер в книжной ориентации</string>
+    <string name="settings_notification_highlight">Выделение уведомлений</string>
+    <string name="settings_notification_highlight_summary">Менять цвет приложения или папки, когда приходит уведомление</string>
+    <string name="settings_notification_access_title">ДОСТУП К УВЕДОМЛЕНИЯМ</string>
+    <string name="settings_notification_access_body">Выделение уведомлений читает ваши активные уведомления, чтобы подкрашивать названия приложений на главном экране.\n\nНа следующем экране найдите «Slate» и включите его.</string>
+    <string name="settings_notification_access_privacy">Slate читает только, у каких приложений есть уведомления. Содержимое сообщений никогда не читается, не сохраняется и никуда не отправляется.</string>
+    <string name="settings_highlight_color">Цвет выделения</string>
+    <string name="settings_ignore_silenced_notifications">Не учитывать беззвучные уведомления</string>
+    <string name="settings_skip_apps_you_set_to_silent">Пропускать приложения, для которых в настройках Android выбрано «Без звука»</string>
+    <string name="settings_hide_status_bar">Скрыть строку состояния</string>
+    <string name="settings_hide_status_bar_summary">Лаунчер на весь экран, проведите вниз, чтобы увидеть ее</string>
+    <string name="settings_homescreen_view">Вид главного экрана</string>
+    <string name="settings_homescreen_view_summary">Выберите, как расположены приложения</string>
+    <string name="settings_flow">Поток</string>
+    <string name="settings_minimal_list">Минимальный список</string>
+    <string name="settings_alphabetical_fast_scroll">Быстрая прокрутка по алфавиту</string>
+    <string name="settings_alphabetical_fast_scroll_summary">Боковой указатель для перехода по буквам (сортирует A–Z)</string>
+    <string name="settings_turn_off_sort_by_most_used">Чтобы включить, выключите «Сортировать по частоте»</string>
+    <string name="settings_set_as_default_launcher">Сделать лаунчером по умолчанию</string>
+    <string name="settings_set_as_default_launcher_summary">Открыть системный выбор лаунчера</string>
+    <string name="settings_slate_is_your_default_launcher">Slate – ваш лаунчер по умолчанию</string>
+    <string name="settings_already_the_default_launcher">Уже лаунчер по умолчанию</string>
+    <string name="settings_already_default_body">Slate – ваш главный экран. Спасибо, что пользуетесь им.</string>
+
+    <!-- Settings: Text size -->
+    <string name="settings_text_size_heading">Размер текста</string>
+    <string name="settings_minimum">Мин.</string>
+    <string name="settings_maximum">Макс.</string>
+    <string name="settings_size">Размер</string>
+    <string name="settings_line_gap">Интервал строк</string>
+    <string name="settings_word_gap">Интервал слов</string>
+
+    <!-- Settings: Typography -->
+    <string name="settings_typography">Типографика</string>
+    <string name="settings_font">Шрифт</string>
+    <string name="settings_font_import_from_storage">Импортировать из памяти…</string>
+    <string name="settings_font_imported">Шрифт импортирован: %1$s</string>
+    <string name="settings_weight">Насыщенность</string>
+    <string name="settings_weight_light">Светлый</string>
+    <string name="settings_weight_regular">Обычный</string>
+    <string name="settings_weight_medium">Средний</string>
+    <string name="settings_weight_bold">Жирный</string>
+    <string name="settings_alignment">Выравнивание</string>
+    <string name="settings_folder_style">Стиль папок</string>
+    <string name="settings_folder_style_summary">Как названия папок выглядят на главном экране</string>
+    <string name="settings_folder_style_chevron">Шеврон</string>
+    <string name="settings_folder_style_slash">Косая черта</string>
+    <string name="settings_folder_style_bullet">Маркер</string>
+    <string name="settings_folder_style_brackets">Скобки</string>
+    <string name="settings_folder_style_count">Количество</string>
+    <string name="settings_folder_style_plain">Простой</string>
+    <string name="settings_selection_style">Стиль выбора</string>
+    <string name="settings_selection_style_summary">Как отмечаются выбранные приложения</string>
+    <string name="settings_selection_style_check">Галочка</string>
+    <string name="settings_selection_style_dot">Точка</string>
+    <string name="settings_selection_style_radio">Кружок</string>
+    <string name="settings_selection_style_square">Квадрат</string>
+
+    <!-- Settings: Colors -->
+    <string name="settings_colors">Цвета</string>
+    <string name="settings_background">Фон</string>
+    <string name="settings_app_text">Текст приложений</string>
+    <string name="settings_app_text_title">Текст приложений</string>
+    <string name="settings_folder_text">Текст папок</string>
+    <string name="settings_folder_text_title">Текст папок</string>
+    <string name="settings_presets">ГОТОВЫЕ НАБОРЫ</string>
+    <string name="settings_apply_to_lockscreen">Применить к экрану блокировки</string>
+    <string name="settings_apply_to_lockscreen_summary">Заливает экран блокировки тем же сплошным цветом, что и фон лаунчера, для единого вида</string>
+    <string name="settings_could_not_set_lockscreen_wallpaper">Не удалось установить обои экрана блокировки</string>
+    <string name="settings_follow_system_theme">Следовать теме системы</string>
+    <string name="settings_follow_system_theme_summary">Менять цвета вместе с темной темой системы</string>
+    <string name="settings_follow_system_theme_title">СЛЕДОВАТЬ ТЕМЕ СИСТЕМЫ</string>
+    <string name="settings_follow_system_theme_body">Текущие цвета фона и текста будут заменены в соответствии с темной или светлой темой системы.\n\nВыбранные вами цвета будут заменены, и автоматически восстановить их нельзя.</string>
+    <string name="settings_follow_system_theme_note">Вы можете выключить это в любой момент и выбрать новые цвета вручную.</string>
+
+    <!-- Settings: Gestures -->
+    <string name="settings_gestures">Жесты</string>
+    <string name="settings_gesture_one_finger_up">"1 палец  ↑"</string>
+    <string name="settings_gesture_one_finger_down">"1 палец  ↓"</string>
+    <string name="settings_gesture_one_finger_left">"1 палец  ←"</string>
+    <string name="settings_gesture_one_finger_right">"1 палец  →"</string>
+    <string name="settings_gesture_action">Действие жеста</string>
+    <string name="gesture_none">Нет</string>
+    <string name="gesture_open_notifications">Открыть уведомления</string>
+    <string name="gesture_lock_screen">Заблокировать экран</string>
+    <string name="gesture_open_settings">Открыть настройки</string>
+    <string name="gesture_search_apps">Искать приложения</string>
+    <string name="gesture_toggle_wifi">Переключить Wi-Fi</string>
+    <string name="gesture_toggle_bluetooth">Переключить Bluetooth</string>
+    <string name="gesture_toggle_location">Переключить геолокацию</string>
+    <string name="gesture_open_camera">Открыть камеру</string>
+    <string name="settings_gesture_open_app">Открыть приложение…</string>
+    <string name="settings_choose_app">Выбор приложения</string>
+
+    <!-- Settings: Search -->
+    <string name="settings_search">Поиск</string>
+    <string name="settings_enable_search">Включить поиск</string>
+    <string name="settings_enable_search_summary">Проведите вверх, чтобы открыть строку поиска</string>
+    <string name="settings_position">Положение</string>
+    <string name="settings_top_or_bottom_of_the_screen">Вверху или внизу экрана</string>
+    <string name="settings_search_bar_position">Положение строки поиска</string>
+    <string name="settings_show_on_home_screen">Показывать на главном экране</string>
+    <string name="settings_show_on_home_screen_summary">Строка поиска остается видимой, закрывается вместе с клавиатурой</string>
+    <string name="settings_search_contacts">Поиск по контактам</string>
+    <string name="settings_search_contacts_summary">Показывать подходящие контакты при вводе</string>
+    <string name="settings_search_contacts_title">ИСКАТЬ ПО КОНТАКТАМ?</string>
+    <string name="settings_search_contacts_body">Включите, чтобы находить контакты при вводе в строке поиска. Подходящие контакты показываются рядом с приложениями; нажмите на контакт, чтобы открыть приложение для звонков с его номером.</string>
+    <string name="settings_search_contacts_privacy">Slate читает ваши контакты только в тот момент, когда вы вводите запрос. Ничего не сохраняется на устройстве, никуда не отправляется и не запоминается между поисками. После перезапуска лаунчера все начинается с чистого листа.</string>
+    <string name="settings_permission_needed_title">НУЖНО РАЗРЕШЕНИЕ</string>
+    <string name="settings_permission_needed_body">Slate нужно разрешение «Контакты», чтобы искать по ним. Его можно выдать в настройках системы.</string>
+    <string name="settings_permission_needed_note">Нажмите «Открыть настройки», чтобы выдать разрешение. Его можно отозвать в любой момент.</string>
+    <string name="settings_permission_required_to_enable_contact_search">Для поиска по контактам нужно разрешение</string>
+    <string name="settings_google_contacts_only">Только контакты Google</string>
+    <string name="settings_google_contacts_only_summary">Скрывать дубликаты из WhatsApp, Telegram, SIM и других источников</string>
+    <string name="settings_google_contacts_only_title">ТОЛЬКО КОНТАКТЫ GOOGLE?</string>
+    <string name="settings_google_contacts_only_body">Показывать совпадения только из контактов вашего аккаунта Google. Дубликаты из WhatsApp, Telegram, SIM и других источников скрываются.</string>
+    <string name="settings_google_contacts_only_note">Если вы не синхронизируете контакты с Google, поиск может ничего не показать. Выключить можно в любой момент.</string>
+    <string name="settings_turn_on_search_to_enable">Чтобы включить, сначала включите поиск</string>
+    <string name="settings_turn_on_search_contacts_to_enable">Чтобы включить, включите «Поиск по контактам»</string>
+
+    <!-- Settings: Quick toggles -->
+    <string name="settings_quick_toggles">Быстрые переключатели</string>
+    <string name="settings_show_toggles_strip">Показывать панель переключателей</string>
+    <string name="settings_show_toggles_strip_summary">Строка с надписями состояния и быстрых переключателей внизу главного экрана</string>
+    <string name="settings_choose_widgets">Выбрать виджеты</string>
+    <string name="settings_widgets_none_selected">Ничего не выбрано</string>
+    <plurals name="settings_widgets_enabled">
+        <item quantity="one">Включено виджетов: %1$d</item>
+        <item quantity="few">Включено виджетов: %1$d</item>
+        <item quantity="many">Включено виджетов: %1$d</item>
+        <item quantity="other">Включено виджетов: %1$d</item>
+    </plurals>
+    <string name="settings_arrange_widgets">Упорядочить виджеты</string>
+    <string name="settings_arrange_widgets_summary">Изменить порядок включенных виджетов</string>
+    <string name="settings_top_or_bottom_of_the_home">Вверху или внизу главного экрана</string>
+    <string name="settings_direct_call">Прямой звонок</string>
+    <string name="settings_direct_call_summary">Звонить сразу при нажатии или долгом нажатии, не открывая приложение для звонков</string>
+    <string name="settings_permission_required_for_direct_call">Для прямого звонка нужно разрешение</string>
+    <string name="settings_trigger">Способ вызова</string>
+    <string name="settings_trigger_summary">Выберите, какой жест сразу начинает звонок</string>
+    <string name="settings_tap">Нажатие</string>
+    <string name="settings_long_press">Долгое нажатие</string>
+    <string name="settings_show_divider">Показывать разделитель</string>
+    <string name="settings_show_divider_summary">Тонкая линия между панелью и списком приложений – просто визуальная деталь</string>
+    <string name="settings_preview">Предпросмотр</string>
+    <string name="settings_text_size">Размер текста</string>
+    <string name="settings_no_contacts_app_available">Нет приложения для контактов</string>
+    <string name="settings_couldnt_read_the_selected_contact">Не удалось прочитать выбранный контакт</string>
+
+    <!-- Settings: App shortcuts -->
+    <string name="settings_app_shortcuts">Ярлыки приложений</string>
+    <string name="settings_add_to_widget_strip">Добавить на панель виджетов</string>
+    <string name="settings_add_to_widget_strip_summary">Закрепить ярлык другого приложения на панели переключателей</string>
+    <string name="settings_add_to_application_list">Добавить в список приложений</string>
+    <string name="settings_add_to_application_list_summary">Закрепить ярлык другого приложения как пункт в списке приложений</string>
+    <string name="settings_set_slate_as_your_default_launcher">Сделайте Slate лаунчером по умолчанию</string>
+    <string name="settings_needs_default_launcher_body">Чтобы читать ярлыки других приложений, Slate должен быть лаунчером по умолчанию.</string>
+    <string name="settings_open_launcher_settings">Открыть настройки лаунчера</string>
+
+    <!-- Settings: Work profile -->
+    <string name="settings_work_profile">Рабочий профиль</string>
+    <string name="settings_show_work_apps">Показывать рабочие приложения</string>
+    <string name="settings_show_work_apps_summary">При выключении ничего не теряется – все вернется, как было</string>
+    <string name="settings_group_work_apps">Сгруппировать рабочие приложения</string>
+    <string name="settings_group_work_apps_summary">Собрать рабочие приложения в папку сейчас</string>
+    <string name="settings_no_work_apps_to_group">Нет рабочих приложений для группировки</string>
+    <plurals name="settings_grouped_work_apps">
+        <item quantity="one">Сгруппировано рабочих приложений: %1$d</item>
+        <item quantity="few">Сгруппировано рабочих приложений: %1$d</item>
+        <item quantity="many">Сгруппировано рабочих приложений: %1$d</item>
+        <item quantity="other">Сгруппировано рабочих приложений: %1$d</item>
+    </plurals>
+    <string name="settings_work_apps_already_in_folders">Рабочие приложения уже в папках</string>
+    <string name="settings_work_app_marker">Метка рабочих приложений</string>
+    <string name="settings_work_app_marker_summary">Как рабочие приложения отмечаются в списке</string>
+    <string name="settings_work_marker_brackets">Скобки</string>
+    <string name="settings_work_marker_word">Слово</string>
+    <string name="settings_work_marker_dagger">Крестик</string>
+    <string name="settings_work_marker_star">Звездочка</string>
+    <string name="settings_work_marker_dot">Точка</string>
+    <string name="settings_work_marker_square">Квадрат</string>
+    <string name="settings_work_marker_diamond">Ромб</string>
+    <string name="settings_work_marker_none">Нет</string>
+    <string name="settings_hide_marker_in_work_folders">Скрывать метку в рабочих папках</string>
+    <string name="settings_hide_marker_in_work_folders_summary">Не показывать ее в папке, где только рабочие приложения</string>
+
+    <!-- Settings: Backup -->
+    <string name="settings_backup">Резервная копия</string>
+    <string name="settings_export_settings">Экспортировать настройки</string>
+    <string name="settings_import_settings">Импортировать настройки</string>
+    <string name="settings_include_hidden_apps_in_backups">Включать скрытые приложения в копии</string>
+    <string name="settings_include_hidden_apps_in_backups_summary">По умолчанию выключено. В копии не попадают скрытые приложения, PIN-код и настройка биометрии.</string>
+    <string name="settings_include_hidden_apps_title">ВКЛЮЧАТЬ СКРЫТЫЕ ПРИЛОЖЕНИЯ?</string>
+    <string name="settings_include_hidden_apps_body">По умолчанию список скрытых приложений, PIN-код и настройка биометрии остаются на этом устройстве. В резервные копии они не попадают, чтобы их нельзя было перенести на другое устройство или случайно кому-то передать.</string>
+    <string name="settings_include_hidden_apps_note">Включите, если хотите, чтобы скрытые приложения возвращались при восстановлении копии – например, при настройке нового телефона. Тогда копия будет содержать список скрытых приложений и хешированную проверку PIN-кода. Короткий PIN-код легче подобрать, если файл копии попадет в чужие руки.</string>
+    <string name="settings_replace_pin_title">ЗАМЕНИТЬ ВАШ PIN-КОД?</string>
+    <string name="settings_replace_pin_body">В этой копии есть скрытые приложения, защищенные другим PIN-кодом. При восстановлении ваши текущий PIN-код, настройка биометрии и список скрытых приложений будут заменены данными из копии.</string>
+    <string name="settings_replace_pin_note">Ваши текущие настройки уже применены – выберите «Отмена», чтобы сохранить их и пропустить скрытые приложения из копии.</string>
+    <string name="settings_restore">Восстановить</string>
+    <string name="settings_restore_hidden_apps_title">ВОССТАНОВИТЬ СКРЫТЫЕ ПРИЛОЖЕНИЯ</string>
+    <string name="settings_restore_hidden_apps_body">В этой копии есть скрытые приложения, защищенные PIN-кодом. Введите PIN-код, чтобы восстановить их. После трех неверных попыток импорт будет отклонен полностью – ваши текущие настройки не изменятся.</string>
+    <string name="settings_verify">Проверить</string>
+    <plurals name="settings_wrong_pin_attempts_left">
+        <item quantity="one">Неверный PIN-код. Осталось попыток: %1$d.</item>
+        <item quantity="few">Неверный PIN-код. Осталось попыток: %1$d.</item>
+        <item quantity="many">Неверный PIN-код. Осталось попыток: %1$d.</item>
+        <item quantity="other">Неверный PIN-код. Осталось попыток: %1$d.</item>
+    </plurals>
+    <string name="settings_import_refused_title">ИМПОРТ ОТКЛОНЕН</string>
+    <string name="settings_import_refused_body">Три неверные попытки ввода PIN-кода. Ваши настройки не изменены.</string>
+    <string name="settings_import_refused_note">Попробуйте еще раз с правильным PIN-кодом или импортируйте другую копию.</string>
+
+    <!-- Settings: Security -->
+    <string name="settings_security">Безопасность</string>
+    <string name="settings_lock_hidden_apps">Блокировать скрытые приложения</string>
+    <string name="settings_lock_hidden_apps_summary">Требовать PIN-код, чтобы посмотреть или показать приложения</string>
+    <string name="settings_set_pin_for_hidden_apps">Выберите PIN-код из 4–8 цифр. Он понадобится, чтобы посмотреть скрытые приложения.</string>
+    <string name="settings_disable_lock">Отключить блокировку</string>
+    <string name="settings_use_biometric">Использовать биометрию</string>
+    <string name="settings_use_biometric_summary">Разблокировка отпечатком пальца или лицом; PIN-код остается запасным способом</string>
+    <string name="settings_no_biometric_enrolled_on_this_device">На этом устройстве биометрия не настроена</string>
+    <string name="settings_enable_biometric">Включить биометрию</string>
+    <string name="settings_confirm_biometric_to_enable">Подтвердите биометрию, чтобы включить</string>
+    <string name="settings_change_pin">Изменить PIN-код</string>
+    <string name="settings_change_pin_summary">Подтвердите текущий PIN-код, затем задайте новый</string>
+    <string name="settings_pin_changed">PIN-код изменен</string>
+    <string name="settings_keep_hidden_apps_in_recents">Оставлять скрытые приложения в «Недавних»</string>
+    <string name="settings_keep_hidden_apps_in_recents_summary">Android не будет закрывать их при переключении, но они появятся в «Недавних»</string>
+    <string name="settings_show_in_recents_title">ПОКАЗЫВАТЬ В «НЕДАВНИХ»?</string>
+    <string name="settings_show_in_recents_body">Скрытые приложения, открытые из Slate, обычно не попадают на экран «Недавние». Если включить, каждое скрытое приложение будет показано там, как любое другое, обычно с изображением того, что было на экране.</string>
+    <string name="settings_show_in_recents_note">Зачем это может понадобиться: приложение, которого нет в «Недавних», закрывается, как только вы уходите на главный экран и открываете что-то другое, поэтому оно перезапускается и теряет введенное. Если позже выключить, приложения, уже попавшие в «Недавние», сами не исчезнут – смахните их один раз.</string>
+    <string name="settings_i_understand_what_this_does">Я понимаю, что это делает</string>
+    <string name="settings_lock_long_press_menus_on_homescreen">Блокировать меню долгого нажатия на главном экране</string>
+    <string name="settings_lock_long_press_menus_on_homescreen_summary">Требовать PIN-код, чтобы открыть их. Биометрия здесь не используется.</string>
+    <string name="settings_set_pin_for_long_press">Выберите PIN-код из 4–8 цифр. Он понадобится, чтобы открывать меню долгого нажатия.</string>
+    <string name="settings_disable_long_press_lock">Отключить блокировку долгого нажатия</string>
+
+    <!-- Settings: About -->
+    <string name="settings_about">О программе</string>
+    <string name="settings_show_guided_tour">Показать обучение</string>
+    <string name="settings_show_guided_tour_summary">Еще раз пройтись по жестам и функциям лаунчера</string>
+    <string name="settings_source_license">Исходный код и лицензия</string>
+    <string name="settings_version">Версия</string>
+
+    <!-- Widgets -->
+    <string name="widget_choose_title">ВЫБРАТЬ ВИДЖЕТЫ</string>
+    <string name="widget_add_call_shortcut">+ Добавить ярлык звонка</string>
+    <string name="widget_add_sms_shortcut">+ Добавить ярлык SMS</string>
+    <string name="widget_section_contact_shortcuts">ЯРЛЫКИ КОНТАКТОВ</string>
+    <string name="widget_call_contact">Позвонить: %1$s</string>
+    <string name="widget_text_contact">SMS: %1$s</string>
+    <string name="widget_section_widgets">ВИДЖЕТЫ</string>
+    <string name="widget_requires_special_access">Требуется особый доступ</string>
+    <string name="widget_arrange_title">УПОРЯДОЧИТЬ ВИДЖЕТЫ</string>
+    <string name="widget_move_up">Выше</string>
+    <string name="widget_move_down">Ниже</string>
+    <string name="widget_wifi">Wi-Fi</string>
+    <string name="widget_bluetooth">Bluetooth</string>
+    <string name="widget_mobile_data">Мобильный интернет</string>
+    <string name="widget_airplane_mode">Режим полета</string>
+    <string name="widget_nfc">NFC</string>
+    <string name="widget_torch">Фонарик</string>
+    <string name="widget_location_name">Службы геолокации</string>
+    <string name="widget_location">Геолокация</string>
+    <string name="widget_dnd_name">Не беспокоить</string>
+    <string name="widget_dnd">Не беспокоить</string>
+    <string name="widget_ringer_name">Режим звонка</string>
+    <string name="widget_ringer_ring">Звук</string>
+    <string name="widget_ringer_vibrate">Вибрация</string>
+    <string name="widget_ringer_silent">Без звука</string>
+    <string name="widget_media_volume_name">Громкость мультимедиа</string>
+    <string name="widget_media_volume_value">Громкость: %1$d\u00A0%%</string>
+    <string name="widget_brightness_name">Яркость</string>
+    <string name="widget_brightness_value">Яркость: %1$d\u00A0%%</string>
+    <string name="widget_brightness_unknown">Яркость: -</string>
+    <string name="widget_battery_name" formatted="false">Батарея %</string>
+    <string name="widget_battery_value">Батарея: %1$d\u00A0%%</string>
+    <string name="widget_battery_unknown">Батарея: -</string>
+    <string name="widget_charging_name">Индикатор зарядки</string>
+    <string name="widget_charging">Заряжается</string>
+    <string name="widget_battery_temp_name">Температура батареи</string>
+    <string name="widget_battery_temp_value">Темп. батареи: %1$d\u00A0°C</string>
+    <string name="widget_battery_temp_unknown">Темп. батареи: -</string>
+    <string name="widget_time_to_full_name">Время до полной зарядки</string>
+    <string name="widget_time_to_full_value">До полной зарядки: %1$s</string>
+    <string name="widget_time_to_full_unknown">До полной зарядки: -</string>
+    <string name="widget_time_to_full_note">Не все телефоны сообщают это. Если данных нет, показывается «-».</string>
+    <string name="widget_uptime_name">Время работы</string>
+    <string name="widget_uptime_value">Время работы: %1$s</string>
+    <string name="widget_duration_minutes">%1$d\u00A0мин</string>
+    <string name="widget_duration_hours_minutes">%1$d\u00A0ч %2$d\u00A0мин</string>
+    <string name="widget_duration_days_hours">%1$d\u00A0д %2$d\u00A0ч</string>
+    <string name="widget_clock_name">Часы</string>
+    <string name="widget_clock_value">Время: %1$s</string>
+    <string name="widget_date_name">Дата</string>
+    <string name="widget_date_value">Дата: %1$s</string>
+    <string name="widget_alarm_name">Следующий будильник</string>
+    <string name="widget_alarm_value">Будильник: %1$s</string>
+    <string name="widget_alarm_none">Будильник: нет</string>
+
+    <!-- Work profile -->
+    <string name="work_profile_label">Работа</string>
+    <string name="work_profile_label_numbered">Работа %1$d</string>
+
+    <!-- Backup -->
+    <string name="backup_saved">Резервная копия сохранена</string>
+    <string name="backup_settings_restored">Настройки восстановлены</string>
+    <string name="backup_restored_hidden_apps_skipped">Настройки восстановлены. Скрытые приложения не импортированы.</string>
+    <string name="backup_hidden_apps_restored">Скрытые приложения восстановлены</string>
+    <string name="backup_unsupported_version">Неподдерживаемая версия резервной копии</string>
+
+    <!-- PIN -->
+    <string name="pin_set_title">ЗАДАТЬ PIN-КОД</string>
+    <string name="pin_choose_new">Выберите новый PIN-код из 4–8 цифр.</string>
+    <string name="pin_weak_warning">Внимание: этот PIN-код легко угадать.</string>
+    <string name="pin_confirm_title">ПОДТВЕРДИТЬ PIN-КОД</string>
+    <string name="pin_confirm_message">Введите еще раз PIN-код, который вы только что выбрали.</string>
+    <string name="pin_mismatch">PIN-коды не совпадают. Попробуйте еще раз.</string>
+    <string name="pin_enter_to_continue">Введите PIN-код, чтобы продолжить.</string>
+    <string name="pin_unlock">Разблокировать</string>
+    <string name="pin_wrong_try_again">Неверный PIN-код. Попробуйте еще раз.</string>
+    <string name="pin_wrong_locked_seconds">Неверный PIN-код. Заблокировано на %1$d\u00A0с.</string>
+    <string name="pin_wrong_locked_minutes">Неверный PIN-код. Заблокировано на %1$d\u00A0мин.</string>
+    <string name="pin_locked_out_seconds">Слишком много попыток. Попробуйте снова через %1$d\u00A0с.</string>
+    <string name="pin_locked_out_minutes">Слишком много попыток. Попробуйте снова через %1$d\u00A0мин.</string>
+    <string name="pin_use_pin">Ввести PIN-код</string>
+    <string name="pin_biometric_subtitle">Разблокировка биометрией</string>
+    <string name="pin_title_home_menu">Меню главного экрана</string>
+    <string name="pin_title_app_menu">Меню приложения</string>
+    <string name="pin_title_folder_menu">Меню папки</string>
+    <string name="pin_title_shortcut_menu">Меню ярлыка</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Добро пожаловать</string>
+    <string name="onboarding_tagline">минималистичный лаунчер</string>
+    <string name="onboarding_choose_a_theme">ВЫБЕРИТЕ ТЕМУ</string>
+    <string name="onboarding_dark">ТЕМНАЯ</string>
+    <string name="onboarding_sample_messages">сообщения</string>
+    <string name="onboarding_sample_maps">карты</string>
+    <string name="onboarding_sample_camera">камера</string>
+    <string name="onboarding_sample_photos">фото</string>
+    <string name="onboarding_light">СВЕТЛАЯ</string>
+    <string name="onboarding_choose_a_layout">ВЫБЕРИТЕ ВИД</string>
+    <string name="onboarding_flow">ПОТОК</string>
+    <string name="onboarding_sample_mail">почта</string>
+    <string name="onboarding_sample_web">веб</string>
+    <string name="onboarding_sample_clock">часы</string>
+    <string name="onboarding_sample_files">файлы</string>
+    <string name="onboarding_sample_phone">телефон</string>
+    <string name="onboarding_names_grow_with_use">чем чаще запуск, тем крупнее имя</string>
+    <string name="onboarding_minimal_list">МИНИМАЛЬНЫЙ СПИСОК</string>
+    <!-- %1$s is the link text, Privacy Policy -->
+    <string name="onboarding_privacy_consent">Я прочитал(а) документ «%1$s»</string>
+    <string name="onboarding_privacy_link">Политика конфиденциальности</string>
+    <string name="onboarding_privacy_checkbox_description">Я прочитал(а) политику конфиденциальности</string>
+    <string name="onboarding_accept_privacy_first">Сначала примите политику конфиденциальности</string>
+    <string name="onboarding_set_as_default_launcher">Сделать лаунчером по умолчанию</string>
+    <string name="onboarding_skip_for_now">Пока пропустить</string>
+    <string name="onboarding_import_previous_settings">Импортировать прежние настройки</string>
+    <string name="onboarding_restore_from_a_slate_backup_json">Восстановить из файла slate_backup.json</string>
+    <string name="onboarding_restored_reimport_note">Настройки восстановлены. Чтобы восстановить скрытые приложения, импортируйте еще раз в разделе «Настройки».</string>
+
+    <!-- Guided tour -->
+    <string name="tour_skip">Пропустить</string>
+    <string name="tour_step_description">Шаг %1$d из %2$d</string>
+    <string name="tour_welcome_title">Добро пожаловать в Slate</string>
+    <string name="tour_welcome_body">Slate показывает приложения простым текстом – без значков и виджетов. Вот 30-секундный обзор того, как им пользоваться.</string>
+    <string name="tour_tap_to_open_title">Нажмите, чтобы открыть</string>
+    <string name="tour_tap_to_open_body">Нажмите на название любого приложения, чтобы открыть его. Чем чаще вы пользуетесь приложением, тем крупнее его название (в виде «Поток»).</string>
+    <string name="tour_long_press_app_title">Долгое нажатие на приложение</string>
+    <string name="tour_long_press_app_body">Нажмите и удерживайте название приложения, чтобы закрепить его, скрыть, переместить в папку, переименовать, изменить цвет или удалить.</string>
+    <string name="tour_long_press_home_title">Долгое нажатие на главный экран</string>
+    <string name="tour_long_press_home_body">Нажмите и удерживайте пустое место главного экрана, чтобы открыть «Настроить» (Настройки), «Скрытые приложения» и «Вопросы и ответы».</string>
+    <string name="tour_search_title">Проведите вверх для поиска</string>
+    <string name="tour_search_body">Проведите вверх в любом месте главного экрана, чтобы открыть строку поиска. Начните вводить текст, чтобы отфильтровать приложения.</string>
+    <string name="tour_folders_title">Папки</string>
+    <string name="tour_folders_body">Нажмите и удерживайте приложение и выберите «Переместить в папку», чтобы сгруппировать похожие приложения. Папка выглядит как «Название ›» – нажмите, чтобы раскрыть, удерживайте, чтобы переименовать или удалить.</string>
+    <string name="tour_gestures_title">Жесты</string>
+    <string name="tour_gestures_body">Вы назначили дополнительные жесты. Проведите вверх, вниз, влево или вправо по главному экрану, чтобы выполнить действия, заданные в разделе Настройки → Жесты.</string>
+    <string name="tour_double_tap_lock_title">Двойное нажатие для блокировки</string>
+    <string name="tour_double_tap_lock_body">Дважды нажмите на пустое место главного экрана, чтобы заблокировать устройство. Вы включили это в разделе Настройки → Общие.</string>
+    <string name="tour_strip_title">Панель быстрых переключателей</string>
+    <string name="tour_strip_body">Панель внизу показывает текущее состояние (Wi-Fi, батарея, часы, …). Нажмите на переключатель, чтобы открыть его настройки; какие виджеты показывать, выбирается в разделе Настройки → Быстрые переключатели.</string>
+    <string name="tour_customize_title">Больше настроек</string>
+    <string name="tour_customize_body">Шрифты, цвета, жесты, строка поиска, безопасность, тема и резервная копия – все это есть в разделе «Настройки». Нажмите и удерживайте главный экран → Настроить, чтобы открыть их.</string>
+    <string name="tour_all_set_title">Все готово</string>
+    <string name="tour_all_set_body">Это все. Вы можете в любой момент пройти обзор снова: Настройки → О программе → Показать обучение.</string>
+
+    <!-- Color picker -->
+    <string name="color_picker_hex">HEX</string>
+    <string name="color_picker_reset">СБРОС</string>
+    <string name="color_picker_cancel">ОТМЕНА</string>
+    <string name="color_picker_apply">ПРИМЕНИТЬ</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_accessibility_title">СЛУЖБА СПЕЦИАЛЬНЫХ ВОЗМОЖНОСТЕЙ</string>
+    <string name="dialog_open_settings">Открыть настройки</string>
+
+    <!-- Privacy policy dialog -->
+    <string name="privacy_title">ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ</string>
+    <string name="privacy_close">Закрыть</string>
+    <string name="privacy_opening_in_browser">Открываем политику конфиденциальности в браузере…</string>
+</resources>

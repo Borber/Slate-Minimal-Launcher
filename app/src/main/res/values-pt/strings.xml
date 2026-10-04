@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="accessibility_service_description">Permite que o Slate bloqueie a tela com um toque duplo, mantendo o desbloqueio biométrico disponível.</string>
+
+    <!-- Words used in many places -->
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_save">Salvar</string>
+    <string name="common_done">Concluído</string>
+    <string name="common_next">Avançar</string>
+    <string name="common_default">Padrão</string>
+    <string name="common_left">Esquerda</string>
+    <string name="common_center">Centro</string>
+    <string name="common_right">Direita</string>
+    <string name="common_top">Em cima</string>
+    <string name="common_bottom">Embaixo</string>
+    <string name="common_import_failed">Falha na importação: %1$s</string>
+    <string name="common_export_failed">Falha na exportação: %1$s</string>
+
+    <!-- Home screen -->
+    <string name="home_search_hint">pesquisar…</string>
+    <string name="home_fast_scroll_description">Rolagem rápida alfabética</string>
+    <string name="home_contact_description">Contato: %1$s, toque duas vezes para ligar</string>
+    <string name="home_contact_description_with_type">Contato: %1$s, %2$s, toque duas vezes para ligar</string>
+    <string name="home_app_not_installed">App não instalado</string>
+    <string name="home_no_dialer_installed">Nenhum app de telefone instalado</string>
+    <string name="home_menu_customize">Personalizar</string>
+    <string name="home_hidden_apps">Apps ocultos</string>
+    <string name="home_faq">Perguntas frequentes</string>
+
+    <!-- Home screen: menus -->
+    <string name="menu_pin_to_top">Fixar no topo</string>
+    <string name="menu_unpin">Desafixar</string>
+    <string name="menu_app_info">Informações do app</string>
+    <string name="menu_hide">Ocultar</string>
+    <string name="menu_uninstall">Desinstalar</string>
+    <string name="menu_move_to_folder">Mover para pasta</string>
+    <string name="menu_move_to_another_folder">Mover para outra pasta</string>
+    <string name="menu_remove_from_folder">Remover da pasta</string>
+    <string name="menu_custom_color">Cor personalizada</string>
+    <string name="menu_rename">Renomear</string>
+    <string name="menu_select">Selecionar</string>
+    <string name="menu_select_all">Selecionar tudo</string>
+    <string name="menu_delete_folder">Excluir pasta</string>
+    <string name="menu_rename_title">Renomear %1$s</string>
+    <string name="menu_rename_reset">Restaurar o nome original</string>
+
+    <!-- Home screen: selecting several apps -->
+    <string name="selection_actions">ações</string>
+    <string name="selection_cancel">cancelar</string>
+    <plurals name="selection_count">
+        <item quantity="one">%1$d selecionado</item>
+        <item quantity="many">%1$d selecionados</item>
+        <item quantity="other">%1$d selecionados</item>
+    </plurals>
+    <string name="selection_row_selected">%1$s, selecionado</string>
+    <string name="selection_row_not_selected">%1$s, não selecionado</string>
+    <plurals name="selection_apps">
+        <item quantity="one">%1$d app</item>
+        <item quantity="many">%1$d apps</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+    <string name="selection_hide_title">OCULTAR APPS</string>
+    <plurals name="selection_hide_body">
+        <item quantity="one">Ocultar %1$d app? Ele sai da tela inicial e da pesquisa. Você pode abri-lo ou mostrá-lo de novo em “Apps ocultos”.</item>
+        <item quantity="many">Ocultar %1$d apps? Eles saem da tela inicial e da pesquisa. Você pode abri-los ou mostrá-los de novo em “Apps ocultos”.</item>
+        <item quantity="other">Ocultar %1$d apps? Eles saem da tela inicial e da pesquisa. Você pode abri-los ou mostrá-los de novo em “Apps ocultos”.</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed_one_app">
+        <item quantity="one">Ocultar este app também removeu %1$d atalho fixado dele – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+        <item quantity="many">Ocultar este app também removeu %1$d atalhos fixados dele – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+        <item quantity="other">Ocultar este app também removeu %1$d atalhos fixados dele – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed_several_apps">
+        <item quantity="one">Ocultar estes apps também removeu %1$d atalho fixado deles – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+        <item quantity="many">Ocultar estes apps também removeu %1$d atalhos fixados deles – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+        <item quantity="other">Ocultar estes apps também removeu %1$d atalhos fixados deles – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+    </plurals>
+    <string name="selection_uninstall_title">DESINSTALAR APPS</string>
+    <plurals name="selection_uninstall_body">
+        <item quantity="one">Desinstalar %1$d app? O Android vai pedir que você confirme.</item>
+        <item quantity="many">Desinstalar %1$d apps? O Android vai pedir que você confirme cada um. Cancelar um pedido interrompe os restantes.</item>
+        <item quantity="other">Desinstalar %1$d apps? O Android vai pedir que você confirme cada um. Cancelar um pedido interrompe os restantes.</item>
+    </plurals>
+    <plurals name="selection_uninstall_skipped">
+        <item quantity="one">%1$d app selecionado não pode ser desinstalado daqui e será ignorado.</item>
+        <item quantity="many">%1$d apps selecionados não podem ser desinstalados daqui e serão ignorados.</item>
+        <item quantity="other">%1$d apps selecionados não podem ser desinstalados daqui e serão ignorados.</item>
+    </plurals>
+
+    <!-- Home screen: folders -->
+    <string name="folder_back">‹\u00A0voltar</string>
+    <string name="folder_new_option">+ Nova pasta</string>
+    <string name="folder_new_title">Nova pasta</string>
+    <string name="folder_rename_title">Renomear pasta</string>
+    <string name="folder_name_hint">Nome da pasta</string>
+    <string name="folder_name_empty">O nome não pode ficar vazio</string>
+    <string name="folder_create">Criar</string>
+    <string name="folder_color_title">Cor da pasta</string>
+    <string name="folder_delete_title">EXCLUIR PASTA</string>
+    <string name="folder_delete_body">Excluir “%1$s”? Os apps dela voltam para a lista principal.</string>
+    <string name="folder_delete_body_work">Excluir “%1$s”? Os apps dela voltam para a lista principal, e o Slate não vai mais agrupar os apps deste perfil, a menos que você use Configurações &gt; Agrupar apps de trabalho.</string>
+    <string name="folder_delete_confirm">Excluir</string>
+    <string name="folder_work_folder_removed">“%1$s” removida. O Slate não vai mais agrupar esses apps.</string>
+
+    <!-- Home screen: hidden apps -->
+    <string name="hidden_none">Nenhum app oculto</string>
+    <string name="hidden_title_with_hint">Apps ocultos – toque para abrir, segure para mostrar</string>
+    <string name="hidden_unhide_title">MOSTRAR APP</string>
+    <string name="hidden_unhide_body">Mostrar “%1$s” de novo? Ele volta para a sua lista principal de apps.</string>
+    <string name="hidden_unhide_confirm">Mostrar</string>
+    <string name="hidden_shortcuts_removed_title">Atalhos removidos</string>
+    <plurals name="hidden_shortcuts_removed">
+        <item quantity="one">Ocultar %1$s também removeu %2$d atalho fixado dele – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+        <item quantity="many">Ocultar %1$s também removeu %2$d atalhos fixados dele – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+        <item quantity="other">Ocultar %1$s também removeu %2$d atalhos fixados dele – os atalhos de um app oculto também não seriam acessíveis daqui.</item>
+    </plurals>
+
+    <!-- Pinned shortcuts -->
+    <string name="shortcut_menu_remove">Remover</string>
+    <string name="shortcut_menu_refresh">Atualizar</string>
+    <string name="shortcut_menu_open_app">Abrir %1$s</string>
+    <string name="shortcut_no_longer_available">Este atalho não está mais disponível</string>
+    <string name="shortcut_destination_widget_strip">Barra de widgets</string>
+    <string name="shortcut_destination_app_list">Lista de apps</string>
+    <string name="shortcut_choose_app_title">%1$s – escolha um app</string>
+    <string name="shortcut_loading_apps">Carregando apps…</string>
+    <string name="shortcut_no_apps_with_shortcuts">Nenhum app com atalhos encontrado</string>
+    <plurals name="shortcut_enabled_count">
+        <item quantity="one">%1$d ativado</item>
+        <item quantity="many">%1$d ativados</item>
+        <item quantity="other">%1$d ativados</item>
+    </plurals>
+    <string name="shortcut_needs_default_launcher">Defina o Slate como launcher padrão para adicionar atalhos</string>
+    <string name="shortcut_none_found_for">Nenhum atalho encontrado para %1$s</string>
+    <string name="shortcut_also_pinned_to_widget_strip">Também fixado na barra de widgets</string>
+    <string name="shortcut_also_pinned_to_app_list">Também fixado na lista de apps</string>
+
+    <!-- FAQ -->
+    <string name="faq_back">← Perguntas frequentes</string>
+    <string name="faq_accessibility_question">Por que o Slate precisa da permissão de acessibilidade?</string>
+    <string name="faq_accessibility_answer">A acessibilidade é usada apenas para o recurso “Toque duplo para bloquear a tela”. Ela chama uma única API do sistema (GLOBAL_ACTION_LOCK_SCREEN) para bloquear o dispositivo, mantendo o desbloqueio biométrico disponível.\n\nCom essa permissão, o Slate não consegue ler o conteúdo da tela, monitorar o uso de apps nem coletar nenhum dado.</string>
+    <string name="faq_notification_access_question">Por que o Slate precisa de acesso às notificações?</string>
+    <string name="faq_notification_access_answer">O acesso às notificações é opcional e usado apenas para o destaque de notificações – ele muda a cor do nome de um app quando há uma notificação pendente.\n\nO Slate só verifica quais pacotes têm notificações ativas. O conteúdo das notificações (títulos, mensagens, remetentes) nunca é lido nem armazenado.</string>
+    <string name="faq_data_question">O Slate coleta algum dado?</string>
+    <string name="faq_data_answer" formatted="false">Não. O Slate é 100% offline e não coleta nenhum dado.\n\nNão há análises, relatórios de falhas, rastreamento nem solicitações de rede de nenhum tipo. Todas as configurações, contagens de uso e personalizações ficam armazenadas localmente no seu dispositivo, usando o SharedPreferences do Android, e nunca saem dele.</string>
+    <string name="faq_contacts_question">O Slate lê meus contatos?</string>
+    <string name="faq_contacts_answer">Só se você ativar “Pesquisar contatos” em Configurações → Pesquisa. Com isso desativado (o padrão), o Slate não tem nenhuma permissão de contatos. Com isso ativado, o Slate lê sua lista de contatos toda vez que você digita uma pesquisa – para encontrar resultados ao lado dos seus apps. Nada é armazenado, indexado nem enviado a lugar nenhum. Ao fechar e reabrir o launcher, não há dados de contatos na memória.\n\nOs contatos do perfil de trabalho não ficam visíveis (o Android os isola de launchers de terceiros). Contatos sem número de telefone são ignorados, já que tocar em um contato abre o app de telefone.\n\nSe a mesma pessoa aparecer várias vezes – é comum, porque o mesmo contato pode existir em mais de uma origem (Google, WhatsApp, Telegram, SIM, contatos do OEM etc.) – ative “Somente contatos do Google” na mesma página de configurações para filtrar pela sua agenda do Google e evitar as duplicatas.</string>
+    <string name="faq_permissions_question">Que outras permissões o Slate usa?</string>
+    <string name="faq_permissions_answer">• EXPAND_STATUS_BAR – gesto de deslizar para baixo que abre o painel de notificações\n• ACCESS_WIFI_STATE / CHANGE_WIFI_STATE – gesto para alternar o Wi-Fi (Android 10+: abre o painel do sistema)\n• BLUETOOTH / BLUETOOTH_ADMIN – alternar o Bluetooth no Android 11 e anteriores\n• QUERY_ALL_PACKAGES – necessária para listar todos os apps instalados (Android 11+)\n• REQUEST_DELETE_PACKAGES – inicia a desinstalação do sistema quando você decide desinstalar um app\n• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS – usada somente quando você toca em “Corrigir” no aviso de restrição de bateria em Configurações, para pedir que o sistema isente o Slate da otimização de bateria e os recursos em segundo plano continuem funcionando\n• USE_BIOMETRIC – declarada pela biblioteca AndroidX Biometric; só é solicitada quando você ativa o desbloqueio biométrico para os apps ocultos. Os dados biométricos são processados pelo sistema e nunca chegam ao Slate.</string>
+    <string name="faq_hidden_lock_question">Como funciona o bloqueio dos apps ocultos?</string>
+    <string name="faq_hidden_lock_answer">Ao ativar “Bloquear apps ocultos” em Configurações → Segurança, você define um PIN de 4–8 dígitos. Depois disso, abrir a caixa “Apps ocultos” pelo menu de toque longo da tela inicial exige o PIN (ou a biometria, se você ativar).\n\nSeu PIN nunca é armazenado em texto simples. O Slate armazena um hash PBKDF2-HMAC-SHA256 com salt, com 120.000 iterações e um salt aleatório de 16 bytes por dispositivo. O hash é um verificador de mão única – mesmo com o arquivo, um invasor teria de descobrir o PIN por força bruta.\n\nA biometria é opcional. Quando ativada, o Slate usa o BiometricPrompt do Android para mostrar a caixa padrão de impressão digital ou rosto. Os dados biométricos ficam dentro do sistema, e o Slate só vê um sinal de sucesso ou falha.\n\nDepois de 5 tentativas erradas de PIN, você fica bloqueado por 30 segundos; depois de 10, por 5 minutos; depois de 15, por 15 minutos. Não há recuperação de PIN – limpar os dados do app é a única forma de redefinir. Ao restaurar um backup que inclui apps ocultos, o PIN do backup será solicitado. Se você não souber, o restante das configurações é restaurado mesmo assim, e seu PIN atual e seus apps ocultos ficam como estavam.</string>
+    <string name="faq_long_press_lock_question">Como funciona o bloqueio dos menus de toque longo?</string>
+    <string name="faq_long_press_lock_answer">Ao ativar “Bloquear os menus de toque longo na tela inicial” em Configurações → Segurança, você define um PIN de 4–8 dígitos, o mesmo usado por “Bloquear apps ocultos”, se você também ativar essa opção. Com o bloqueio ativado, esse PIN é pedido primeiro ao abrir o menu de toque longo da tela inicial (Personalizar / Apps ocultos / Perguntas frequentes), o menu de toque longo de um app (Fixar, Ocultar, Renomear, Desinstalar e os demais), o de uma pasta ou de um atalho fixado, ou ao usar um gesto associado a “Abrir configurações”.\n\nEste bloqueio funciona só com PIN. Ele nunca usa biometria, mesmo que você tenha ativado o desbloqueio biométrico para os apps ocultos em outro ponto desta tela; portanto, aqui você sempre terá de digitar o PIN.\n\nO PIN é exatamente o mesmo descrito acima: um hash PBKDF2-HMAC-SHA256 com salt, nunca armazenado em texto simples, com o mesmo esquema de bloqueio após 5/10/15 tentativas, compartilhado pelos dois bloqueios. Se você ainda não tem um PIN, ativar esta opção primeiro orienta você a criar um, exatamente como faz “Bloquear apps ocultos”.\n\nNo restante, os dois bloqueios são independentes. Desativar este não afeta “Bloquear apps ocultos”, seu PIN nem seus apps ocultos; apenas deixa de pedir o PIN antes dos menus de toque longo e do gesto mencionado.</string>
+    <string name="faq_recents_question">Os apps ocultos aparecem na tela Recentes (visão geral)?</string>
+    <string name="faq_recents_answer">Quando você abre um app oculto pelo Slate, ele é iniciado de um jeito que o mantém fora da tela Recentes do Android – assim, quem der uma olhada em Recentes não vê qual app oculto você abriu.\n\nUma ressalva que o Android não permite evitar: se o app já tinha uma tarefa em Recentes de antes (porque você o abriu por outro launcher ou porque ele usa o modo “single task” do Android, como o Chrome em alguns dispositivos), o Slate não consegue remover essa entrada. Deslize-a para fora de Recentes uma vez e, a partir daí, as aberturas pelo Slate ficam invisíveis.</string>
+    <string name="faq_folders_question">Como as pastas funcionam?</string>
+    <string name="faq_folders_answer">Toque e mantenha pressionado qualquer app e escolha “Mover para pasta” para adicioná-lo a uma pasta existente, ou “+ Nova pasta” para criar uma na hora. As pastas aparecem na tela inicial com uma marca (ângulo, marcador, colchetes, barra, contagem ou simples – escolha o estilo em Configurações → Tipografia → Estilo de pasta). Toque para expandir no lugar – a lista inicial é substituída pelos apps da pasta, com uma linha “‹\u00A0voltar” no início. Toque nela (ou use o gesto de voltar do sistema) para retornar.\n\nCada app fica em no máximo uma pasta. Os apps de uma pasta ficam ocultos da lista principal para reduzir a bagunça – a pesquisa continua encontrando todos, e o próprio nome da pasta também aparece nos resultados.\n\nToque e mantenha pressionado o nome de uma pasta para renomear, definir uma cor personalizada ou excluir. Excluir uma pasta devolve os apps para a lista principal; os apps em si nunca são removidos. Fixar um app o remove automaticamente da pasta em que ele estava. Se você desinstalar um app, ele some da pasta; pastas vazias são removidas automaticamente.</string>
+    <string name="faq_several_apps_question">Como altero vários apps de uma vez?</string>
+    <string name="faq_several_apps_answer">Toque e mantenha pressionado qualquer app e escolha “Selecionar”. Toque em mais apps para marcá-los, inclusive os que estão em pastas e nos resultados da pesquisa. Uma barra abaixo da lista mostra quantos estão selecionados. Toque em “ações” para fixar, ocultar, desinstalar, mover ou mudar a cor de todos de uma vez, ou em “cancelar” para parar. A seleção também termina quando você pressiona Voltar ou sai da tela inicial.\n\nNa desinstalação, o Android pede confirmação para cada app, e os apps de trabalho e do sistema são ignorados. Escolha o marcador em Configurações → Tipografia → Estilo de seleção.</string>
+    <string name="faq_widgets_as_text_question">Por que os widgets aparecem como texto, e não como ícones?</string>
+    <string name="faq_widgets_as_text_answer" formatted="false">O Slate usa só texto, de propósito – os apps são listados pelo nome, e a barra de widgets segue a mesma regra. Um rótulo como “Wi-Fi” é lido como uma palavra, e não como um símbolo que você reconhece no automático; assim, abrir ou alternar algo continua sendo uma pequena escolha consciente, e não um reflexo.\n\nCada widget mostra o nome com o valor atual, quando há um (Bateria: 67%, Volume: 60%, Hora: 14:32), ou só o nome nos controles simples de ligar e desligar (Wi-Fi, Bluetooth). Os widgets ativos aparecem com opacidade total; os inativos são esmaecidos para 40%, para que você veja de relance se algo está ligado, sem precisar de ícones nem de cores.</string>
+    <string name="faq_wifi_name_question">Por que o widget de Wi-Fi não mostra o nome da minha rede?</string>
+    <string name="faq_wifi_name_answer">No Android 10 e versões mais recentes, um app só pode ler o nome da rede Wi-Fi conectada (SSID) se você conceder uma permissão sensível em tempo de execução – na maioria dos dispositivos, a permissão de localização precisa (ACCESS_FINE_LOCATION) – e se os serviços de localização estiverem ativados.\n\nO Slate funciona só offline e nunca pede uma permissão de que não precise estritamente para um recurso; por isso o widget mostra apenas “Wi-Fi”, mais ou menos esmaecido conforme esteja ativo ou não. Tocar nele abre o painel de Wi-Fi do sistema, que mostra a rede conectada por conta própria, sem que o Slate precise pedir nada.</string>
+    <string name="faq_toggles_question">Por que o Slate não consegue alternar o Wi-Fi ou o Bluetooth diretamente?</string>
+    <string name="faq_toggles_answer">O Android tirou dos apps de terceiros o acesso direto a esses controles:\n\n• Wi-Fi: desde o Android 10, os apps não podem ligar nem desligar o Wi-Fi por código. Tocar no widget abre o painel de Wi-Fi do sistema, sobreposto na parte inferior da tela – um toque para ligar ou desligar o Wi-Fi sem sair do launcher.\n\n• Bluetooth: desde o Android 12, alternar o Bluetooth exige a permissão em tempo de execução BLUETOOTH_CONNECT, que também dá acesso aos nomes e endereços de todos os dispositivos pareados e permite conectar-se a eles – muito mais do que ligar e desligar.\n\n• Dados móveis, Modo avião, NFC: alterná-los exige permissões de nível de assinatura, que o Android só concede a apps do sistema.\n\nO Slate poderia pedir BLUETOOTH_CONNECT para alternar o Bluetooth com um toque, mas isso significaria manter uma permissão de que nenhum outro recurso precisa. Levar você aos painéis do sistema é o meio-termo – um toque a mais, nenhum acesso desnecessário ao seu dispositivo.</string>
+    <string name="faq_open_source_question">O Slate é de código aberto?</string>
+    <string name="faq_open_source_answer">Sim. O Slate é de código aberto, sob a licença MIT.\n\nCódigo-fonte: github.com/roufsyed/Slate-Minimal-Launcher</string>
+    <string name="faq_work_apps_question">Como funcionam os apps de trabalho?</string>
+    <string name="faq_work_apps_answer">Os apps do seu perfil de trabalho aparecem ao lado dos seus apps pessoais, cada um com um marcador, por exemplo “Gmail [Trabalho]”. Configurações → Perfil de trabalho → Marcador de apps de trabalho transforma isso em um símbolo ou remove o marcador.\n\nNa primeira vez que o Slate vê um perfil de trabalho, ele reúne esses apps em uma pasta para você, uma única vez. Em um perfil que você já tem há algum tempo, a pasta aparece na hora. Em um que acabou de ser configurado, o Slate espera cerca de um minuto, porque um perfil de trabalho novo instala os apps aos poucos e, do contrário, o Slate agruparia só o primeiro ou os dois primeiros.\n\nDepois disso, a pasta é uma pasta comum. Renomeie, mude a cor, fixe, tire apps ou coloque apps pessoais – tudo permanece, e o Slate nunca mais a reorganiza. Um app de trabalho instalado mais tarde aparece na lista principal como qualquer outro app novo; use Configurações → Perfil de trabalho → Agrupar apps de trabalho para guardá-lo na pasta.\n\nExcluir a pasta é definitivo – os apps voltam para a lista principal, e o Slate não os agrupa de novo, a menos que você peça. Apps de trabalho ocultos nunca são agrupados. Os apps de trabalho que você pausou no Android aparecem esmaecidos; ao tocar em um deles, o Android oferece reativá-los.\n\n“Desinstalar” não é oferecido para um app de trabalho, porque o Android só permite que a sua organização os remova. “Informações do app” continua abrindo a página do sistema.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_background_activity_restricted">Atividade em segundo plano restrita</string>
+    <string name="settings_battery_banner_message">O destaque de notificações e o bloqueio de tela podem parar de funcionar.</string>
+    <string name="settings_battery_banner_message_with_maker_note">O destaque de notificações e o bloqueio de tela podem parar de funcionar.\n\nNo seu dispositivo, talvez também seja preciso permitir a inicialização automática ou desativar a otimização de bateria nas configurações de bateria.</string>
+    <string name="settings_fix_this">CORRIGIR</string>
+    <string name="settings_hide_warning_title">OCULTAR AVISO</string>
+    <string name="settings_hide_warning_body">Quer ocultar permanentemente este aviso de restrição de bateria?</string>
+    <string name="settings_hide_warning_note">Os recursos ainda podem parar de funcionar se a atividade em segundo plano continuar restrita. Você sempre pode corrigir isso manualmente nas configurações de bateria do dispositivo.</string>
+    <string name="settings_dismiss_once">Dispensar agora</string>
+    <string name="settings_dont_remind_again">Não lembrar de novo</string>
+    <string name="settings_turn_on">Ativar</string>
+    <string name="settings_enable">Ativar</string>
+
+    <!-- Settings: General -->
+    <string name="settings_general">Geral</string>
+    <string name="settings_double_tap_to_lock_screen">Toque duplo para bloquear a tela</string>
+    <string name="settings_double_tap_to_lock_screen_summary">Requer a permissão do serviço de acessibilidade</string>
+    <string name="settings_accessibility_body">O toque duplo para bloquear usa o serviço de acessibilidade do Android para bloquear a tela.\n\nNa próxima tela, encontre “Slate” na lista e ative.</string>
+    <string name="settings_accessibility_privacy">O Slate usa essa permissão apenas para bloquear a tela. Nenhum dado é coletado, lido nem enviado a lugar nenhum.</string>
+    <string name="settings_sort_by_most_used">Ordenar por mais usados</string>
+    <string name="settings_sort_by_most_used_summary">Os apps mais abertos aparecem primeiro</string>
+    <string name="settings_most_used_appear_at_top">Os apps mais abertos aparecem em cima</string>
+    <string name="settings_most_used_appear_at_bottom">Os apps mais abertos aparecem embaixo</string>
+    <string name="settings_show_most_used_at">Mostrar os mais usados</string>
+    <string name="settings_show_most_used_at_summary">Onde os apps mais usados ficam na lista</string>
+    <string name="settings_turn_on_sort_by_most_used">Ative “Ordenar por mais usados” para habilitar</string>
+    <string name="settings_lock_screen_rotation">Bloquear a rotação da tela</string>
+    <string name="settings_lock_screen_rotation_summary">Manter o launcher em modo retrato</string>
+    <string name="settings_notification_highlight">Destaque de notificações</string>
+    <string name="settings_notification_highlight_summary">Mudar a cor do app ou da pasta quando chega uma notificação</string>
+    <string name="settings_notification_access_title">ACESSO ÀS NOTIFICAÇÕES</string>
+    <string name="settings_notification_access_body">O destaque de notificações lê suas notificações ativas para colorir os nomes dos apps na tela inicial.\n\nNa próxima tela, encontre “Slate” e ative.</string>
+    <string name="settings_notification_access_privacy">O Slate só lê quais apps têm notificações. O conteúdo das mensagens nunca é acessado, armazenado nem enviado a lugar nenhum.</string>
+    <string name="settings_highlight_color">Cor do destaque</string>
+    <string name="settings_ignore_silenced_notifications">Ignorar notificações silenciadas</string>
+    <string name="settings_skip_apps_you_set_to_silent">Ignorar os apps que você definiu como Silencioso nas configurações do Android</string>
+    <string name="settings_hide_status_bar">Ocultar a barra de status</string>
+    <string name="settings_hide_status_bar_summary">Launcher em tela cheia, deslize para baixo para espiar</string>
+    <string name="settings_homescreen_view">Visualização da tela inicial</string>
+    <string name="settings_homescreen_view_summary">Escolha como os apps são dispostos</string>
+    <string name="settings_flow">Fluxo</string>
+    <string name="settings_minimal_list">Lista mínima</string>
+    <string name="settings_alphabetical_fast_scroll">Rolagem rápida alfabética</string>
+    <string name="settings_alphabetical_fast_scroll_summary">Índice lateral para pular entre letras (ordena de A–Z)</string>
+    <string name="settings_turn_off_sort_by_most_used">Desative “Ordenar por mais usados” para habilitar</string>
+    <string name="settings_set_as_default_launcher">Definir como launcher padrão</string>
+    <string name="settings_set_as_default_launcher_summary">Abrir o seletor de launcher do sistema</string>
+    <string name="settings_slate_is_your_default_launcher">O Slate é o seu launcher padrão</string>
+    <string name="settings_already_the_default_launcher">Já é o launcher padrão</string>
+    <string name="settings_already_default_body">O Slate é a sua tela inicial. Obrigado por usá-lo.</string>
+
+    <!-- Settings: Text size -->
+    <string name="settings_text_size_heading">Tamanho do texto</string>
+    <string name="settings_minimum">Mínimo</string>
+    <string name="settings_maximum">Máximo</string>
+    <string name="settings_size">Tamanho</string>
+    <string name="settings_line_gap">Entrelinha</string>
+    <string name="settings_word_gap">Espaçamento</string>
+
+    <!-- Settings: Typography -->
+    <string name="settings_typography">Tipografia</string>
+    <string name="settings_font">Fonte</string>
+    <string name="settings_font_import_from_storage">Importar do armazenamento…</string>
+    <string name="settings_font_imported">Fonte importada: %1$s</string>
+    <string name="settings_weight">Peso</string>
+    <string name="settings_weight_light">Leve</string>
+    <string name="settings_weight_regular">Normal</string>
+    <string name="settings_weight_medium">Médio</string>
+    <string name="settings_weight_bold">Negrito</string>
+    <string name="settings_alignment">Alinhamento</string>
+    <string name="settings_folder_style">Estilo de pasta</string>
+    <string name="settings_folder_style_summary">Como os nomes das pastas aparecem na tela inicial</string>
+    <string name="settings_folder_style_chevron">Ângulo</string>
+    <string name="settings_folder_style_slash">Barra</string>
+    <string name="settings_folder_style_bullet">Marcador</string>
+    <string name="settings_folder_style_brackets">Colchetes</string>
+    <string name="settings_folder_style_count">Contagem</string>
+    <string name="settings_folder_style_plain">Simples</string>
+    <string name="settings_selection_style">Estilo de seleção</string>
+    <string name="settings_selection_style_summary">Como os apps selecionados são marcados</string>
+    <string name="settings_selection_style_check">Visto</string>
+    <string name="settings_selection_style_dot">Ponto</string>
+    <string name="settings_selection_style_radio">Botão de opção</string>
+    <string name="settings_selection_style_square">Quadrado</string>
+
+    <!-- Settings: Colors -->
+    <string name="settings_colors">Cores</string>
+    <string name="settings_background">Plano de fundo</string>
+    <string name="settings_app_text">Texto dos apps</string>
+    <string name="settings_app_text_title">Texto dos apps</string>
+    <string name="settings_folder_text">Texto das pastas</string>
+    <string name="settings_folder_text_title">Texto das pastas</string>
+    <string name="settings_presets">PREDEFINIÇÕES</string>
+    <string name="settings_apply_to_lockscreen">Aplicar à tela de bloqueio</string>
+    <string name="settings_apply_to_lockscreen_summary">Preenche a tela de bloqueio com a mesma cor sólida do plano de fundo do launcher, para um visual uniforme</string>
+    <string name="settings_could_not_set_lockscreen_wallpaper">Não foi possível definir o plano de fundo da tela de bloqueio</string>
+    <string name="settings_follow_system_theme">Seguir o tema do sistema</string>
+    <string name="settings_follow_system_theme_summary">Trocar as cores com o modo escuro do sistema</string>
+    <string name="settings_follow_system_theme_title">SEGUIR O TEMA DO SISTEMA</string>
+    <string name="settings_follow_system_theme_body">Isso vai substituir suas cores atuais de plano de fundo e de texto para acompanhar o modo escuro ou claro do sistema.\n\nSuas cores personalizadas serão substituídas e não poderão ser restauradas automaticamente.</string>
+    <string name="settings_follow_system_theme_note">Você pode desativar isso a qualquer momento e escolher novas cores manualmente.</string>
+
+    <!-- Settings: Gestures -->
+    <string name="settings_gestures">Gestos</string>
+    <string name="settings_gesture_one_finger_up">"1 dedo  ↑"</string>
+    <string name="settings_gesture_one_finger_down">"1 dedo  ↓"</string>
+    <string name="settings_gesture_one_finger_left">"1 dedo  ←"</string>
+    <string name="settings_gesture_one_finger_right">"1 dedo  →"</string>
+    <string name="settings_gesture_action">Ação do gesto</string>
+    <string name="gesture_none">Nenhuma</string>
+    <string name="gesture_open_notifications">Abrir notificações</string>
+    <string name="gesture_lock_screen">Bloquear tela</string>
+    <string name="gesture_open_settings">Abrir configurações</string>
+    <string name="gesture_search_apps">Pesquisar apps</string>
+    <string name="gesture_toggle_wifi">Alternar Wi-Fi</string>
+    <string name="gesture_toggle_bluetooth">Alternar Bluetooth</string>
+    <string name="gesture_toggle_location">Alternar localização</string>
+    <string name="gesture_open_camera">Abrir câmera</string>
+    <string name="settings_gesture_open_app">Abrir app…</string>
+    <string name="settings_choose_app">Escolher app</string>
+
+    <!-- Settings: Search -->
+    <string name="settings_search">Pesquisa</string>
+    <string name="settings_enable_search">Ativar a pesquisa</string>
+    <string name="settings_enable_search_summary">Deslize para cima para abrir a barra de pesquisa</string>
+    <string name="settings_position">Posição</string>
+    <string name="settings_top_or_bottom_of_the_screen">Em cima ou embaixo na tela</string>
+    <string name="settings_search_bar_position">Posição da barra de pesquisa</string>
+    <string name="settings_show_on_home_screen">Mostrar na tela inicial</string>
+    <string name="settings_show_on_home_screen_summary">A barra de pesquisa fica visível, fecha com o teclado</string>
+    <string name="settings_search_contacts">Pesquisar contatos</string>
+    <string name="settings_search_contacts_summary">Mostrar contatos correspondentes enquanto você digita</string>
+    <string name="settings_search_contacts_title">PESQUISAR CONTATOS?</string>
+    <string name="settings_search_contacts_body">Ative para encontrar contatos ao digitar na barra de pesquisa. Os contatos correspondentes aparecem ao lado dos apps; toque em um para abrir o app de telefone com o número dele.</string>
+    <string name="settings_search_contacts_privacy">O Slate lê seus contatos apenas no momento em que você digita uma pesquisa. Nada é armazenado no dispositivo, enviado a lugar nenhum nem lembrado entre as pesquisas. Reiniciar o launcher começa do zero.</string>
+    <string name="settings_permission_needed_title">PERMISSÃO NECESSÁRIA</string>
+    <string name="settings_permission_needed_body">O Slate precisa da permissão de Contatos para pesquisá-los. Você pode concedê-la nas configurações do sistema.</string>
+    <string name="settings_permission_needed_note">Toque em “Abrir configurações” para conceder a permissão. Você pode revogá-la quando quiser.</string>
+    <string name="settings_permission_required_to_enable_contact_search">Permissão necessária para ativar a pesquisa de contatos</string>
+    <string name="settings_google_contacts_only">Somente contatos do Google</string>
+    <string name="settings_google_contacts_only_summary">Ocultar duplicatas do WhatsApp, Telegram, SIM e de outras origens</string>
+    <string name="settings_google_contacts_only_title">SOMENTE CONTATOS DO GOOGLE?</string>
+    <string name="settings_google_contacts_only_body">Mostra apenas os contatos correspondentes da sua conta do Google. Oculta duplicatas do WhatsApp, Telegram, SIM e de outras origens.</string>
+    <string name="settings_google_contacts_only_note">Se você não sincroniza os contatos com o Google, a pesquisa pode não mostrar nenhum. Desative quando quiser.</string>
+    <string name="settings_turn_on_search_to_enable">Ative a pesquisa para habilitar</string>
+    <string name="settings_turn_on_search_contacts_to_enable">Ative “Pesquisar contatos” para habilitar</string>
+
+    <!-- Settings: Quick toggles -->
+    <string name="settings_quick_toggles">Controles rápidos</string>
+    <string name="settings_show_toggles_strip">Mostrar a barra de controles</string>
+    <string name="settings_show_toggles_strip_summary">Uma linha de rótulos de status e controles rápidos na parte inferior da tela inicial</string>
+    <string name="settings_choose_widgets">Escolher widgets</string>
+    <string name="settings_widgets_none_selected">Nenhum selecionado</string>
+    <plurals name="settings_widgets_enabled">
+        <item quantity="one">%1$d widget ativado</item>
+        <item quantity="many">%1$d widgets ativados</item>
+        <item quantity="other">%1$d widgets ativados</item>
+    </plurals>
+    <string name="settings_arrange_widgets">Organizar widgets</string>
+    <string name="settings_arrange_widgets_summary">Reordenar os widgets ativados</string>
+    <string name="settings_top_or_bottom_of_the_home">Em cima ou embaixo na tela inicial</string>
+    <string name="settings_direct_call">Chamada direta</string>
+    <string name="settings_direct_call_summary">Ligar imediatamente ao tocar ou manter pressionado, em vez de abrir o app de telefone</string>
+    <string name="settings_permission_required_for_direct_call">Permissão necessária para a chamada direta</string>
+    <string name="settings_trigger">Acionamento</string>
+    <string name="settings_trigger_summary">Escolha qual gesto faz a chamada diretamente</string>
+    <string name="settings_tap">Toque</string>
+    <string name="settings_long_press">Toque longo</string>
+    <string name="settings_show_divider">Mostrar divisor</string>
+    <string name="settings_show_divider_summary">Uma linha fina entre a barra e a lista de apps – só um detalhe visual</string>
+    <string name="settings_preview">Visualização</string>
+    <string name="settings_text_size">Tamanho do texto</string>
+    <string name="settings_no_contacts_app_available">Nenhum app de contatos disponível</string>
+    <string name="settings_couldnt_read_the_selected_contact">Não foi possível ler o contato selecionado</string>
+
+    <!-- Settings: App shortcuts -->
+    <string name="settings_app_shortcuts">Atalhos de apps</string>
+    <string name="settings_add_to_widget_strip">Adicionar à barra de widgets</string>
+    <string name="settings_add_to_widget_strip_summary">Fixar o atalho de outro app na barra de controles</string>
+    <string name="settings_add_to_application_list">Adicionar à lista de apps</string>
+    <string name="settings_add_to_application_list_summary">Fixar o atalho de outro app como um item da sua lista de apps</string>
+    <string name="settings_set_slate_as_your_default_launcher">Defina o Slate como launcher padrão</string>
+    <string name="settings_needs_default_launcher_body">O Slate precisa ser o seu launcher padrão para ler os atalhos de outro app.</string>
+    <string name="settings_open_launcher_settings">Abrir configurações do launcher</string>
+
+    <!-- Settings: Work profile -->
+    <string name="settings_work_profile">Perfil de trabalho</string>
+    <string name="settings_show_work_apps">Mostrar apps de trabalho</string>
+    <string name="settings_show_work_apps_summary">Nada se perde ao desativar – tudo volta como estava</string>
+    <string name="settings_group_work_apps">Agrupar apps de trabalho</string>
+    <string name="settings_group_work_apps_summary">Guardar agora os apps de trabalho em uma pasta</string>
+    <string name="settings_no_work_apps_to_group">Nenhum app de trabalho para agrupar</string>
+    <plurals name="settings_grouped_work_apps">
+        <item quantity="one">%1$d app de trabalho agrupado</item>
+        <item quantity="many">%1$d apps de trabalho agrupados</item>
+        <item quantity="other">%1$d apps de trabalho agrupados</item>
+    </plurals>
+    <string name="settings_work_apps_already_in_folders">Os apps de trabalho já estão em pastas</string>
+    <string name="settings_work_app_marker">Marcador de apps de trabalho</string>
+    <string name="settings_work_app_marker_summary">Como os apps de trabalho são marcados na lista de apps</string>
+    <string name="settings_work_marker_brackets">Colchetes</string>
+    <string name="settings_work_marker_word">Palavra</string>
+    <string name="settings_work_marker_dagger">Adaga</string>
+    <string name="settings_work_marker_star">Estrela</string>
+    <string name="settings_work_marker_dot">Ponto</string>
+    <string name="settings_work_marker_square">Quadrado</string>
+    <string name="settings_work_marker_diamond">Losango</string>
+    <string name="settings_work_marker_none">Nenhum</string>
+    <string name="settings_hide_marker_in_work_folders">Ocultar o marcador em pastas de trabalho</string>
+    <string name="settings_hide_marker_in_work_folders_summary">Omitir dentro de uma pasta que só tem apps de trabalho</string>
+
+    <!-- Settings: Backup -->
+    <string name="settings_backup">Backup</string>
+    <string name="settings_export_settings">Exportar configurações</string>
+    <string name="settings_import_settings">Importar configurações</string>
+    <string name="settings_include_hidden_apps_in_backups">Incluir apps ocultos nos backups</string>
+    <string name="settings_include_hidden_apps_in_backups_summary">Desativado por padrão. Os backups deixam de fora seus apps ocultos, o PIN e a configuração de biometria.</string>
+    <string name="settings_include_hidden_apps_title">INCLUIR APPS OCULTOS?</string>
+    <string name="settings_include_hidden_apps_body">Por padrão, sua lista de apps ocultos, o PIN e a configuração de biometria ficam neste dispositivo. Os backups os deixam de fora para que não possam ser levados a outro dispositivo nem compartilhados por engano.</string>
+    <string name="settings_include_hidden_apps_note">Ative se quiser que os apps ocultos voltem ao restaurar um backup – por exemplo, ao configurar um telefone novo. O backup passará a conter sua lista de apps ocultos e um verificador com hash do seu PIN. Um PIN curto é mais fácil de adivinhar se alguém obtiver o arquivo de backup.</string>
+    <string name="settings_replace_pin_title">SUBSTITUIR SEU PIN?</string>
+    <string name="settings_replace_pin_body">Este backup contém apps ocultos protegidos por um PIN diferente. A restauração vai substituir seu PIN atual, a configuração de biometria e a lista de apps ocultos pelos do backup.</string>
+    <string name="settings_replace_pin_note">Suas configurações atuais já estão aplicadas – escolha “Cancelar” para mantê-las e ignorar os apps ocultos do backup.</string>
+    <string name="settings_restore">Restaurar</string>
+    <string name="settings_restore_hidden_apps_title">RESTAURAR APPS OCULTOS</string>
+    <string name="settings_restore_hidden_apps_body">Este backup contém apps ocultos protegidos por um PIN. Digite o PIN para restaurá-los. Três tentativas erradas recusam a importação inteira – suas configurações atuais não mudam.</string>
+    <string name="settings_verify">Verificar</string>
+    <plurals name="settings_wrong_pin_attempts_left">
+        <item quantity="one">PIN incorreto. Resta %1$d tentativa.</item>
+        <item quantity="many">PIN incorreto. Restam %1$d tentativas.</item>
+        <item quantity="other">PIN incorreto. Restam %1$d tentativas.</item>
+    </plurals>
+    <string name="settings_import_refused_title">IMPORTAÇÃO RECUSADA</string>
+    <string name="settings_import_refused_body">Três tentativas erradas de PIN. Suas configurações não foram alteradas.</string>
+    <string name="settings_import_refused_note">Tente de novo com o PIN correto ou importe outro backup.</string>
+
+    <!-- Settings: Security -->
+    <string name="settings_security">Segurança</string>
+    <string name="settings_lock_hidden_apps">Bloquear apps ocultos</string>
+    <string name="settings_lock_hidden_apps_summary">Exigir PIN para ver ou voltar a mostrar apps</string>
+    <string name="settings_set_pin_for_hidden_apps">Escolha um PIN de 4–8 dígitos. Você vai precisar dele para ver os apps ocultos.</string>
+    <string name="settings_disable_lock">Desativar o bloqueio</string>
+    <string name="settings_use_biometric">Usar biometria</string>
+    <string name="settings_use_biometric_summary">Desbloquear com impressão digital ou rosto; o PIN continua como alternativa</string>
+    <string name="settings_no_biometric_enrolled_on_this_device">Nenhuma biometria cadastrada neste dispositivo</string>
+    <string name="settings_enable_biometric">Ativar biometria</string>
+    <string name="settings_confirm_biometric_to_enable">Confirme a biometria para ativar</string>
+    <string name="settings_change_pin">Alterar PIN</string>
+    <string name="settings_change_pin_summary">Verifique o PIN atual e defina um novo</string>
+    <string name="settings_pin_changed">PIN alterado</string>
+    <string name="settings_keep_hidden_apps_in_recents">Manter apps ocultos em Recentes</string>
+    <string name="settings_keep_hidden_apps_in_recents_summary">Evita que o Android os feche quando você troca de app, mas eles aparecem em Recentes</string>
+    <string name="settings_show_in_recents_title">MOSTRAR EM RECENTES?</string>
+    <string name="settings_show_in_recents_body">Os apps ocultos que você abre pelo Slate normalmente ficam fora da tela Recentes. Ao ativar, todos os apps ocultos aparecem lá como qualquer outro, em geral com uma prévia do que estava na tela.</string>
+    <string name="settings_show_in_recents_note">Por que você pode querer isso: um app mantido fora de Recentes é fechado assim que você vai para a tela inicial e abre outra coisa; então ele reinicia e perde o que você tinha digitado. Desativar depois não limpa os apps que já estão em Recentes – deslize-os para fora uma vez.</string>
+    <string name="settings_i_understand_what_this_does">Entendo o que isso faz</string>
+    <string name="settings_lock_long_press_menus_on_homescreen">Bloquear os menus de toque longo na tela inicial</string>
+    <string name="settings_lock_long_press_menus_on_homescreen_summary">Exigir PIN para abri-los. A biometria não é usada aqui.</string>
+    <string name="settings_set_pin_for_long_press">Escolha um PIN de 4–8 dígitos. Você vai precisar dele para abrir os menus de toque longo.</string>
+    <string name="settings_disable_long_press_lock">Desativar o bloqueio de toque longo</string>
+
+    <!-- Settings: About -->
+    <string name="settings_about">Sobre</string>
+    <string name="settings_show_guided_tour">Mostrar tour guiado</string>
+    <string name="settings_show_guided_tour_summary">Rever os gestos e os recursos do launcher</string>
+    <string name="settings_source_license">Código-fonte e licença</string>
+    <string name="settings_version">Versão</string>
+
+    <!-- Widgets -->
+    <string name="widget_choose_title">ESCOLHER WIDGETS</string>
+    <string name="widget_add_call_shortcut">+ Adicionar atalho de chamada</string>
+    <string name="widget_add_sms_shortcut">+ Adicionar atalho de SMS</string>
+    <string name="widget_section_contact_shortcuts">ATALHOS DE CONTATOS</string>
+    <string name="widget_call_contact">Ligar para %1$s</string>
+    <string name="widget_text_contact">SMS para %1$s</string>
+    <string name="widget_section_widgets">WIDGETS</string>
+    <string name="widget_requires_special_access">Requer acesso especial</string>
+    <string name="widget_arrange_title">ORGANIZAR WIDGETS</string>
+    <string name="widget_move_up">Mover para cima</string>
+    <string name="widget_move_down">Mover para baixo</string>
+    <string name="widget_wifi">Wi-Fi</string>
+    <string name="widget_bluetooth">Bluetooth</string>
+    <string name="widget_mobile_data">Dados móveis</string>
+    <string name="widget_airplane_mode">Modo avião</string>
+    <string name="widget_nfc">NFC</string>
+    <string name="widget_torch">Lanterna</string>
+    <string name="widget_location_name">Serviços de localização</string>
+    <string name="widget_location">Localização</string>
+    <string name="widget_dnd_name">Não perturbe</string>
+    <string name="widget_dnd">Não perturbe</string>
+    <string name="widget_ringer_name">Modo da campainha</string>
+    <string name="widget_ringer_ring">Tocar</string>
+    <string name="widget_ringer_vibrate">Vibrar</string>
+    <string name="widget_ringer_silent">Silencioso</string>
+    <string name="widget_media_volume_name">Volume da mídia</string>
+    <string name="widget_media_volume_value">Volume: %1$d%%</string>
+    <string name="widget_brightness_name">Brilho</string>
+    <string name="widget_brightness_value">Brilho: %1$d%%</string>
+    <string name="widget_brightness_unknown">Brilho: -</string>
+    <string name="widget_battery_name" formatted="false">Bateria %</string>
+    <string name="widget_battery_value">Bateria: %1$d%%</string>
+    <string name="widget_battery_unknown">Bateria: -</string>
+    <string name="widget_charging_name">Indicador de carregamento</string>
+    <string name="widget_charging">Carregando</string>
+    <string name="widget_battery_temp_name">Temperatura da bateria</string>
+    <string name="widget_battery_temp_value">Temp. da bateria: %1$d\u00A0°C</string>
+    <string name="widget_battery_temp_unknown">Temp. da bateria: -</string>
+    <string name="widget_time_to_full_name">Tempo até a carga completa</string>
+    <string name="widget_time_to_full_value">Carga completa em: %1$s</string>
+    <string name="widget_time_to_full_unknown">Carga completa em: -</string>
+    <string name="widget_time_to_full_note">Nem todos os telefones informam isso. Mostra “-” quando indisponível.</string>
+    <string name="widget_uptime_name">Tempo de atividade</string>
+    <string name="widget_uptime_value">Ligado há: %1$s</string>
+    <string name="widget_duration_minutes">%1$d\u00A0min</string>
+    <string name="widget_duration_hours_minutes">%1$d\u00A0h %2$d\u00A0min</string>
+    <string name="widget_duration_days_hours">%1$d\u00A0d %2$d\u00A0h</string>
+    <string name="widget_clock_name">Relógio</string>
+    <string name="widget_clock_value">Hora: %1$s</string>
+    <string name="widget_date_name">Data</string>
+    <string name="widget_date_value">Data: %1$s</string>
+    <string name="widget_alarm_name">Próximo alarme</string>
+    <string name="widget_alarm_value">Alarme: %1$s</string>
+    <string name="widget_alarm_none">Alarme: nenhum</string>
+
+    <!-- Work profile -->
+    <string name="work_profile_label">Trabalho</string>
+    <string name="work_profile_label_numbered">Trabalho %1$d</string>
+
+    <!-- Backup -->
+    <string name="backup_saved">Backup salvo</string>
+    <string name="backup_settings_restored">Configurações restauradas</string>
+    <string name="backup_restored_hidden_apps_skipped">Configurações restauradas. Apps ocultos não importados.</string>
+    <string name="backup_hidden_apps_restored">Apps ocultos restaurados</string>
+    <string name="backup_unsupported_version">Versão de backup não compatível</string>
+
+    <!-- PIN -->
+    <string name="pin_set_title">DEFINIR PIN</string>
+    <string name="pin_choose_new">Escolha um novo PIN de 4–8 dígitos.</string>
+    <string name="pin_weak_warning">Atenção: esse PIN é fácil de adivinhar.</string>
+    <string name="pin_confirm_title">CONFIRMAR PIN</string>
+    <string name="pin_confirm_message">Digite de novo o PIN que você acabou de escolher.</string>
+    <string name="pin_mismatch">Os PINs não coincidem. Tente de novo.</string>
+    <string name="pin_enter_to_continue">Digite seu PIN para continuar.</string>
+    <string name="pin_unlock">Desbloquear</string>
+    <string name="pin_wrong_try_again">PIN incorreto. Tente de novo.</string>
+    <string name="pin_wrong_locked_seconds">PIN incorreto. Bloqueado por %1$d\u00A0s.</string>
+    <string name="pin_wrong_locked_minutes">PIN incorreto. Bloqueado por %1$d\u00A0min.</string>
+    <string name="pin_locked_out_seconds">Muitas tentativas. Tente de novo em %1$d\u00A0s.</string>
+    <string name="pin_locked_out_minutes">Muitas tentativas. Tente de novo em %1$d\u00A0min.</string>
+    <string name="pin_use_pin">Usar PIN</string>
+    <string name="pin_biometric_subtitle">Desbloquear com biometria</string>
+    <string name="pin_title_home_menu">Menu da tela inicial</string>
+    <string name="pin_title_app_menu">Menu do app</string>
+    <string name="pin_title_folder_menu">Menu da pasta</string>
+    <string name="pin_title_shortcut_menu">Menu do atalho</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Boas-vindas</string>
+    <string name="onboarding_tagline">um launcher minimalista</string>
+    <string name="onboarding_choose_a_theme">ESCOLHA UM TEMA</string>
+    <string name="onboarding_dark">ESCURO</string>
+    <string name="onboarding_sample_messages">mensagens</string>
+    <string name="onboarding_sample_maps">mapas</string>
+    <string name="onboarding_sample_camera">câmera</string>
+    <string name="onboarding_sample_photos">fotos</string>
+    <string name="onboarding_light">CLARO</string>
+    <string name="onboarding_choose_a_layout">ESCOLHA UM LAYOUT</string>
+    <string name="onboarding_flow">FLUXO</string>
+    <string name="onboarding_sample_mail">e-mail</string>
+    <string name="onboarding_sample_web">web</string>
+    <string name="onboarding_sample_clock">relógio</string>
+    <string name="onboarding_sample_files">arquivos</string>
+    <string name="onboarding_sample_phone">telefone</string>
+    <string name="onboarding_names_grow_with_use">os nomes crescem com o uso</string>
+    <string name="onboarding_minimal_list">LISTA MÍNIMA</string>
+    <!-- %1$s is the link text, Privacy Policy -->
+    <string name="onboarding_privacy_consent">Li a %1$s</string>
+    <string name="onboarding_privacy_link">Política de Privacidade</string>
+    <string name="onboarding_privacy_checkbox_description">Li a política de privacidade</string>
+    <string name="onboarding_accept_privacy_first">Aceite primeiro a política de privacidade</string>
+    <string name="onboarding_set_as_default_launcher">Definir como launcher padrão</string>
+    <string name="onboarding_skip_for_now">Pular por enquanto</string>
+    <string name="onboarding_import_previous_settings">Importar configurações anteriores</string>
+    <string name="onboarding_restore_from_a_slate_backup_json">Restaurar de um arquivo slate_backup.json</string>
+    <string name="onboarding_restored_reimport_note">Configurações restauradas. Importe de novo em Configurações para restaurar os apps ocultos.</string>
+
+    <!-- Guided tour -->
+    <string name="tour_skip">Pular</string>
+    <string name="tour_step_description">Etapa %1$d de %2$d</string>
+    <string name="tour_welcome_title">Boas-vindas ao Slate</string>
+    <string name="tour_welcome_body">O Slate mostra seus apps como texto puro – sem ícones, sem widgets. Este é um tour de 30 segundos sobre como usá-lo.</string>
+    <string name="tour_tap_to_open_title">Toque para abrir</string>
+    <string name="tour_tap_to_open_body">Toque no nome de qualquer app para abri-lo. Quanto mais você usa um app, maior o nome dele aparece (na visualização Fluxo).</string>
+    <string name="tour_long_press_app_title">Toque longo em um app</string>
+    <string name="tour_long_press_app_body">Toque e mantenha pressionado o nome de qualquer app para fixar, ocultar, mover para uma pasta, renomear, mudar a cor ou desinstalar.</string>
+    <string name="tour_long_press_home_title">Toque longo na tela inicial</string>
+    <string name="tour_long_press_home_body">Toque e mantenha pressionada uma área vazia da tela inicial para acessar “Personalizar” (Configurações), “Apps ocultos” e “Perguntas frequentes”.</string>
+    <string name="tour_search_title">Deslize para cima para pesquisar</string>
+    <string name="tour_search_body">Deslize para cima em qualquer ponto da tela inicial para abrir a barra de pesquisa. Comece a digitar para filtrar os apps.</string>
+    <string name="tour_folders_title">Pastas</string>
+    <string name="tour_folders_body">Toque e mantenha pressionado um app e escolha “Mover para pasta” para agrupar apps relacionados. Uma pasta aparece como “Nome ›” – toque para expandir, mantenha pressionado para renomear ou excluir.</string>
+    <string name="tour_gestures_title">Gestos de deslizar</string>
+    <string name="tour_gestures_body">Você configurou gestos de deslizar adicionais. Deslize para cima, para baixo, para a esquerda ou para a direita na tela inicial para acionar as ações definidas em Configurações → Gestos.</string>
+    <string name="tour_double_tap_lock_title">Toque duplo para bloquear</string>
+    <string name="tour_double_tap_lock_body">Toque duas vezes em uma área vazia da tela inicial para bloquear o dispositivo. Você ativou isso em Configurações → Geral.</string>
+    <string name="tour_strip_title">Barra de controles rápidos</string>
+    <string name="tour_strip_body">A barra na parte inferior mostra o status em tempo real (Wi-Fi, bateria, relógio, …). Toque em um controle para abrir as configurações dele; escolha quais widgets aparecem em Configurações → Controles rápidos.</string>
+    <string name="tour_customize_title">Personalize mais</string>
+    <string name="tour_customize_body">Fontes, cores, gestos, barra de pesquisa, segurança, tema e backup – tudo fica em Configurações. Toque e mantenha pressionada a tela inicial → Personalizar para abrir.</string>
+    <string name="tour_all_set_title">Tudo pronto</string>
+    <string name="tour_all_set_body">É isso. Você pode refazer este tour quando quiser em Configurações → Sobre → Mostrar tour guiado.</string>
+
+    <!-- Color picker -->
+    <string name="color_picker_hex">HEX</string>
+    <string name="color_picker_reset">REDEFINIR</string>
+    <string name="color_picker_cancel">CANCELAR</string>
+    <string name="color_picker_apply">APLICAR</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_accessibility_title">SERVIÇO DE ACESSIBILIDADE</string>
+    <string name="dialog_open_settings">Abrir configurações</string>
+
+    <!-- Privacy policy dialog -->
+    <string name="privacy_title">POLÍTICA DE PRIVACIDADE</string>
+    <string name="privacy_close">Fechar</string>
+    <string name="privacy_opening_in_browser">Abrindo a política de privacidade no navegador…</string>
+</resources>

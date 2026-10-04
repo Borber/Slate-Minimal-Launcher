@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="accessibility_service_description">Hiermee kan Slate het scherm vergrendelen met dubbeltikken, terwijl biometrisch ontgrendelen beschikbaar blijft.</string>
+
+    <!-- Words used in many places -->
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Annuleren</string>
+    <string name="common_save">Opslaan</string>
+    <string name="common_done">Klaar</string>
+    <string name="common_next">Volgende</string>
+    <string name="common_default">Standaard</string>
+    <string name="common_left">Links</string>
+    <string name="common_center">Midden</string>
+    <string name="common_right">Rechts</string>
+    <string name="common_top">Boven</string>
+    <string name="common_bottom">Onder</string>
+    <string name="common_import_failed">Importeren mislukt: %1$s</string>
+    <string name="common_export_failed">Exporteren mislukt: %1$s</string>
+
+    <!-- Home screen -->
+    <string name="home_search_hint">zoeken…</string>
+    <string name="home_fast_scroll_description">Snel scrollen op alfabet</string>
+    <string name="home_contact_description">Contact: %1$s, dubbeltik om te bellen</string>
+    <string name="home_contact_description_with_type">Contact: %1$s, %2$s, dubbeltik om te bellen</string>
+    <string name="home_app_not_installed">App niet geïnstalleerd</string>
+    <string name="home_no_dialer_installed">Geen telefoon-app geïnstalleerd</string>
+    <string name="home_menu_customize">Aanpassen</string>
+    <string name="home_hidden_apps">Verborgen apps</string>
+    <string name="home_faq">Veelgestelde vragen</string>
+
+    <!-- Home screen: menus -->
+    <string name="menu_pin_to_top">Bovenaan vastzetten</string>
+    <string name="menu_unpin">Losmaken</string>
+    <string name="menu_app_info">App-info</string>
+    <string name="menu_hide">Verbergen</string>
+    <string name="menu_uninstall">De-installeren</string>
+    <string name="menu_move_to_folder">Naar map verplaatsen</string>
+    <string name="menu_move_to_another_folder">Naar andere map verplaatsen</string>
+    <string name="menu_remove_from_folder">Uit map halen</string>
+    <string name="menu_custom_color">Eigen kleur</string>
+    <string name="menu_rename">Naam wijzigen</string>
+    <string name="menu_select">Selecteren</string>
+    <string name="menu_select_all">Alles selecteren</string>
+    <string name="menu_delete_folder">Map verwijderen</string>
+    <string name="menu_rename_title">Naam van %1$s wijzigen</string>
+    <string name="menu_rename_reset">Oorspronkelijke naam herstellen</string>
+
+    <!-- Home screen: selecting several apps -->
+    <string name="selection_actions">acties</string>
+    <string name="selection_cancel">annuleren</string>
+    <plurals name="selection_count">
+        <item quantity="one">%1$d geselecteerd</item>
+        <item quantity="other">%1$d geselecteerd</item>
+    </plurals>
+    <string name="selection_row_selected">%1$s, geselecteerd</string>
+    <string name="selection_row_not_selected">%1$s, niet geselecteerd</string>
+    <plurals name="selection_apps">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+    <string name="selection_hide_title">APPS VERBERGEN</string>
+    <plurals name="selection_hide_body">
+        <item quantity="one">%1$d app verbergen? Deze verdwijnt van het startscherm en uit de zoekfunctie. Je kunt de app openen of weer tonen via ‘Verborgen apps’.</item>
+        <item quantity="other">%1$d apps verbergen? Ze verdwijnen van het startscherm en uit de zoekfunctie. Je kunt ze openen of weer tonen via ‘Verborgen apps’.</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed_one_app">
+        <item quantity="one">Door deze app te verbergen is ook %1$d vastgezette snelkoppeling ervan verwijderd – de snelkoppelingen van een verborgen app zouden hier toch niet bereikbaar zijn.</item>
+        <item quantity="other">Door deze app te verbergen zijn ook %1$d vastgezette snelkoppelingen ervan verwijderd – de snelkoppelingen van een verborgen app zouden hier toch niet bereikbaar zijn.</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed_several_apps">
+        <item quantity="one">Door deze apps te verbergen is ook %1$d vastgezette snelkoppeling ervan verwijderd – de snelkoppelingen van een verborgen app zouden hier toch niet bereikbaar zijn.</item>
+        <item quantity="other">Door deze apps te verbergen zijn ook %1$d vastgezette snelkoppelingen ervan verwijderd – de snelkoppelingen van een verborgen app zouden hier toch niet bereikbaar zijn.</item>
+    </plurals>
+    <string name="selection_uninstall_title">APPS DE-INSTALLEREN</string>
+    <plurals name="selection_uninstall_body">
+        <item quantity="one">%1$d app de-installeren? Android vraagt je dit te bevestigen.</item>
+        <item quantity="other">%1$d apps de-installeren? Android vraagt je elke app te bevestigen. Als je een verzoek annuleert, stopt de rest.</item>
+    </plurals>
+    <plurals name="selection_uninstall_skipped">
+        <item quantity="one">%1$d geselecteerde app kan hier niet worden gede-installeerd en wordt overgeslagen.</item>
+        <item quantity="other">%1$d geselecteerde apps kunnen hier niet worden gede-installeerd en worden overgeslagen.</item>
+    </plurals>
+
+    <!-- Home screen: folders -->
+    <string name="folder_back">‹\u00A0terug</string>
+    <string name="folder_new_option">+ Nieuwe map</string>
+    <string name="folder_new_title">Nieuwe map</string>
+    <string name="folder_rename_title">Mapnaam wijzigen</string>
+    <string name="folder_name_hint">Mapnaam</string>
+    <string name="folder_name_empty">De naam mag niet leeg zijn</string>
+    <string name="folder_create">Maken</string>
+    <string name="folder_color_title">Mapkleur</string>
+    <string name="folder_delete_title">MAP VERWIJDEREN</string>
+    <string name="folder_delete_body">‘%1$s’ verwijderen? De apps erin gaan terug naar de hoofdlijst.</string>
+    <string name="folder_delete_body_work">‘%1$s’ verwijderen? De apps erin gaan terug naar de hoofdlijst, en Slate groepeert de apps van dit profiel niet meer, tenzij je Instellingen &gt; Werk-apps groeperen gebruikt.</string>
+    <string name="folder_delete_confirm">Verwijderen</string>
+    <string name="folder_work_folder_removed">‘%1$s’ verwijderd. Slate groepeert deze apps niet meer.</string>
+
+    <!-- Home screen: hidden apps -->
+    <string name="hidden_none">Geen verborgen apps</string>
+    <string name="hidden_title_with_hint">Verborgen apps – tik om te openen, houd vast om te tonen</string>
+    <string name="hidden_unhide_title">APP TONEN</string>
+    <string name="hidden_unhide_body">‘%1$s’ weer tonen? De app gaat terug naar je hoofdlijst met apps.</string>
+    <string name="hidden_unhide_confirm">Tonen</string>
+    <string name="hidden_shortcuts_removed_title">Snelkoppelingen verwijderd</string>
+    <plurals name="hidden_shortcuts_removed">
+        <item quantity="one">Door %1$s te verbergen is ook %2$d vastgezette snelkoppeling ervan verwijderd – de snelkoppelingen van een verborgen app zouden hier toch niet bereikbaar zijn.</item>
+        <item quantity="other">Door %1$s te verbergen zijn ook %2$d vastgezette snelkoppelingen ervan verwijderd – de snelkoppelingen van een verborgen app zouden hier toch niet bereikbaar zijn.</item>
+    </plurals>
+
+    <!-- Pinned shortcuts -->
+    <string name="shortcut_menu_remove">Verwijderen</string>
+    <string name="shortcut_menu_refresh">Vernieuwen</string>
+    <string name="shortcut_menu_open_app">%1$s openen</string>
+    <string name="shortcut_no_longer_available">Deze snelkoppeling is niet meer beschikbaar</string>
+    <string name="shortcut_destination_widget_strip">Widgetbalk</string>
+    <string name="shortcut_destination_app_list">App-lijst</string>
+    <string name="shortcut_choose_app_title">%1$s – kies een app</string>
+    <string name="shortcut_loading_apps">Apps laden…</string>
+    <string name="shortcut_no_apps_with_shortcuts">Geen apps met snelkoppelingen gevonden</string>
+    <plurals name="shortcut_enabled_count">
+        <item quantity="one">%1$d aangezet</item>
+        <item quantity="other">%1$d aangezet</item>
+    </plurals>
+    <string name="shortcut_needs_default_launcher">Stel Slate in als standaardlauncher om snelkoppelingen toe te voegen</string>
+    <string name="shortcut_none_found_for">Geen snelkoppelingen gevonden voor %1$s</string>
+    <string name="shortcut_also_pinned_to_widget_strip">Ook vastgezet op de widgetbalk</string>
+    <string name="shortcut_also_pinned_to_app_list">Ook vastgezet in de app-lijst</string>
+
+    <!-- FAQ -->
+    <string name="faq_back">← Veelgestelde vragen</string>
+    <string name="faq_accessibility_question">Waarom heeft Slate de toegankelijkheidsrechten nodig?</string>
+    <string name="faq_accessibility_answer">Toegankelijkheid wordt alleen gebruikt voor de functie ‘Dubbeltikken om scherm te vergrendelen’. Er wordt één systeem-API (GLOBAL_ACTION_LOCK_SCREEN) aangeroepen om het apparaat te vergrendelen, terwijl biometrisch ontgrendelen beschikbaar blijft.\n\nSlate kan via dit recht geen scherminhoud lezen, geen app-gebruik volgen en geen gegevens verzamelen.</string>
+    <string name="faq_notification_access_question">Waarom heeft Slate toegang tot meldingen nodig?</string>
+    <string name="faq_notification_access_answer">Toegang tot meldingen is optioneel en wordt alleen gebruikt voor de meldingsmarkering – die verandert de kleur van de naam van een app wanneer er een melding klaarstaat.\n\nSlate controleert alleen welke pakketten actieve meldingen hebben. De inhoud van meldingen (titels, berichten, afzenders) wordt nooit gelezen of opgeslagen.</string>
+    <string name="faq_data_question">Verzamelt Slate gegevens?</string>
+    <string name="faq_data_answer" formatted="false">Nee. Slate werkt 100% offline en verzamelt geen enkel gegeven.\n\nEr zijn geen analyses, geen crashrapporten, geen tracking en geen netwerkverzoeken van welke aard dan ook. Alle instellingen, gebruikstellers en aanpassingen worden lokaal op je apparaat opgeslagen met de SharedPreferences van Android en verlaten het nooit.</string>
+    <string name="faq_contacts_question">Leest Slate mijn contacten?</string>
+    <string name="faq_contacts_answer">Alleen als je ‘Contacten doorzoeken’ aanzet in Instellingen → Zoeken. Staat dat uit (de standaard), dan heeft Slate helemaal geen rechten voor contacten. Staat het aan, dan leest Slate je contactenlijst telkens wanneer je een zoekopdracht typt – om overeenkomsten naast je apps te vinden. Er wordt niets opgeslagen, geïndexeerd of ergens naartoe gestuurd. Na het afsluiten en opnieuw starten van de launcher staan er geen contactgegevens meer in het geheugen.\n\nContacten uit het werkprofiel zijn niet zichtbaar (Android schermt ze af voor launchers van derden). Contacten zonder telefoonnummer worden overgeslagen, omdat tikken op een contact de telefoon-app opent.\n\nKomt dezelfde persoon meerdere keren voor – dat gebeurt vaak, omdat hetzelfde contact in meer dan één bron kan staan (Google, WhatsApp, Telegram, SIM, OEM-contacten enzovoort) – zet dan op dezelfde instellingenpagina ‘Alleen Google-contacten’ aan om alleen je Google-adresboek te gebruiken en de dubbelingen over te slaan.</string>
+    <string name="faq_permissions_question">Welke andere rechten gebruikt Slate?</string>
+    <string name="faq_permissions_answer">• EXPAND_STATUS_BAR – gebaar om het meldingenpaneel omlaag te vegen\n• ACCESS_WIFI_STATE / CHANGE_WIFI_STATE – gebaar om wifi aan of uit te zetten (Android 10+: opent het systeempaneel)\n• BLUETOOTH / BLUETOOTH_ADMIN – Bluetooth aan- of uitzetten op Android 11 en lager\n• QUERY_ALL_PACKAGES – nodig om alle geïnstalleerde apps te tonen (Android 11+)\n• REQUEST_DELETE_PACKAGES – start het de-installeren door het systeem wanneer je een app wilt de-installeren\n• REQUEST_IGNORE_BATTERY_OPTIMIZATIONS – wordt alleen gebruikt wanneer je in Instellingen bij de waarschuwing over batterijbeperking op ‘Oplossen’ tikt, om het systeem te vragen Slate uit te zonderen van batterijoptimalisatie, zodat achtergrondfuncties blijven werken\n• USE_BIOMETRIC – gedeclareerd door de bibliotheek AndroidX Biometric; wordt alleen gevraagd wanneer je biometrisch ontgrendelen voor verborgen apps aanzet. Biometrische gegevens worden door het besturingssysteem verwerkt en bereiken Slate nooit.</string>
+    <string name="faq_hidden_lock_question">Hoe werkt de vergrendeling van verborgen apps?</string>
+    <string name="faq_hidden_lock_answer">Als je ‘Verborgen apps vergrendelen’ aanzet in Instellingen → Beveiliging, wordt je gevraagd een pincode van 4–8 cijfers in te stellen. Daarna is voor het openen van het venster ‘Verborgen apps’ vanuit het menu bij lang indrukken op het startscherm de pincode nodig (of biometrie, als je die aanzet).\n\nJe pincode wordt nooit als leesbare tekst opgeslagen. Slate bewaart een PBKDF2-HMAC-SHA256-hash met salt, met 120.000 iteraties en een willekeurige salt van 16 bytes per apparaat. De hash is een eenrichtingscontrole – zelfs met het bestand zou een aanvaller de pincode met brute kracht moeten raden.\n\nBiometrie is optioneel. Als die aanstaat, gebruikt Slate de BiometricPrompt van Android om het standaardvenster voor vingerafdruk of gezicht te tonen. Biometrische gegevens blijven binnen het besturingssysteem en Slate ziet alleen een signaal voor gelukt of mislukt.\n\nNa 5 foute pincodes ben je 30 seconden geblokkeerd; na 10 foute 5 minuten; na 15 foute 15 minuten. De pincode kan niet worden hersteld – de app-gegevens wissen is de enige manier om opnieuw te beginnen. Bij het terugzetten van een back-up met verborgen apps wordt je om de pincode van de back-up gevraagd. Weet je die niet, dan worden je overige instellingen toch teruggezet en blijven je huidige pincode en verborgen apps zoals ze waren.</string>
+    <string name="faq_long_press_lock_question">Hoe werkt de vergrendeling van de menu\'s bij lang indrukken?</string>
+    <string name="faq_long_press_lock_answer">Als je ‘Menu\'s bij lang indrukken op startscherm vergrendelen’ aanzet in Instellingen → Beveiliging, wordt je gevraagd een pincode van 4–8 cijfers in te stellen, dezelfde die ‘Verborgen apps vergrendelen’ gebruikt als je die ook aanzet. Zodra dit aanstaat, wordt eerst om die pincode gevraagd bij het openen van het menu bij lang indrukken op het startscherm (Aanpassen / Verborgen apps / Veelgestelde vragen), het menu bij lang indrukken van een app (Vastzetten, Verbergen, Naam wijzigen, De-installeren en de rest), dat van een map of een vastgezette snelkoppeling, of bij een gebaar dat is gekoppeld aan ‘Instellingen openen’.\n\nDeze vergrendeling werkt alleen met de pincode. Ze gebruikt nooit biometrie, ook niet als je elders op dit scherm biometrisch ontgrendelen voor verborgen apps hebt aangezet, dus hier moet je altijd de pincode typen.\n\nDe pincode zelf is precies dezelfde als hierboven beschreven: een PBKDF2-HMAC-SHA256-hash met salt, nooit als leesbare tekst opgeslagen, met hetzelfde blokkeerschema na 5/10/15 pogingen, gedeeld door beide vergrendelingen. Heb je nog geen pincode, dan word je bij het aanzetten eerst geholpen er een in te stellen, precies zoals ‘Verborgen apps vergrendelen’ dat doet.\n\nVerder staan de twee vergrendelingen los van elkaar. Als je deze uitzet, blijven ‘Verborgen apps vergrendelen’, je pincode en je verborgen apps ongemoeid; er wordt alleen niet meer om een pincode gevraagd vóór de menu\'s bij lang indrukken en het genoemde gebaar.</string>
+    <string name="faq_recents_question">Verschijnen verborgen apps in het scherm Recent (Overzicht)?</string>
+    <string name="faq_recents_answer">Als je een verborgen app opent vanuit Slate, wordt die zo gestart dat ze buiten het scherm Recent van Android blijft – wie even naar Recent kijkt, ziet dus niet welke verborgen app je hebt geopend.\n\nEén beperking die Android niet laat omzeilen: had de app al een taak in Recent van eerder (omdat je haar vanuit een andere launcher hebt geopend, of omdat ze de ‘single task’-modus van Android gebruikt, zoals Chrome op sommige apparaten), dan kan Slate dat bestaande item niet weghalen. Veeg het één keer weg uit Recent, en vanaf dan blijven starts vanuit Slate onzichtbaar.</string>
+    <string name="faq_folders_question">Hoe werken mappen?</string>
+    <string name="faq_folders_answer">Houd een app ingedrukt en kies ‘Naar map verplaatsen’ om haar aan een bestaande map toe te voegen, of kies ‘+ Nieuwe map’ om er meteen een te maken. Mappen verschijnen op het startscherm met een markering (punthaak, opsommingsteken, haken, schuine streep, aantal of eenvoudig – kies je stijl in Instellingen → Typografie → Mapstijl). Tik om de map ter plekke uit te klappen – de startlijst wordt vervangen door de apps van de map, met bovenaan een rij ‘‹\u00A0terug’. Tik daarop (of gebruik het teruggebaar van het systeem) om terug te gaan.\n\nElke app staat in hooguit één map. Apps in een map worden in de hoofdlijst verborgen om die overzichtelijk te houden – de zoekfunctie vindt ze nog steeds overal, en ook de mapnaam zelf verschijnt in de zoekresultaten.\n\nHoud een mapnaam ingedrukt om de naam te wijzigen, een eigen kleur in te stellen of de map te verwijderen. Als je een map verwijdert, gaan de apps terug naar de hoofdlijst; de apps zelf worden nooit verwijderd. Als je een app vastzet, wordt ze automatisch uit de map gehaald waarin ze stond. Als je een app de-installeert, verdwijnt ze uit haar map; lege mappen worden automatisch opgeruimd.</string>
+    <string name="faq_several_apps_question">Hoe wijzig ik meerdere apps tegelijk?</string>
+    <string name="faq_several_apps_answer">Houd een app ingedrukt en kies ‘Selecteren’. Tik op meer apps om ze aan te vinken, ook apps in mappen en in zoekresultaten. Een balk onder de lijst laat zien hoeveel er zijn geselecteerd. Tik op ‘acties’ om ze in één keer vast te zetten, te verbergen, te de-installeren, te verplaatsen of een andere kleur te geven, of op ‘annuleren’ om te stoppen. Het selecteren stopt ook als je op Terug drukt of het startscherm verlaat.\n\nBij het de-installeren vraagt Android om elke app te bevestigen, en werk-apps en systeem-apps worden overgeslagen. Kies de markering in Instellingen → Typografie → Selectiestijl.</string>
+    <string name="faq_widgets_as_text_question">Waarom worden widgets als tekst getoond en niet als pictogrammen?</string>
+    <string name="faq_widgets_as_text_answer" formatted="false">Slate gebruikt bewust alleen tekst – apps staan op naam in de lijst, en de widgetbalk volgt dezelfde regel. Een label als ‘Wifi’ lees je als een woord in plaats van als een symbool dat je op de automatische piloot herkent, zodat iets openen of omzetten een kleine bewuste keuze blijft en geen reflex.\n\nElke widget toont zijn naam met de huidige waarde als er een is (Batterij: 67%, Volume: 60%, Tijd: 14:32) of alleen de naam bij eenvoudige aan/uit-schakelaars (Wifi, Bluetooth). Actieve widgets worden volledig dekkend getoond; inactieve worden gedimd tot 40%, zodat je in één oogopslag ziet of iets aanstaat, zonder pictogrammen of kleur.</string>
+    <string name="faq_wifi_name_question">Waarom toont de wifi-widget de naam van mijn netwerk niet?</string>
+    <string name="faq_wifi_name_answer">Op Android 10 en hoger kan een app de naam van het verbonden wifi-netwerk (SSID) alleen lezen als je de app een gevoelig runtime-recht geeft – op de meeste apparaten is dat het recht voor exacte locatie (ACCESS_FINE_LOCATION) – en als locatieservices aanstaan.\n\nSlate werkt alleen offline en vraagt nooit om een recht dat niet strikt nodig is voor een functie, dus de widget toont alleen ‘Wifi’, helder of gedimd naargelang de status. Tik erop om het wifi-paneel van het systeem te openen, dat het verbonden netwerk zelf toont zonder dat Slate ergens om hoeft te vragen.</string>
+    <string name="faq_toggles_question">Waarom kan Slate wifi of Bluetooth niet rechtstreeks aan- of uitzetten?</string>
+    <string name="faq_toggles_answer">Android heeft apps van derden de rechtstreekse toegang tot deze schakelaars ontnomen:\n\n• Wifi: sinds Android 10 kunnen apps wifi niet meer vanuit code aan- of uitzetten. Tik op de widget om het wifi-paneel van het systeem te openen als een venster onder in het scherm – één tik om wifi aan of uit te zetten zonder de launcher te verlaten.\n\n• Bluetooth: sinds Android 12 is voor het aan- of uitzetten van Bluetooth het runtime-recht BLUETOOTH_CONNECT nodig, dat ook toegang geeft tot de namen en adressen van alle gekoppelde apparaten en de mogelijkheid om ermee te verbinden – veel meer dan alleen aan/uit.\n\n• Mobiele data, Vliegtuigmodus, NFC: het omzetten hiervan vereist rechten op handtekeningniveau, die Android alleen aan systeem-apps geeft.\n\nSlate zou BLUETOOTH_CONNECT kunnen vragen om Bluetooth met één tik om te zetten, maar dan zou het een recht houden dat geen enkele andere functie nodig heeft. Doorverwijzen naar de systeempanelen is het compromis – één tik extra, geen onnodige toegang tot je apparaat.</string>
+    <string name="faq_open_source_question">Is Slate open source?</string>
+    <string name="faq_open_source_answer">Ja. Slate is open source onder de MIT-licentie.\n\nBroncode: github.com/roufsyed/Slate-Minimal-Launcher</string>
+    <string name="faq_work_apps_question">Hoe werken werk-apps?</string>
+    <string name="faq_work_apps_answer">Apps in je werkprofiel verschijnen naast je persoonlijke apps, elk met een markering, bijvoorbeeld ‘Gmail [Werk]’. Instellingen → Werkprofiel → Markering van werk-apps maakt daar een symbool van of haalt de markering weg.\n\nDe eerste keer dat Slate een werkprofiel ziet, verzamelt het die apps één keer voor je in een map. Bij een profiel dat je al een tijd hebt, verschijnt de map meteen. Bij een profiel dat net is ingesteld, wacht Slate ongeveer een minuut, omdat een nieuw werkprofiel zijn apps geleidelijk installeert en Slate anders alleen de eerste een of twee zou groeperen.\n\nDaarna is de map een gewone map. Wijzig de naam, geef een andere kleur, zet de map vast, haal apps eruit of zet er persoonlijke apps in – het blijft allemaal zo, en Slate herschikt de map nooit meer. Een werk-app die je later installeert, verschijnt in de hoofdlijst zoals elke andere nieuwe app; gebruik Instellingen → Werkprofiel → Werk-apps groeperen om haar op te bergen.\n\nDe map verwijderen is definitief – de apps gaan terug naar de hoofdlijst en Slate groepeert ze niet opnieuw, tenzij je erom vraagt. Verborgen werk-apps worden nooit gegroepeerd. Werk-apps die je in Android hebt gepauzeerd, worden gedimd getoond; als je op een ervan tikt, biedt Android aan ze weer aan te zetten.\n\n‘De-installeren’ wordt voor een werk-app niet aangeboden, omdat Android alleen je organisatie toestaat die te verwijderen. ‘App-info’ opent nog steeds de systeempagina.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Instellingen</string>
+    <string name="settings_background_activity_restricted">Achtergrondactiviteit beperkt</string>
+    <string name="settings_battery_banner_message">Meldingsmarkering en schermvergrendeling werken mogelijk niet meer.</string>
+    <string name="settings_battery_banner_message_with_maker_note">Meldingsmarkering en schermvergrendeling werken mogelijk niet meer.\n\nOp jouw apparaat moet je misschien ook automatisch starten toestaan of batterijoptimalisatie uitzetten in de batterij-instellingen.</string>
+    <string name="settings_fix_this">OPLOSSEN</string>
+    <string name="settings_hide_warning_title">WAARSCHUWING VERBERGEN</string>
+    <string name="settings_hide_warning_body">Wil je deze waarschuwing over batterijbeperking voorgoed verbergen?</string>
+    <string name="settings_hide_warning_note">Functies kunnen nog steeds stoppen met werken zolang achtergrondactiviteit beperkt blijft. Je kunt dit altijd zelf oplossen in de batterij-instellingen van je apparaat.</string>
+    <string name="settings_dismiss_once">Eén keer sluiten</string>
+    <string name="settings_dont_remind_again">Niet meer herinneren</string>
+    <string name="settings_turn_on">Aanzetten</string>
+    <string name="settings_enable">Aanzetten</string>
+
+    <!-- Settings: General -->
+    <string name="settings_general">Algemeen</string>
+    <string name="settings_double_tap_to_lock_screen">Dubbeltikken om scherm te vergrendelen</string>
+    <string name="settings_double_tap_to_lock_screen_summary">Vereist het recht voor de toegankelijkheidsservice</string>
+    <string name="settings_accessibility_body">Dubbeltikken om te vergrendelen gebruikt de toegankelijkheidsservice van Android om je scherm te vergrendelen.\n\nZoek op het volgende scherm ‘Slate’ in de lijst en zet het aan.</string>
+    <string name="settings_accessibility_privacy">Slate gebruikt dit recht alleen om het scherm te vergrendelen. Er worden geen gegevens verzameld, gelezen of ergens naartoe gestuurd.</string>
+    <string name="settings_sort_by_most_used">Sorteren op meest gebruikt</string>
+    <string name="settings_sort_by_most_used_summary">Meest gestarte apps staan eerst</string>
+    <string name="settings_most_used_appear_at_top">Meest gestarte apps staan bovenaan</string>
+    <string name="settings_most_used_appear_at_bottom">Meest gestarte apps staan onderaan</string>
+    <string name="settings_show_most_used_at">Meest gebruikte tonen</string>
+    <string name="settings_show_most_used_at_summary">Waar de meest gebruikte apps in de lijst terechtkomen</string>
+    <string name="settings_turn_on_sort_by_most_used">Zet ‘Sorteren op meest gebruikt’ aan om dit te gebruiken</string>
+    <string name="settings_lock_screen_rotation">Schermrotatie vergrendelen</string>
+    <string name="settings_lock_screen_rotation_summary">Launcher in staande stand houden</string>
+    <string name="settings_notification_highlight">Meldingsmarkering</string>
+    <string name="settings_notification_highlight_summary">Kleur van app of map wijzigen als er een melding binnenkomt</string>
+    <string name="settings_notification_access_title">TOEGANG TOT MELDINGEN</string>
+    <string name="settings_notification_access_body">Meldingsmarkering leest je actieve meldingen om app-namen op het startscherm te kleuren.\n\nZoek op het volgende scherm ‘Slate’ en zet het aan.</string>
+    <string name="settings_notification_access_privacy">Slate leest alleen welke apps meldingen hebben. De inhoud van berichten wordt nooit bekeken, opgeslagen of ergens naartoe gestuurd.</string>
+    <string name="settings_highlight_color">Markeringskleur</string>
+    <string name="settings_ignore_silenced_notifications">Stille meldingen negeren</string>
+    <string name="settings_skip_apps_you_set_to_silent">Apps overslaan die je in de Android-instellingen op Stil hebt gezet</string>
+    <string name="settings_hide_status_bar">Statusbalk verbergen</string>
+    <string name="settings_hide_status_bar_summary">Launcher op volledig scherm, veeg omlaag om te kijken</string>
+    <string name="settings_homescreen_view">Weergave van startscherm</string>
+    <string name="settings_homescreen_view_summary">Kies hoe apps worden ingedeeld</string>
+    <string name="settings_flow">Vloeiend</string>
+    <string name="settings_minimal_list">Minimale lijst</string>
+    <string name="settings_alphabetical_fast_scroll">Snel scrollen op alfabet</string>
+    <string name="settings_alphabetical_fast_scroll_summary">Index aan de zijkant om naar letters te springen (sorteert A–Z)</string>
+    <string name="settings_turn_off_sort_by_most_used">Zet ‘Sorteren op meest gebruikt’ uit om dit te gebruiken</string>
+    <string name="settings_set_as_default_launcher">Instellen als standaardlauncher</string>
+    <string name="settings_set_as_default_launcher_summary">Launcherkiezer van het systeem openen</string>
+    <string name="settings_slate_is_your_default_launcher">Slate is je standaardlauncher</string>
+    <string name="settings_already_the_default_launcher">Al de standaardlauncher</string>
+    <string name="settings_already_default_body">Slate is je startscherm. Bedankt dat je het gebruikt.</string>
+
+    <!-- Settings: Text size -->
+    <string name="settings_text_size_heading">Tekstgrootte</string>
+    <string name="settings_minimum">Minimum</string>
+    <string name="settings_maximum">Maximum</string>
+    <string name="settings_size">Grootte</string>
+    <string name="settings_line_gap">Regelafstand</string>
+    <string name="settings_word_gap">Woordafstand</string>
+
+    <!-- Settings: Typography -->
+    <string name="settings_typography">Typografie</string>
+    <string name="settings_font">Lettertype</string>
+    <string name="settings_font_import_from_storage">Importeren uit opslag…</string>
+    <string name="settings_font_imported">Lettertype geïmporteerd: %1$s</string>
+    <string name="settings_weight">Dikte</string>
+    <string name="settings_weight_light">Licht</string>
+    <string name="settings_weight_regular">Normaal</string>
+    <string name="settings_weight_medium">Medium</string>
+    <string name="settings_weight_bold">Vet</string>
+    <string name="settings_alignment">Uitlijning</string>
+    <string name="settings_folder_style">Mapstijl</string>
+    <string name="settings_folder_style_summary">Hoe mapnamen op het startscherm verschijnen</string>
+    <string name="settings_folder_style_chevron">Punthaak</string>
+    <string name="settings_folder_style_slash">Schuine streep</string>
+    <string name="settings_folder_style_bullet">Opsommingsteken</string>
+    <string name="settings_folder_style_brackets">Haken</string>
+    <string name="settings_folder_style_count">Aantal</string>
+    <string name="settings_folder_style_plain">Eenvoudig</string>
+    <string name="settings_selection_style">Selectiestijl</string>
+    <string name="settings_selection_style_summary">Hoe geselecteerde apps worden gemarkeerd</string>
+    <string name="settings_selection_style_check">Vinkje</string>
+    <string name="settings_selection_style_dot">Stip</string>
+    <string name="settings_selection_style_radio">Keuzerondje</string>
+    <string name="settings_selection_style_square">Vierkant</string>
+
+    <!-- Settings: Colors -->
+    <string name="settings_colors">Kleuren</string>
+    <string name="settings_background">Achtergrond</string>
+    <string name="settings_app_text">App-tekst</string>
+    <string name="settings_app_text_title">App-tekst</string>
+    <string name="settings_folder_text">Maptekst</string>
+    <string name="settings_folder_text_title">Maptekst</string>
+    <string name="settings_presets">VOORINSTELLINGEN</string>
+    <string name="settings_apply_to_lockscreen">Toepassen op vergrendelscherm</string>
+    <string name="settings_apply_to_lockscreen_summary">Vult je vergrendelscherm met dezelfde effen kleur als de achtergrond van de launcher, voor een gelijk geheel</string>
+    <string name="settings_could_not_set_lockscreen_wallpaper">Kan achtergrond van vergrendelscherm niet instellen</string>
+    <string name="settings_follow_system_theme">Systeemthema volgen</string>
+    <string name="settings_follow_system_theme_summary">Kleuren wisselen met de donkere modus van het systeem</string>
+    <string name="settings_follow_system_theme_title">SYSTEEMTHEMA VOLGEN</string>
+    <string name="settings_follow_system_theme_body">Hiermee worden je huidige achtergrond- en tekstkleuren vervangen, zodat ze passen bij de donkere of lichte modus van je systeem.\n\nJe eigen kleurkeuzes worden vervangen en kunnen niet automatisch worden teruggezet.</string>
+    <string name="settings_follow_system_theme_note">Je kunt dit altijd uitzetten en zelf nieuwe kleuren kiezen.</string>
+
+    <!-- Settings: Gestures -->
+    <string name="settings_gestures">Gebaren</string>
+    <string name="settings_gesture_one_finger_up">"1 vinger  ↑"</string>
+    <string name="settings_gesture_one_finger_down">"1 vinger  ↓"</string>
+    <string name="settings_gesture_one_finger_left">"1 vinger  ←"</string>
+    <string name="settings_gesture_one_finger_right">"1 vinger  →"</string>
+    <string name="settings_gesture_action">Actie voor gebaar</string>
+    <string name="gesture_none">Geen</string>
+    <string name="gesture_open_notifications">Meldingen openen</string>
+    <string name="gesture_lock_screen">Scherm vergrendelen</string>
+    <string name="gesture_open_settings">Instellingen openen</string>
+    <string name="gesture_search_apps">Apps zoeken</string>
+    <string name="gesture_toggle_wifi">Wifi aan/uit</string>
+    <string name="gesture_toggle_bluetooth">Bluetooth aan/uit</string>
+    <string name="gesture_toggle_location">Locatie aan/uit</string>
+    <string name="gesture_open_camera">Camera openen</string>
+    <string name="settings_gesture_open_app">App openen…</string>
+    <string name="settings_choose_app">App kiezen</string>
+
+    <!-- Settings: Search -->
+    <string name="settings_search">Zoeken</string>
+    <string name="settings_enable_search">Zoeken aanzetten</string>
+    <string name="settings_enable_search_summary">Veeg omhoog om de zoekbalk te openen</string>
+    <string name="settings_position">Positie</string>
+    <string name="settings_top_or_bottom_of_the_screen">Boven of onder in het scherm</string>
+    <string name="settings_search_bar_position">Positie van zoekbalk</string>
+    <string name="settings_show_on_home_screen">Tonen op startscherm</string>
+    <string name="settings_show_on_home_screen_summary">Zoekbalk blijft zichtbaar, sluit met het toetsenbord</string>
+    <string name="settings_search_contacts">Contacten doorzoeken</string>
+    <string name="settings_search_contacts_summary">Overeenkomende contacten tonen terwijl je typt</string>
+    <string name="settings_search_contacts_title">CONTACTEN DOORZOEKEN?</string>
+    <string name="settings_search_contacts_body">Zet dit aan om contacten te vinden terwijl je in de zoekbalk typt. Overeenkomende contacten verschijnen naast apps; tik op een contact om de telefoon-app met het nummer te openen.</string>
+    <string name="settings_search_contacts_privacy">Slate leest je contacten alleen op het moment dat je een zoekopdracht typt. Er wordt niets op het apparaat opgeslagen, ergens naartoe gestuurd of tussen zoekopdrachten onthouden. Na het herstarten van de launcher begint alles opnieuw.</string>
+    <string name="settings_permission_needed_title">RECHT NODIG</string>
+    <string name="settings_permission_needed_body">Slate heeft het recht Contacten nodig om ze te doorzoeken. Je kunt het geven in de systeeminstellingen.</string>
+    <string name="settings_permission_needed_note">Tik op ‘Instellingen openen’ om het recht te geven. Je kunt het altijd weer intrekken.</string>
+    <string name="settings_permission_required_to_enable_contact_search">Recht nodig om contacten te doorzoeken</string>
+    <string name="settings_google_contacts_only">Alleen Google-contacten</string>
+    <string name="settings_google_contacts_only_summary">Dubbelingen uit WhatsApp, Telegram, SIM en andere bronnen verbergen</string>
+    <string name="settings_google_contacts_only_title">ALLEEN GOOGLE-CONTACTEN?</string>
+    <string name="settings_google_contacts_only_body">Toont alleen overeenkomende contacten uit je Google-account. Verbergt dubbelingen uit WhatsApp, Telegram, SIM en andere bronnen.</string>
+    <string name="settings_google_contacts_only_note">Als je contacten niet met Google synchroniseert, toont de zoekfunctie er mogelijk geen. Je kunt dit altijd uitzetten.</string>
+    <string name="settings_turn_on_search_to_enable">Zet Zoeken aan om dit te gebruiken</string>
+    <string name="settings_turn_on_search_contacts_to_enable">Zet ‘Contacten doorzoeken’ aan om dit te gebruiken</string>
+
+    <!-- Settings: Quick toggles -->
+    <string name="settings_quick_toggles">Snelle schakelaars</string>
+    <string name="settings_show_toggles_strip">Schakelaarbalk tonen</string>
+    <string name="settings_show_toggles_strip_summary">Een rij met status- en schakelaarlabels onder aan het startscherm</string>
+    <string name="settings_choose_widgets">Widgets kiezen</string>
+    <string name="settings_widgets_none_selected">Geen geselecteerd</string>
+    <plurals name="settings_widgets_enabled">
+        <item quantity="one">%1$d widget aangezet</item>
+        <item quantity="other">%1$d widgets aangezet</item>
+    </plurals>
+    <string name="settings_arrange_widgets">Widgets ordenen</string>
+    <string name="settings_arrange_widgets_summary">Volgorde van de aangezette widgets wijzigen</string>
+    <string name="settings_top_or_bottom_of_the_home">Boven of onder op het startscherm</string>
+    <string name="settings_direct_call">Direct bellen</string>
+    <string name="settings_direct_call_summary">Meteen bellen bij tikken of lang indrukken, in plaats van de telefoon-app te openen</string>
+    <string name="settings_permission_required_for_direct_call">Recht nodig voor direct bellen</string>
+    <string name="settings_trigger">Activering</string>
+    <string name="settings_trigger_summary">Kies welk gebaar meteen belt</string>
+    <string name="settings_tap">Tikken</string>
+    <string name="settings_long_press">Lang indrukken</string>
+    <string name="settings_show_divider">Scheidingslijn tonen</string>
+    <string name="settings_show_divider_summary">Een haarlijn tussen de balk en de app-lijst – alleen een visueel detail</string>
+    <string name="settings_preview">Voorbeeld</string>
+    <string name="settings_text_size">Tekstgrootte</string>
+    <string name="settings_no_contacts_app_available">Geen contacten-app beschikbaar</string>
+    <string name="settings_couldnt_read_the_selected_contact">Kan het geselecteerde contact niet lezen</string>
+
+    <!-- Settings: App shortcuts -->
+    <string name="settings_app_shortcuts">App-snelkoppelingen</string>
+    <string name="settings_add_to_widget_strip">Toevoegen aan widgetbalk</string>
+    <string name="settings_add_to_widget_strip_summary">De snelkoppeling van een andere app vastzetten op de schakelaarbalk</string>
+    <string name="settings_add_to_application_list">Toevoegen aan app-lijst</string>
+    <string name="settings_add_to_application_list_summary">De snelkoppeling van een andere app vastzetten als item in je app-lijst</string>
+    <string name="settings_set_slate_as_your_default_launcher">Stel Slate in als standaardlauncher</string>
+    <string name="settings_needs_default_launcher_body">Slate moet je standaardlauncher zijn om de snelkoppelingen van een andere app te lezen.</string>
+    <string name="settings_open_launcher_settings">Launcherinstellingen openen</string>
+
+    <!-- Settings: Work profile -->
+    <string name="settings_work_profile">Werkprofiel</string>
+    <string name="settings_show_work_apps">Werk-apps tonen</string>
+    <string name="settings_show_work_apps_summary">Er gaat niets verloren als dit uitstaat – alles komt terug zoals het was</string>
+    <string name="settings_group_work_apps">Werk-apps groeperen</string>
+    <string name="settings_group_work_apps_summary">Werk-apps nu in een map opbergen</string>
+    <string name="settings_no_work_apps_to_group">Geen werk-apps om te groeperen</string>
+    <plurals name="settings_grouped_work_apps">
+        <item quantity="one">%1$d werk-app gegroepeerd</item>
+        <item quantity="other">%1$d werk-apps gegroepeerd</item>
+    </plurals>
+    <string name="settings_work_apps_already_in_folders">Werk-apps staan al in mappen</string>
+    <string name="settings_work_app_marker">Markering van werk-apps</string>
+    <string name="settings_work_app_marker_summary">Hoe werk-apps in de app-lijst worden gemarkeerd</string>
+    <string name="settings_work_marker_brackets">Haken</string>
+    <string name="settings_work_marker_word">Woord</string>
+    <string name="settings_work_marker_dagger">Kruisje</string>
+    <string name="settings_work_marker_star">Ster</string>
+    <string name="settings_work_marker_dot">Stip</string>
+    <string name="settings_work_marker_square">Vierkant</string>
+    <string name="settings_work_marker_diamond">Ruit</string>
+    <string name="settings_work_marker_none">Geen</string>
+    <string name="settings_hide_marker_in_work_folders">Markering verbergen in werkmappen</string>
+    <string name="settings_hide_marker_in_work_folders_summary">Weglaten in een map met alleen werk-apps</string>
+
+    <!-- Settings: Backup -->
+    <string name="settings_backup">Back-up</string>
+    <string name="settings_export_settings">Instellingen exporteren</string>
+    <string name="settings_import_settings">Instellingen importeren</string>
+    <string name="settings_include_hidden_apps_in_backups">Verborgen apps opnemen in back-ups</string>
+    <string name="settings_include_hidden_apps_in_backups_summary">Standaard uit. Back-ups slaan je verborgen apps, pincode en biometrie-instelling over.</string>
+    <string name="settings_include_hidden_apps_title">VERBORGEN APPS OPNEMEN?</string>
+    <string name="settings_include_hidden_apps_body">Standaard blijven je lijst met verborgen apps, je pincode en de biometrie-instelling op dit apparaat. Back-ups slaan ze over, zodat ze niet naar een ander apparaat kunnen worden meegenomen of per ongeluk gedeeld.</string>
+    <string name="settings_include_hidden_apps_note">Zet dit aan als je wilt dat verborgen apps terugkomen bij het terugzetten van een back-up – bijvoorbeeld bij het instellen van een nieuwe telefoon. De back-up bevat dan je lijst met verborgen apps en een gehashte controle van je pincode. Een korte pincode is makkelijker te raden als iemand het back-upbestand in handen krijgt.</string>
+    <string name="settings_replace_pin_title">JE PINCODE VERVANGEN?</string>
+    <string name="settings_replace_pin_body">Deze back-up bevat verborgen apps die met een andere pincode zijn beveiligd. Bij het terugzetten worden je huidige pincode, de biometrie-instelling en de lijst met verborgen apps vervangen door die uit de back-up.</string>
+    <string name="settings_replace_pin_note">Je huidige instellingen zijn al toegepast – kies ‘Annuleren’ om ze te houden en de verborgen apps uit de back-up over te slaan.</string>
+    <string name="settings_restore">Terugzetten</string>
+    <string name="settings_restore_hidden_apps_title">VERBORGEN APPS TERUGZETTEN</string>
+    <string name="settings_restore_hidden_apps_body">Deze back-up bevat verborgen apps die met een pincode zijn beveiligd. Voer de pincode in om ze terug te zetten. Na drie foute pogingen wordt de hele import geweigerd – je huidige instellingen veranderen dan niet.</string>
+    <string name="settings_verify">Controleren</string>
+    <plurals name="settings_wrong_pin_attempts_left">
+        <item quantity="one">Onjuiste pincode. Nog %1$d poging.</item>
+        <item quantity="other">Onjuiste pincode. Nog %1$d pogingen.</item>
+    </plurals>
+    <string name="settings_import_refused_title">IMPORT GEWEIGERD</string>
+    <string name="settings_import_refused_body">Drie foute pincodes. Je instellingen zijn niet gewijzigd.</string>
+    <string name="settings_import_refused_note">Probeer het opnieuw met de juiste pincode of importeer een andere back-up.</string>
+
+    <!-- Settings: Security -->
+    <string name="settings_security">Beveiliging</string>
+    <string name="settings_lock_hidden_apps">Verborgen apps vergrendelen</string>
+    <string name="settings_lock_hidden_apps_summary">Pincode vragen om apps te bekijken of weer te tonen</string>
+    <string name="settings_set_pin_for_hidden_apps">Kies een pincode van 4–8 cijfers. Je hebt die nodig om verborgen apps te bekijken.</string>
+    <string name="settings_disable_lock">Vergrendeling uitzetten</string>
+    <string name="settings_use_biometric">Biometrie gebruiken</string>
+    <string name="settings_use_biometric_summary">Ontgrendelen met vingerafdruk of gezicht; de pincode blijft als terugvaloptie</string>
+    <string name="settings_no_biometric_enrolled_on_this_device">Geen biometrie ingesteld op dit apparaat</string>
+    <string name="settings_enable_biometric">Biometrie aanzetten</string>
+    <string name="settings_confirm_biometric_to_enable">Bevestig biometrie om aan te zetten</string>
+    <string name="settings_change_pin">Pincode wijzigen</string>
+    <string name="settings_change_pin_summary">Bevestig je huidige pincode en stel dan een nieuwe in</string>
+    <string name="settings_pin_changed">Pincode gewijzigd</string>
+    <string name="settings_keep_hidden_apps_in_recents">Verborgen apps in Recent houden</string>
+    <string name="settings_keep_hidden_apps_in_recents_summary">Voorkomt dat Android ze sluit als je wisselt, maar ze verschijnen in Recent</string>
+    <string name="settings_show_in_recents_title">TONEN IN RECENT?</string>
+    <string name="settings_show_in_recents_body">Verborgen apps die je vanuit Slate opent, blijven normaal buiten het scherm Recent. Zet je dit aan, dan verschijnt elke verborgen app daar zoals elke andere, meestal met een voorbeeld van wat er op het scherm stond.</string>
+    <string name="settings_show_in_recents_note">Waarom je dit zou willen: een app die buiten Recent blijft, wordt gesloten zodra je naar het startscherm gaat en iets anders opent, dus ze start opnieuw en verliest wat je had getypt. Als je dit later weer uitzet, verdwijnen apps die al in Recent staan niet vanzelf – veeg ze één keer weg.</string>
+    <string name="settings_i_understand_what_this_does">Ik begrijp wat dit doet</string>
+    <string name="settings_lock_long_press_menus_on_homescreen">Menu\'s bij lang indrukken op startscherm vergrendelen</string>
+    <string name="settings_lock_long_press_menus_on_homescreen_summary">Pincode vragen om ze te openen. Biometrie wordt hier niet gebruikt.</string>
+    <string name="settings_set_pin_for_long_press">Kies een pincode van 4–8 cijfers. Je hebt die nodig om de menu\'s bij lang indrukken te openen.</string>
+    <string name="settings_disable_long_press_lock">Vergrendeling bij lang indrukken uitzetten</string>
+
+    <!-- Settings: About -->
+    <string name="settings_about">Over</string>
+    <string name="settings_show_guided_tour">Rondleiding tonen</string>
+    <string name="settings_show_guided_tour_summary">De gebaren en functies van de launcher nog eens doorlopen</string>
+    <string name="settings_source_license">Broncode en licentie</string>
+    <string name="settings_version">Versie</string>
+
+    <!-- Widgets -->
+    <string name="widget_choose_title">WIDGETS KIEZEN</string>
+    <string name="widget_add_call_shortcut">+ Belsnelkoppeling toevoegen</string>
+    <string name="widget_add_sms_shortcut">+ Sms-snelkoppeling toevoegen</string>
+    <string name="widget_section_contact_shortcuts">SNELKOPPELINGEN VOOR CONTACTEN</string>
+    <string name="widget_call_contact">%1$s bellen</string>
+    <string name="widget_text_contact">Sms naar %1$s</string>
+    <string name="widget_section_widgets">WIDGETS</string>
+    <string name="widget_requires_special_access">Vereist speciale toegang</string>
+    <string name="widget_arrange_title">WIDGETS ORDENEN</string>
+    <string name="widget_move_up">Omhoog</string>
+    <string name="widget_move_down">Omlaag</string>
+    <string name="widget_wifi">Wifi</string>
+    <string name="widget_bluetooth">Bluetooth</string>
+    <string name="widget_mobile_data">Mobiele data</string>
+    <string name="widget_airplane_mode">Vliegtuigmodus</string>
+    <string name="widget_nfc">NFC</string>
+    <string name="widget_torch">Zaklamp</string>
+    <string name="widget_location_name">Locatieservices</string>
+    <string name="widget_location">Locatie</string>
+    <string name="widget_dnd_name">Niet storen</string>
+    <string name="widget_dnd">Niet storen</string>
+    <string name="widget_ringer_name">Belmodus</string>
+    <string name="widget_ringer_ring">Geluid</string>
+    <string name="widget_ringer_vibrate">Trillen</string>
+    <string name="widget_ringer_silent">Stil</string>
+    <string name="widget_media_volume_name">Mediavolume</string>
+    <string name="widget_media_volume_value">Volume: %1$d%%</string>
+    <string name="widget_brightness_name">Helderheid</string>
+    <string name="widget_brightness_value">Helderheid: %1$d%%</string>
+    <string name="widget_brightness_unknown">Helderheid: -</string>
+    <string name="widget_battery_name" formatted="false">Batterij %</string>
+    <string name="widget_battery_value">Batterij: %1$d%%</string>
+    <string name="widget_battery_unknown">Batterij: -</string>
+    <string name="widget_charging_name">Oplaadindicator</string>
+    <string name="widget_charging">Opladen</string>
+    <string name="widget_battery_temp_name">Batterijtemperatuur</string>
+    <string name="widget_battery_temp_value">Batterijtemp.: %1$d\u00A0°C</string>
+    <string name="widget_battery_temp_unknown">Batterijtemp.: -</string>
+    <string name="widget_time_to_full_name">Tijd tot vol</string>
+    <string name="widget_time_to_full_value">Tijd tot vol: %1$s</string>
+    <string name="widget_time_to_full_unknown">Tijd tot vol: -</string>
+    <string name="widget_time_to_full_note">Niet alle telefoons geven dit door. Toont ‘-’ als het niet beschikbaar is.</string>
+    <string name="widget_uptime_name">Uptime</string>
+    <string name="widget_uptime_value">Uptime: %1$s</string>
+    <string name="widget_duration_minutes">%1$d\u00A0min</string>
+    <string name="widget_duration_hours_minutes">%1$d\u00A0u %2$d\u00A0min</string>
+    <string name="widget_duration_days_hours">%1$d\u00A0d %2$d\u00A0u</string>
+    <string name="widget_clock_name">Klok</string>
+    <string name="widget_clock_value">Tijd: %1$s</string>
+    <string name="widget_date_name">Datum</string>
+    <string name="widget_date_value">Datum: %1$s</string>
+    <string name="widget_alarm_name">Volgende wekker</string>
+    <string name="widget_alarm_value">Wekker: %1$s</string>
+    <string name="widget_alarm_none">Wekker: geen</string>
+
+    <!-- Work profile -->
+    <string name="work_profile_label">Werk</string>
+    <string name="work_profile_label_numbered">Werk %1$d</string>
+
+    <!-- Backup -->
+    <string name="backup_saved">Back-up opgeslagen</string>
+    <string name="backup_settings_restored">Instellingen teruggezet</string>
+    <string name="backup_restored_hidden_apps_skipped">Instellingen teruggezet. Verborgen apps niet geïmporteerd.</string>
+    <string name="backup_hidden_apps_restored">Verborgen apps teruggezet</string>
+    <string name="backup_unsupported_version">Niet-ondersteunde back-upversie</string>
+
+    <!-- PIN -->
+    <string name="pin_set_title">PINCODE INSTELLEN</string>
+    <string name="pin_choose_new">Kies een nieuwe pincode van 4–8 cijfers.</string>
+    <string name="pin_weak_warning">Let op: die pincode is makkelijk te raden.</string>
+    <string name="pin_confirm_title">PINCODE BEVESTIGEN</string>
+    <string name="pin_confirm_message">Voer de pincode die je net hebt gekozen opnieuw in.</string>
+    <string name="pin_mismatch">De pincodes komen niet overeen. Probeer het opnieuw.</string>
+    <string name="pin_enter_to_continue">Voer je pincode in om door te gaan.</string>
+    <string name="pin_unlock">Ontgrendelen</string>
+    <string name="pin_wrong_try_again">Onjuiste pincode. Probeer het opnieuw.</string>
+    <string name="pin_wrong_locked_seconds">Onjuiste pincode. Geblokkeerd voor %1$d\u00A0s.</string>
+    <string name="pin_wrong_locked_minutes">Onjuiste pincode. Geblokkeerd voor %1$d\u00A0min.</string>
+    <string name="pin_locked_out_seconds">Te veel pogingen. Probeer het over %1$d\u00A0s opnieuw.</string>
+    <string name="pin_locked_out_minutes">Te veel pogingen. Probeer het over %1$d\u00A0min opnieuw.</string>
+    <string name="pin_use_pin">Pincode gebruiken</string>
+    <string name="pin_biometric_subtitle">Ontgrendelen met biometrie</string>
+    <string name="pin_title_home_menu">Startschermmenu</string>
+    <string name="pin_title_app_menu">App-menu</string>
+    <string name="pin_title_folder_menu">Mapmenu</string>
+    <string name="pin_title_shortcut_menu">Snelkoppelingsmenu</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Welkom</string>
+    <string name="onboarding_tagline">een minimale launcher</string>
+    <string name="onboarding_choose_a_theme">KIES EEN THEMA</string>
+    <string name="onboarding_dark">DONKER</string>
+    <string name="onboarding_sample_messages">berichten</string>
+    <string name="onboarding_sample_maps">kaarten</string>
+    <string name="onboarding_sample_camera">camera</string>
+    <string name="onboarding_sample_photos">foto\'s</string>
+    <string name="onboarding_light">LICHT</string>
+    <string name="onboarding_choose_a_layout">KIES EEN INDELING</string>
+    <string name="onboarding_flow">VLOEIEND</string>
+    <string name="onboarding_sample_mail">mail</string>
+    <string name="onboarding_sample_web">web</string>
+    <string name="onboarding_sample_clock">klok</string>
+    <string name="onboarding_sample_files">bestanden</string>
+    <string name="onboarding_sample_phone">telefoon</string>
+    <string name="onboarding_names_grow_with_use">namen groeien met gebruik</string>
+    <string name="onboarding_minimal_list">MINIMALE LIJST</string>
+    <!-- %1$s is the link text, Privacy Policy -->
+    <string name="onboarding_privacy_consent">Ik heb het %1$s gelezen</string>
+    <string name="onboarding_privacy_link">Privacybeleid</string>
+    <string name="onboarding_privacy_checkbox_description">Ik heb het privacybeleid gelezen</string>
+    <string name="onboarding_accept_privacy_first">Accepteer eerst het privacybeleid</string>
+    <string name="onboarding_set_as_default_launcher">Instellen als standaardlauncher</string>
+    <string name="onboarding_skip_for_now">Nu overslaan</string>
+    <string name="onboarding_import_previous_settings">Eerdere instellingen importeren</string>
+    <string name="onboarding_restore_from_a_slate_backup_json">Terugzetten uit een bestand slate_backup.json</string>
+    <string name="onboarding_restored_reimport_note">Instellingen teruggezet. Importeer opnieuw via Instellingen om verborgen apps terug te zetten.</string>
+
+    <!-- Guided tour -->
+    <string name="tour_skip">Overslaan</string>
+    <string name="tour_step_description">Stap %1$d van %2$d</string>
+    <string name="tour_welcome_title">Welkom bij Slate</string>
+    <string name="tour_welcome_body">Slate toont je apps als platte tekst – geen pictogrammen, geen widgets. Hier is een rondleiding van 30 seconden over hoe je het gebruikt.</string>
+    <string name="tour_tap_to_open_title">Tik om te openen</string>
+    <string name="tour_tap_to_open_body">Tik op de naam van een app om die te openen. Hoe vaker je een app gebruikt, hoe groter de naam wordt (in de weergave Vloeiend).</string>
+    <string name="tour_long_press_app_title">Een app ingedrukt houden</string>
+    <string name="tour_long_press_app_body">Houd de naam van een app ingedrukt om de app vast te zetten, te verbergen, naar een map te verplaatsen, een andere naam of kleur te geven of te de-installeren.</string>
+    <string name="tour_long_press_home_title">Het startscherm ingedrukt houden</string>
+    <string name="tour_long_press_home_body">Houd een leeg deel van het startscherm ingedrukt voor ‘Aanpassen’ (Instellingen), ‘Verborgen apps’ en ‘Veelgestelde vragen’.</string>
+    <string name="tour_search_title">Veeg omhoog om te zoeken</string>
+    <string name="tour_search_body">Veeg ergens op het startscherm omhoog om de zoekbalk te openen. Begin te typen om apps te filteren.</string>
+    <string name="tour_folders_title">Mappen</string>
+    <string name="tour_folders_body">Houd een app ingedrukt en kies ‘Naar map verplaatsen’ om bij elkaar horende apps te groeperen. Een map verschijnt als ‘Naam ›’ – tik om uit te klappen, houd ingedrukt om de naam te wijzigen of de map te verwijderen.</string>
+    <string name="tour_gestures_title">Veeggebaren</string>
+    <string name="tour_gestures_body">Je hebt extra veeggebaren ingesteld. Veeg omhoog, omlaag, naar links of naar rechts op het startscherm om de acties uit te voeren die je hebt ingesteld in Instellingen → Gebaren.</string>
+    <string name="tour_double_tap_lock_title">Dubbeltikken om te vergrendelen</string>
+    <string name="tour_double_tap_lock_body">Dubbeltik op een leeg deel van het startscherm om het apparaat te vergrendelen. Je hebt dit aangezet in Instellingen → Algemeen.</string>
+    <string name="tour_strip_title">Balk met snelle schakelaars</string>
+    <string name="tour_strip_body">De balk onderaan toont de actuele status (wifi, batterij, klok, …). Tik op een schakelaar om de bijbehorende instellingen te openen; kies welke widgets verschijnen in Instellingen → Snelle schakelaars.</string>
+    <string name="tour_customize_title">Meer aanpassen</string>
+    <string name="tour_customize_body">Lettertypen, kleuren, gebaren, zoekbalk, beveiliging, thema en back-up – het staat allemaal in Instellingen. Houd het startscherm ingedrukt → Aanpassen om ze te openen.</string>
+    <string name="tour_all_set_title">Je bent klaar</string>
+    <string name="tour_all_set_body">Dat is alles. Je kunt deze rondleiding altijd opnieuw doen via Instellingen → Over → Rondleiding tonen.</string>
+
+    <!-- Color picker -->
+    <string name="color_picker_hex">HEX</string>
+    <string name="color_picker_reset">RESETTEN</string>
+    <string name="color_picker_cancel">ANNULEREN</string>
+    <string name="color_picker_apply">TOEPASSEN</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_accessibility_title">TOEGANKELIJKHEIDSSERVICE</string>
+    <string name="dialog_open_settings">Instellingen openen</string>
+
+    <!-- Privacy policy dialog -->
+    <string name="privacy_title">PRIVACYBELEID</string>
+    <string name="privacy_close">Sluiten</string>
+    <string name="privacy_opening_in_browser">Privacybeleid openen in browser…</string>
+</resources>
