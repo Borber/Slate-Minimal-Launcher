@@ -740,6 +740,26 @@ class SettingsActivity : AppCompatActivity() {
                 folderStyleValue.text = label
             }.show()
         }
+
+        // Selection style - labels, keys and previews all come from SelectionMarker.STYLES.
+        val selectionStyleValue = findViewById<TextView>(R.id.selectionStyleValue)
+        selectionStyleValue.setTextColor(secondary)
+        selectionStyleValue.text = SelectionMarker.styleFor(prefs.selectionStyle).label
+
+        findViewById<android.view.View>(R.id.rowSelectionStyle).setOnClickListener {
+            val styles = SelectionMarker.STYLES
+            val paint = android.graphics.Paint()
+            SlateListDialog(
+                context = this,
+                title = "Selection style",
+                items = styles.map { it.label },
+                bgColor = prefs.backgroundColor,
+                secondaryItems = styles.map { "${SelectionMarker.glyphFor(it, paint)} Gmail" }
+            ) { index, label ->
+                prefs.selectionStyle = styles[index].key
+                selectionStyleValue.text = label
+            }.show()
+        }
     }
 
     /**

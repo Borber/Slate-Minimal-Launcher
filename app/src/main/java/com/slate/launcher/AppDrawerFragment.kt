@@ -3027,6 +3027,15 @@ class AppDrawerFragment : Fragment() {
             "How do folders work?" to
                 "Long-press any app and choose \"Move to folder\" to add it to an existing folder, or pick \"+ New folder\" to create one on the spot. Folders appear on the home screen with a marker (chevron, bullet, brackets, slash, count, or plain - pick your style in Settings → Typography → Folder style). Tap to expand inline - the home list is replaced by the folder's apps with a leading ‹ back row. Tap back (or press the system back gesture) to return.\n\nEach app lives in at most one folder. Apps inside a folder are hidden from the main list to reduce clutter - search still finds them globally, and the folder name itself also appears in search results.\n\nLong-press a folder label to rename, set a custom color, or delete. Deleting a folder returns its apps to the main list; the apps themselves are never removed. Pinning an app automatically removes it from any folder it was in. If you uninstall an app, it disappears from its folder; empty folders are pruned automatically.",
 
+            "How do I change several apps at once?" to
+                "Long-press any app and choose \"Select\". Tap more apps to tick them, " +
+                "including apps inside folders and in search results. A bar under the list " +
+                "shows how many are selected. Tap \"actions\" to pin, hide, uninstall, move " +
+                "or recolor them in one go, or \"cancel\" to stop. Selecting also ends when " +
+                "you press Back or leave the home screen.\n\n" +
+                "Uninstalling asks Android to confirm each app, and work and system apps " +
+                "are skipped. Pick the marker in Settings → Typography → Selection style.",
+
             "Why are widgets shown as text, not icons?" to
                 "Slate is text-only by design - apps are listed by name, and the widget strip follows the same rule. A label like \"Wi-Fi\" reads as a word rather than a symbol you recognise on autopilot, so opening or toggling something stays a small deliberate choice instead of a reflex.\n\nEach widget shows its name with the current value when there is one to show (Battery: 67%, Volume: 60%, Time: 14:32) or just the name for simple on/off toggles (Wi-Fi, Bluetooth). Active widgets render at full opacity; inactive ones are dimmed to 40% so you can see at a glance whether something is on without needing icons or colour.",
 

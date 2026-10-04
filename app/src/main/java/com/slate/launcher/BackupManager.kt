@@ -213,6 +213,7 @@ class BackupManager(private val prefs: PreferencesManager) {
         // Folder display style (chevron/slash/bullet/brackets/count/plain).
         root.put("folderStyle", prefs.folderStyle)
         root.put("workMarkerStyle", prefs.workMarkerStyle)
+        root.put("selectionStyle", prefs.selectionStyle)
         root.put("suppressWorkMarkerInFolder", prefs.suppressWorkMarkerInFolder)
 
         return root.toString(2)
@@ -467,6 +468,12 @@ class BackupManager(private val prefs: PreferencesManager) {
         if (root.has("workMarkerStyle")) {
             val marker = root.optString("workMarkerStyle")
             if (marker in knownWorkMarkers) prefs.workMarkerStyle = marker
+        }
+        // Selection marker style, same rule: an unknown value is ignored and a backup without
+        // the key leaves the device's choice alone.
+        if (root.has("selectionStyle")) {
+            val style = root.optString("selectionStyle")
+            if (SelectionMarker.isKnown(style)) prefs.selectionStyle = style
         }
         // No whitelist needed - a boolean cannot carry an unrenderable value. Default matches
         // PreferencesManager so a pre-existing backup file imports as ON, same as a fresh install.
