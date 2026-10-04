@@ -317,6 +317,13 @@ class PreferencesManager(context: Context) {
 
     fun pinApp(key: String) { pinnedApps = pinnedApps + key }
     fun unpinApp(key: String) { pinnedApps = pinnedApps - key }
+
+    /** Unpins every key in [keys] with one write, or none when nothing in it was pinned. */
+    fun unpinApps(keys: Collection<String>) {
+        val current = pinnedApps
+        val next = current - keys.toSet()
+        if (next.size != current.size) pinnedApps = next
+    }
     fun isPinned(key: String): Boolean = key in pinnedApps
 
     /**

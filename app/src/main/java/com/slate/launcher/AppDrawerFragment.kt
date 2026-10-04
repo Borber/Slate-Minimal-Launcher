@@ -1952,16 +1952,35 @@ class AppDrawerFragment : Fragment() {
             bgColor = prefs.backgroundColor
         ) { index, _ ->
             if (index < existing.size) {
-                FolderStore.addAppToFolder(prefs, existing[index].id, app.key)
-                buildAppList()
+                finishFolderChange(FolderStore.addAppToFolder(prefs, existing[index].id, app.key))
             } else {
                 showCreateFolderDialog { newName ->
                     val folder = FolderStore.createEmpty(prefs, newName)
-                    FolderStore.addAppToFolder(prefs, folder.id, app.key)
-                    buildAppList()
+                    finishFolderChange(FolderStore.addAppToFolder(prefs, folder.id, app.key))
                 }
             }
         }.show()
+    }
+
+    /**
+     * Redraws after a move that may have removed the folders in [removed]. A removed work
+     * folder also ends automatic grouping for its profile, which is worth saying out loud, and
+     * a folder view whose folder is gone goes back to the main list.
+     */
+    private fun finishFolderChange(removed: List<Folder>) {
+        announceRemovedWorkFolders(removed)
+        val open = currentFolderId
+        if (open != null && FolderStore.find(prefs, open) == null) exitFolder() else buildAppList()
+    }
+
+    private fun announceRemovedWorkFolders(removed: List<Folder>) {
+        removed.filter { it.profileSerial != null }.forEach { folder ->
+            Toast.makeText(
+                requireContext(),
+                "\"${folder.name}\" removed. Slate won't group these apps again.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     /** Long-press on a folder label - Pin / Rename / Delete / Custom color. */

@@ -51,22 +51,73 @@ object FolderStore {
         return folder
     }
 
-    /** Adds [key] to [folderId]; removes it from any other folder it was in. */
-    fun addAppToFolder(prefs: PreferencesManager, folderId: String, key: String) {
-        // Pinned apps cannot live in folders - enforce by unpinning first.
-        if (prefs.isPinned(key)) prefs.unpinApp(key)
+    /**
+     * Adds [key] to [folderId]; removes it from any other folder it was in. Returns the
+     * folders that emptied, which are removed. See [addAppsToFolder].
+     */
+    fun addAppToFolder(prefs: PreferencesManager, folderId: String, key: String): List<Folder> =
+        addAppsToFolder(prefs, folderId, listOf(key))
+
+    /**
+     * Moves [keys] into [folderId] with one read and one write, and returns the folders this
+     * emptied, which are removed.
+     *
+     * A folder is removed only when it had members and now has none. It used to be left behind
+     * with no apps: the home screen stopped showing it, yet it stayed in storage and in the
+     * move picker with no way to delete it. The target is never removed, so a folder that
+     * [createEmpty] made a moment ago survives to receive its first app. Hidden members still
+     * count, so a folder holding only hidden apps is not empty.
+     *
+     * Pinned apps cannot live in folders, so [keys] are unpinned first.
+     */
+    fun addAppsToFolder(
+        prefs: PreferencesManager,
+        folderId: String,
+        keys: Collection<String>
+    ): List<Folder> {
+        val wanted = LinkedHashSet(keys)
         val list = all(prefs).toMutableList()
-        list.forEachIndexed { i, f ->
-            if (f.id != folderId) {
-                if (key in f.packages) {
-                    f.packages.remove(key)
-                    list[i] = f
+        val target = list.firstOrNull { it.id == folderId } ?: return emptyList()
+        if (wanted.isEmpty()) return emptyList()
+        prefs.unpinApps(wanted)
+
+        val removed = mutableListOf<Folder>()
+        val iter = list.iterator()
+        while (iter.hasNext()) {
+            val f = iter.next()
+            if (f.id == folderId) continue
+            if (f.packages.removeAll(wanted) && f.packages.isEmpty()) {
+                removed.add(f)
+                iter.remove()
+            }
+        }
+        wanted.forEach { if (it !in target.packages) target.packages.add(it) }
+        save(prefs, list)
+        return removed
+    }
+
+    /**
+     * Takes [keys] out of whatever folders hold them, with one write. Returns the folders this
+     * emptied, which are removed. The many-apps form of [removeAppFromFolder].
+     */
+    fun removeAppsFromFolders(prefs: PreferencesManager, keys: Collection<String>): List<Folder> {
+        val wanted = keys.toSet()
+        val list = all(prefs).toMutableList()
+        val removed = mutableListOf<Folder>()
+        var changed = false
+        val iter = list.iterator()
+        while (iter.hasNext()) {
+            val f = iter.next()
+            if (f.packages.removeAll(wanted)) {
+                changed = true
+                if (f.packages.isEmpty()) {
+                    removed.add(f)
+                    iter.remove()
                 }
             }
         }
-        val target = list.firstOrNull { it.id == folderId } ?: return
-        if (key !in target.packages) target.packages.add(key)
-        save(prefs, list)
+        if (changed) save(prefs, list)
+        return removed
     }
 
     /**
