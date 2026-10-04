@@ -1988,6 +1988,8 @@ class AppDrawerFragment : Fragment() {
                 }
                 "Hide" -> {
                     prefs.hideApp(app.key)
+                    // The cached work list was built before this hide. See hideSelection.
+                    if (app.profile != null) repository.invalidateWorkCache()
                     val removedShortcuts = PinnedShortcutStore.removeForPackage(prefs, launcherApps(), app.packageName)
                     if (removedShortcuts.isNotEmpty()) quickStrip?.bind()
                     buildAppList()
@@ -3321,6 +3323,8 @@ class AppDrawerFragment : Fragment() {
             setOnClickListener {
                 dialog.dismiss()
                 prefs.unhideApp(key)
+                // The cached work list was built while this app was hidden.
+                if (AppKey.serialOf(key) != null) repository.invalidateWorkCache()
                 onConfirmed()
             }
         }
