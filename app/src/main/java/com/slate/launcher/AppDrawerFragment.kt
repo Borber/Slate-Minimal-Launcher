@@ -20,6 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.ContactsContract
 import androidx.core.content.ContextCompat
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.provider.Settings
 import android.text.Editable
@@ -39,6 +40,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -119,6 +121,16 @@ class AppDrawerFragment : Fragment() {
     private lateinit var selectionCount: TextView
     /** Height of the bottom strip the bar is standing in for, or 0 when it replaces none. */
     private var replacedStripHeight = 0
+
+    /** Packages still waiting for their uninstall prompt, and the one whose prompt is open. */
+    private val uninstallQueue = ArrayDeque<String>()
+    private var uninstalling: String? = null
+    private val uninstallLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { onUninstallPromptClosed() }
+
+    /** Dismissed in onDestroyView for the same reason as [activeFaqDetailDialog]. */
+    private var activeConfirmDialog: Dialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -437,6 +449,8 @@ class AppDrawerFragment : Fragment() {
         // configuration change while it was open would leak the window (WindowLeaked).
         activeFaqDetailDialog?.let { runCatching { it.dismiss() } }
         activeFaqDetailDialog = null
+        activeConfirmDialog?.let { runCatching { it.dismiss() } }
+        activeConfirmDialog = null
         // Clear any pending debounced contact query so a late-fire post-teardown can't run
         // requireContext() / requireView() against a destroyed view tree.
         mainHandler.removeCallbacksAndMessages(null)
@@ -2283,8 +2297,11 @@ class AppDrawerFragment : Fragment() {
         val inView = viewAppKeys
         val pinned = prefs.pinnedApps
         val inFolders = FolderStore.keysInAnyFolder(prefs)
+        val removable = removablePackages(apps)
         val items = buildList {
             add(if (keys.all { it in pinned }) "Unpin" else "Pin to top")
+            add("Hide")
+            if (removable.isNotEmpty()) add("Uninstall")
             add("Move to folder")
             if (keys.any { it in inFolders }) add("Remove from folder")
             add("Custom color")
@@ -2307,6 +2324,11 @@ class AppDrawerFragment : Fragment() {
                     prefs.unpinApps(keys)
                     finishSelection()
                 }
+                "Hide" -> confirmHideSelection(apps)
+                "Uninstall" -> confirmUninstallSelection(
+                    removable,
+                    skipped = apps.count { it.packageName !in removable }
+                )
                 "Move to folder" -> showFolderPicker { id ->
                     finishSelection(FolderStore.addAppsToFolder(prefs, id, keys))
                 }
@@ -2350,6 +2372,175 @@ class AppDrawerFragment : Fragment() {
         val open = currentFolderId
         if (open != null && FolderStore.find(prefs, open) == null) exitFolder()
         else rerenderCurrentView()
+    }
+
+    private fun countOf(count: Int, noun: String): String =
+        if (count == 1) "1 $noun" else "$count ${noun}s"
+
+    private fun confirmHideSelection(apps: List<AppInfo>) {
+        val one = apps.size == 1
+        showConfirmDialog(
+            title = "HIDE APPS",
+            body = "Hide ${countOf(apps.size, "app")}? ${if (one) "It leaves" else "They leave"} " +
+                "the home screen and search. You can open or unhide " +
+                "${if (one) "it" else "them"} from Hidden Apps.",
+            confirmLabel = "Hide"
+        ) { hideSelection(apps) }
+    }
+
+    /**
+     * Hides [apps] with one write. As with a single Hide, their pinned shortcuts are removed
+     * too, and one notice says how many went.
+     *
+     * The work list is cached with the hidden apps already filtered out of it, so it is
+     * dropped here. Otherwise a work app hidden now would stay on screen until the cache aged.
+     */
+    private fun hideSelection(apps: List<AppInfo>) {
+        prefs.hideApps(apps.map { it.key })
+        if (apps.any { it.profile != null }) repository.invalidateWorkCache()
+        val shortcuts = apps.map { it.packageName }.distinct().sumOf {
+            PinnedShortcutStore.removeForPackage(prefs, launcherApps(), it).size
+        }
+        if (shortcuts > 0) quickStrip?.bind()
+        finishSelection()
+        if (shortcuts == 0) return
+        val one = apps.size == 1
+        SlateListDialog(
+            context = requireContext(),
+            title = "Shortcuts removed",
+            items = listOf(
+                "Hiding ${if (one) "this app" else "these apps"} also removed " +
+                    "${countOf(shortcuts, "pinned shortcut")} from ${if (one) "it" else "them"} - " +
+                    "a hidden app's shortcuts wouldn't be reachable from here either.",
+                "OK"
+            ),
+            bgColor = prefs.backgroundColor
+        ) { _, _ -> }.show()
+    }
+
+    /**
+     * The packages among [apps] that Android can remove from here. Work apps are left out for
+     * the reason [showAppMenu] gives, and system apps because their prompt cannot remove them.
+     * An app whose state cannot be read is left out as well.
+     */
+    private fun removablePackages(apps: List<AppInfo>): List<String> =
+        apps.filter { it.profile == null && !isSystemApp(it.packageName) }
+            .map { it.packageName }
+            .distinct()
+
+    private fun isSystemApp(packageName: String): Boolean = runCatching {
+        val info = requireContext().packageManager.getApplicationInfo(packageName, 0)
+        info.flags and ApplicationInfo.FLAG_SYSTEM != 0
+    }.getOrDefault(true)
+
+    private fun isInstalled(packageName: String): Boolean = runCatching {
+        requireContext().packageManager.getApplicationInfo(packageName, 0)
+    }.isSuccess
+
+    private fun confirmUninstallSelection(packages: List<String>, skipped: Int) {
+        val body = buildString {
+            append("Uninstall ${countOf(packages.size, "app")}? ")
+            append(
+                if (packages.size == 1) "Android will ask you to confirm it."
+                else "Android will ask you to confirm each one. Cancelling a prompt stops the rest."
+            )
+            if (skipped > 0) {
+                append(" ${countOf(skipped, "selected app")} can't be uninstalled from here ")
+                append("and will be skipped.")
+            }
+        }
+        showConfirmDialog(title = "UNINSTALL APPS", body = body, confirmLabel = "Uninstall") {
+            finishSelection()
+            uninstallQueue.clear()
+            uninstallQueue.addAll(packages)
+            launchNextUninstall()
+        }
+    }
+
+    /** Opens Android's uninstall prompt for the next package in the queue, if there is one. */
+    private fun launchNextUninstall() {
+        val next = uninstallQueue.removeFirstOrNull()
+        uninstalling = next
+        if (next == null) return
+        val prompt = Intent(Intent.ACTION_DELETE, Uri.fromParts("package", next, null))
+            .putExtra(Intent.EXTRA_RETURN_RESULT, true)
+        runCatching { uninstallLauncher.launch(prompt) }.onFailure {
+            uninstalling = null
+            uninstallQueue.clear()
+        }
+    }
+
+    /**
+     * Runs when Android's uninstall prompt closes. EXTRA_RETURN_RESULT keeps the prompt open
+     * until the app is gone, so an app still installed at this point means the prompt was
+     * cancelled or the removal failed. Either way the rest of the queue is dropped: prompts
+     * must never keep appearing after the user has backed out of one.
+     */
+    private fun onUninstallPromptClosed() {
+        val closed = uninstalling ?: return
+        uninstalling = null
+        if (isInstalled(closed)) uninstallQueue.clear() else launchNextUninstall()
+    }
+
+    /**
+     * A yes-or-no question on the same layout as the delete-folder confirmation. [onConfirm]
+     * runs only when the confirm button is pressed.
+     */
+    private fun showConfirmDialog(
+        title: String,
+        body: String,
+        confirmLabel: String,
+        onConfirm: () -> Unit
+    ) {
+        val dialog = Dialog(requireContext(), R.style.SlateDialogTheme)
+        dialog.setContentView(R.layout.dialog_accessibility_info)
+        dialog.window?.setBackgroundDrawable(
+            android.graphics.drawable.ColorDrawable(Color.TRANSPARENT)
+        )
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.85).toInt(),
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setGravity(Gravity.CENTER)
+        dialog.setCanceledOnTouchOutside(true)
+
+        val bg = parseColorSafe(prefs.backgroundColor)
+        val isLight = isColorLight(bg)
+        val primary = if (isLight) Color.BLACK else Color.WHITE
+        val secondary = if (isLight) Color.parseColor("#555555") else Color.parseColor("#999999")
+        val accent = if (isLight) Color.parseColor("#333399") else Color.parseColor("#8888FF")
+
+        val root = dialog.findViewById<View>(R.id.dialogTitle)?.parent as? android.view.ViewGroup
+            ?: return
+        root.background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            setColor(bg)
+            cornerRadius = resources.displayMetrics.density * 12
+        }
+        dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
+            text = title
+            setTextColor(accent)
+        }
+        dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
+            text = body
+            setTextColor(primary)
+        }
+        dialog.findViewById<TextView>(R.id.dialogPrivacy)?.visibility = View.GONE
+        dialog.findViewById<TextView>(R.id.btnCancel)?.apply {
+            setTextColor(secondary)
+            setOnClickListener { dialog.dismiss() }
+        }
+        dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
+            text = confirmLabel
+            setTextColor(accent)
+            setOnClickListener {
+                dialog.dismiss()
+                onConfirm()
+            }
+        }
+        dialog.setOnDismissListener { if (activeConfirmDialog === dialog) activeConfirmDialog = null }
+        activeConfirmDialog = dialog
+        dialog.show()
     }
 
     /** Long-press on a folder label - Pin / Rename / Delete / Custom color. */

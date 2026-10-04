@@ -755,6 +755,11 @@ class PreferencesManager(context: Context) {
         hiddenApps = hiddenApps + key
     }
 
+    /** Hides every key in [keys] with one write. */
+    fun hideApps(keys: Collection<String>) {
+        hiddenApps = hiddenApps + keys
+    }
+
     fun unhideApp(key: String) {
         hiddenApps = hiddenApps - key
     }
