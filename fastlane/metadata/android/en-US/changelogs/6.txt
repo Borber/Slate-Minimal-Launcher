@@ -1,11 +1,6 @@
-Features:
-- Add a setting to PIN-gate long-press menus
-- Highlight folders that contain a notified app
-- Add a homescreen layout picker to onboarding
-- Add a default text color setting for folders
-- Remember custom colors as swatches in the color picker
-
-Fixes:
-- Include the homescreen layout in backups
-- Fix Back not leaving folders when the search bar is shown on home
-- Fix swipe down not opening notifications when the search bar is shown on home
+- Bulk pin, move, recolor, hide, and uninstall apps from the minimal list.
+- Remove folders emptied by moving their last app; preserve hidden members.
+- Remember recent custom colors and set a default folder text color.
+- Include folder color and recent colors in settings backups.
+- Sync the Chinese/English picker with Android 13+ app language settings.
+- Preserve manual language selection on earlier Android versions.

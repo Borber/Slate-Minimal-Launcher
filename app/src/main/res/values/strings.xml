@@ -298,4 +298,40 @@
     <string name="tour_step_count">Step %1$d of %2$d</string>
     <string name="code_default">Default</string>
     <string name="onboarding_title">Welcome</string>
+
+    <!-- App management and shared color settings -->
+    <string name="menu_select">Select apps</string>
+    <string name="menu_select_all">Select all</string>
+    <string name="selection_actions">Actions</string>
+    <string name="selection_row_selected">%1$s, selected</string>
+    <string name="selection_row_not_selected">%1$s, not selected</string>
+    <string name="selection_hide_title">Hide selected apps</string>
+    <string name="selection_uninstall_title">Uninstall selected apps</string>
+    <string name="selection_uninstall_failed">Could not open the uninstall prompt</string>
+    <string name="folder_default_color">Folder text</string>
+    <string name="folder_color_follow_apps">Follow app text</string>
+    <plurals name="selection_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+    <plurals name="selection_apps">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
+    <plurals name="selection_hide_body">
+        <item quantity="one">Hide %1$d app? Its pinned shortcuts will be removed.</item>
+        <item quantity="other">Hide %1$d apps? Their pinned shortcuts will be removed.</item>
+    </plurals>
+    <plurals name="selection_uninstall_body">
+        <item quantity="one">Android will ask you to confirm the removal of %1$d app. Cancelling a prompt stops the remaining requests.</item>
+        <item quantity="other">Android will ask you to confirm the removal of %1$d apps, one at a time. Cancelling a prompt stops the remaining requests.</item>
+    </plurals>
+    <plurals name="selection_uninstall_skipped">
+        <item quantity="one">%1$d system app will be skipped.</item>
+        <item quantity="other">%1$d system apps will be skipped.</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed">
+        <item quantity="one">%1$d pinned shortcut was removed.</item>
+        <item quantity="other">%1$d pinned shortcuts were removed.</item>
+    </plurals>
 </resources>

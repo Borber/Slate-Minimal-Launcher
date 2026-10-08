@@ -533,9 +533,18 @@ class SettingsActivity : LocalizedActivity() {
         val bgSwatch    = findViewById<View>(R.id.bgColorSwatch)
         val textDisplay = findViewById<TextView>(R.id.textColorDisplay)
         val textSwatch  = findViewById<View>(R.id.textColorSwatch)
+        val folderDisplay = findViewById<TextView>(R.id.folderColorDisplay)
+        val folderSwatch = findViewById<View>(R.id.folderColorSwatch)
 
         bgDisplay.setTextColor(secondary)
         textDisplay.setTextColor(secondary)
+        folderDisplay.setTextColor(secondary)
+        folderDisplay.text = prefs.folderTextColor ?: getString(R.string.folder_color_follow_apps)
+        folderSwatch.background = GradientDrawable().apply {
+            cornerRadius = 6f * density
+            setColor(parseColorSafe(prefs.folderTextColor ?: prefs.appTextColor, Color.GRAY))
+            setStroke((1.5f * density).toInt(), borderColor)
+        }
 
         fun updateBgSwatch(hex: String) {
             bgDisplay.text = hex
@@ -599,6 +608,19 @@ class SettingsActivity : LocalizedActivity() {
 
         findViewById<View>(R.id.rowBgColor).setOnClickListener { openBgPicker() }
         findViewById<View>(R.id.rowTextColor).setOnClickListener { openTextPicker() }
+        findViewById<View>(R.id.rowFolderColor).setOnClickListener {
+            ColorPickerDialog(
+                context = this,
+                title = getString(R.string.folder_default_color),
+                initialColor = prefs.folderTextColor ?: prefs.appTextColor,
+                bgColor = prefs.backgroundColor,
+                showReset = prefs.folderTextColor != null,
+                onReset = { prefs.folderTextColor = null; setupColors() }
+            ) { hex ->
+                prefs.folderTextColor = hex
+                setupColors()
+            }.show()
+        }
 
         // Follow system theme toggle
         val switchFollowSystem = findViewById<MaterialSwitch>(R.id.switchFollowSystemTheme)
@@ -1468,7 +1490,9 @@ class SettingsActivity : LocalizedActivity() {
                 val selected = choices[index]
                 if (selected != prefs.language) {
                     prefs.language = selected
-                    row.post { recreate() }
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                        row.post { recreate() }
+                    }
                 }
             }.show()
         }

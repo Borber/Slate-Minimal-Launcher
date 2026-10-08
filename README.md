@@ -8,7 +8,9 @@
 - **Removed:** Notification highlighting and its listener.
 - **Removed:** The quick strip, widgets, work-profile handling, and Flow layout.
 - **Retained:** Folders, app shortcuts, hidden-app security, and double-tap lock.
-- **Languages:** Simplified Chinese and English UI; English in-app privacy policy.
+- **Management:** Long-press an app → Select apps to bulk pin, move, recolor, hide, or uninstall. Canceling an Android uninstall prompt stops the remaining requests.
+- **Colors:** Shared recent custom colors and a default folder text color; both are included in JSON backups.
+- **Languages:** Simplified Chinese and English UI; Android 13+ app language settings stay in sync with the in-app picker. Older Android versions retain the in-app picker. English in-app privacy policy.
 - **Background:** Removed the battery-exemption prompt and unused background work.
 - **Builds:** GitHub Actions uploads a signed release APK on pushes, manual runs, and same-repository PRs. Fork PRs and Dependabot runs upload an unsigned release APK because they cannot access signing secrets.
 - **Maintenance:** This fork stays local and will not be submitted upstream. The documentation below describes upstream.

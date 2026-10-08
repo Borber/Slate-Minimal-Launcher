@@ -74,6 +74,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all {
+            it.systemProperty("robolectric.dependency.repo.url", "https://repo.maven.apache.org/maven2")
+        }
+    }
+
     // AGP 8.1+ embeds the current git revision into META-INF/version-control-info.textproto.
     // Inside F-Droid's sandbox there is no git context, so their build emits a placeholder
     // ("generate_error_reason: NO_VALID_GIT_FOUND") while our local build emits the real SHA.
@@ -107,4 +115,7 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.recyclerview)
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.json:json:20240303")
+    testImplementation("org.robolectric:robolectric:4.17")
 }

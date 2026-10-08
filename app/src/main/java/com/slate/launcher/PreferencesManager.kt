@@ -3,7 +3,7 @@ package com.slate.launcher
 import android.content.Context
 import android.content.SharedPreferences
 
-class PreferencesManager(context: Context) {
+class PreferencesManager(private val context: Context) {
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -31,6 +31,9 @@ class PreferencesManager(context: Context) {
         private const val KEY_BACKGROUND_COLOR = "background_color"
         private const val KEY_LANGUAGE = "language"
         private const val KEY_TEXT_COLOR = "text_color"
+        private const val KEY_FOLDER_TEXT_COLOR = "folder_text_color"
+        private const val KEY_CUSTOM_COLORS = "custom_colors"
+        private const val KEY_SYSTEM_LANGUAGE_MIGRATED = "system_language_migrated"
         private const val KEY_DOUBLE_TAP_LOCK = "double_tap_lock"
         private const val KEY_FONT_FAMILY = "font_family"
         private const val KEY_FONT_WEIGHT = "font_weight"
@@ -102,6 +105,21 @@ class PreferencesManager(context: Context) {
         get() = prefs.getString(KEY_TEXT_COLOR, DEFAULT_TEXT_COLOR) ?: DEFAULT_TEXT_COLOR
         set(value) = prefs.edit().putString(KEY_TEXT_COLOR, value).apply()
 
+    /** Null keeps folder labels linked to the current app text color. */
+    var folderTextColor: String?
+        get() = prefs.getString(KEY_FOLDER_TEXT_COLOR, null)
+        set(value) = prefs.edit().apply {
+            if (value == null) remove(KEY_FOLDER_TEXT_COLOR)
+            else putString(KEY_FOLDER_TEXT_COLOR, value)
+        }.apply()
+
+    var customColors: List<String>
+        get() = (prefs.getString(KEY_CUSTOM_COLORS, "") ?: "")
+            .split(',').filter { it.isNotEmpty() }
+        set(value) = prefs.edit().putString(
+            KEY_CUSTOM_COLORS, ColorPickerDialog.sanitizeCustomColors(value).joinToString(",")
+        ).apply()
+
     var doubleTapToLock: Boolean
         get() = prefs.getBoolean(KEY_DOUBLE_TAP_LOCK, false)
         set(value) = prefs.edit().putBoolean(KEY_DOUBLE_TAP_LOCK, value).apply()
@@ -154,6 +172,12 @@ class PreferencesManager(context: Context) {
 
     fun pinApp(key: String) { pinnedApps = pinnedApps + key }
     fun unpinApp(key: String) { pinnedApps = pinnedApps - key }
+    fun pinApps(keys: Collection<String>) { pinnedApps = pinnedApps + keys }
+    fun unpinApps(keys: Collection<String>) {
+        val current = pinnedApps
+        val next = current - keys.toSet()
+        if (next != current) pinnedApps = next
+    }
     fun isPinned(key: String): Boolean = key in pinnedApps
 
     /**
@@ -345,6 +369,12 @@ class PreferencesManager(context: Context) {
     fun clearAppTextColor(key: String) =
         prefs.edit().remove("app_color_$key").apply()
 
+    fun setAppTextColors(keys: Collection<String>, hex: String) =
+        prefs.edit().apply { keys.forEach { putString("app_color_$it", hex) } }.apply()
+
+    fun clearAppTextColors(keys: Collection<String>) =
+        prefs.edit().apply { keys.forEach { remove("app_color_$it") } }.apply()
+
     fun getAllAppColors(): Map<String, String> =
         prefs.all.entries
             .filter { it.key.startsWith("app_color_") }
@@ -366,10 +396,16 @@ class PreferencesManager(context: Context) {
     var language: String
         get() = prefs.getString(KEY_LANGUAGE, "system")
             ?.takeIf { it == "system" || it == "zh" || it == "en" } ?: "system"
-        set(value) = prefs.edit().putString(
-            KEY_LANGUAGE,
-            value.takeIf { it == "zh" || it == "en" } ?: "system"
-        ).apply()
+        set(value) {
+            val language = value.takeIf { it == "zh" || it == "en" } ?: "system"
+            prefs.edit().putString(KEY_LANGUAGE, language).apply()
+            LanguageManager.applySystemLanguage(context, language)
+        }
+
+    /** Device-local: a restored backup must not mark a new device's migration complete. */
+    var systemLanguageMigrated: Boolean
+        get() = devicePrefs.getBoolean(KEY_SYSTEM_LANGUAGE_MIGRATED, false)
+        set(value) = devicePrefs.edit().putBoolean(KEY_SYSTEM_LANGUAGE_MIGRATED, value).apply()
 
     // ── Gesture actions ───────────────────────────────────────────
 
@@ -400,6 +436,10 @@ class PreferencesManager(context: Context) {
 
     fun hideApp(key: String) {
         hiddenApps = hiddenApps + key
+    }
+
+    fun hideApps(keys: Collection<String>) {
+        hiddenApps = hiddenApps + keys
     }
 
     fun unhideApp(key: String) {

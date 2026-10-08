@@ -40,7 +40,52 @@ class ColorPickerDialog(
             "#b71c1c", "#1a237e", "#1b5e20", "#e65100", "#4a148c",
             "#006064", "#880e4f", "#f57f17", "#33691e", "#bf360c"
         )
+
+        /** The one form a color takes in this dialog: # followed by six hex digits. */
+        private val HEX_COLOR = Regex("^#[0-9A-Fa-f]{6}$")
+
+        /**
+         * How many typed colors are remembered. Five is not arbitrary: the grid is seven
+         * swatches wide and the built-in set ends two into its last row, so five more complete
+         * that row and the dialog stays exactly the height it was.
+         */
+        const val MAX_CUSTOM_COLORS = 5
+
+        /**
+         * [saved] reduced to what the picker will show: well formed, not already a built-in
+         * swatch, no repeats (case ignored), order kept, at most [MAX_CUSTOM_COLORS].
+         *
+         * Every path into the stored list runs through this, backup import included, so what
+         * is on disk and what is on screen cannot disagree.
+         */
+        fun sanitizeCustomColors(saved: List<String>): List<String> {
+            val kept = ArrayList<String>(MAX_CUSTOM_COLORS)
+            for (hex in saved) {
+                if (kept.size == MAX_CUSTOM_COLORS) break
+                if (!HEX_COLOR.matches(hex)) continue
+                if (PRESETS.any { it.equals(hex, ignoreCase = true) }) continue
+                if (kept.any { it.equals(hex, ignoreCase = true) }) continue
+                kept.add(hex)
+            }
+            return kept
+        }
+
+        /**
+         * [saved] with [hex] at the front as the most recently used color. Using a color that
+         * is already remembered moves it forward instead of adding it twice, so the ones in
+         * regular use are the last to fall off the end. A built-in swatch is not remembered.
+         */
+        fun withRemembered(saved: List<String>, hex: String): List<String> =
+            sanitizeCustomColors(listOf(hex) + saved)
     }
+
+    private val prefs = PreferencesManager(context)
+
+    /**
+     * The built-in swatches followed by the remembered ones. Read once per dialog: the
+     * remembered list only changes on Apply, and Apply closes the dialog.
+     */
+    private val swatches: List<String> = PRESETS + sanitizeCustomColors(prefs.customColors)
 
     private var currentHex = initialColor
 
@@ -99,7 +144,7 @@ class ColorPickerDialog(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 val hex = s?.toString() ?: return
-                if (hex.matches(Regex("^#[0-9A-Fa-f]{6}$"))) {
+                if (HEX_COLOR.matches(hex)) {
                     currentHex = hex
                     updatePreview(hex)
                     buildSwatches(previewView, hexInput, accent, density)
@@ -124,6 +169,11 @@ class ColorPickerDialog(
 
         btnCancel.setOnClickListener { dismiss() }
         btnApply.setOnClickListener {
+            // An applied color that is not a built-in swatch comes back as a swatch next
+            // time, in every picker. Cancel and Reset never reach this, so they save nothing.
+            val saved = prefs.customColors
+            val remembered = withRemembered(saved, currentHex)
+            if (remembered != saved) prefs.customColors = remembered
             onApply(currentHex)
             dismiss()
         }
@@ -143,7 +193,7 @@ class ColorPickerDialog(
         val size = (28 * density).toInt()
         val margin = (4 * density).toInt()
 
-        PRESETS.forEach { hex ->
+        swatches.forEach { hex ->
             val swatch = View(context)
             val lp = FlexboxLayout.LayoutParams(size, size).apply {
                 setMargins(margin, margin, margin, margin)

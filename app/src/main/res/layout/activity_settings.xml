@@ -206,6 +206,12 @@
                 <TextView android:id="@+id/textColorDisplay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp" android:fontFamily="monospace"/>
             </LinearLayout>
 
+            <LinearLayout android:id="@+id/rowFolderColor" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:paddingVertical="12dp" android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/folder_default_color" android:textSize="17sp"/>
+                <View android:id="@+id/folderColorSwatch" android:layout_width="36dp" android:layout_height="36dp" android:layout_marginEnd="12dp" android:importantForAccessibility="no"/>
+                <TextView android:id="@+id/folderColorDisplay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="15sp"/>
+            </LinearLayout>
+
             <!-- Preset color combinations -->
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ui_presets" android:textSize="11sp" android:textAllCaps="true" android:letterSpacing="0.15" android:textStyle="bold" android:alpha="0.5" android:layout_marginTop="16dp" android:layout_marginBottom="10dp"/>
 

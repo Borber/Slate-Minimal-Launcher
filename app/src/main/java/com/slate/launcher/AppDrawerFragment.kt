@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
@@ -29,6 +30,9 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -68,6 +72,22 @@ class AppDrawerFragment : Fragment() {
     private var currentFolderId: String? = null
     private var mainListAnchor: ScrollAnchor? = null
     private var stoppedListAnchor: ScrollAnchor? = null
+    private val selectedKeys = LinkedHashSet<String>()
+    private var viewAppKeys: Set<String> = emptySet()
+    private val isSelecting: Boolean get() = selectedKeys.isNotEmpty()
+    private lateinit var selectionBar: View
+    private lateinit var selectionCount: TextView
+    private var activeConfirmDialog: Dialog? = null
+    private val uninstallQueue = ArrayDeque<String>()
+    private var uninstalling: String? = null
+    private val uninstallLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        val closed = uninstalling
+        uninstalling = null
+        if (closed != null && !isInstalled(closed)) launchNextUninstall()
+        else uninstallQueue.clear()
+    }
 
     private data class ScrollAnchor(val position: Int, val offset: Int)
 
@@ -80,8 +100,10 @@ class AppDrawerFragment : Fragment() {
         val wordSpacing: Int,
         val alignment: String,
         val textColor: String,
+        val folderTextColor: String?,
         val folderStyle: String,
-        val appColors: Map<String, String>
+        val appColors: Map<String, String>,
+        val selectedKeys: Set<String>
     )
 
     override fun onCreateView(
@@ -100,6 +122,11 @@ class AppDrawerFragment : Fragment() {
         appList.itemAnimator = null
         appList.setItemViewCacheSize(0)
         appList.adapter = homeAdapter
+        selectionBar = view.findViewById(R.id.selectionBar)
+        selectionCount = view.findViewById(R.id.selectionCount)
+        view.findViewById<View>(R.id.selectionActions).setOnClickListener { showSelectionMenu() }
+        view.findViewById<View>(R.id.selectionCancel).setOnClickListener { clearSelection() }
+        selectionBar.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> applyChromeLayout() }
         fastScroll = view.findViewById(R.id.fastScroll)
         fastScrollBubble = view.findViewById(R.id.fastScrollBubble)
         setupFastScroll()
@@ -113,6 +140,7 @@ class AppDrawerFragment : Fragment() {
                 }
 
                 override fun onLongPress(e: MotionEvent) {
+                    if (isSelecting) return
                     if (!touchStartedOnApp) {
                         AuthGate.authenticatePinOnly(
                             activity = requireActivity(),
@@ -126,6 +154,7 @@ class AppDrawerFragment : Fragment() {
                 }
 
                 override fun onDoubleTap(e: MotionEvent): Boolean {
+                    if (isSelecting) return false
                     if (!prefs.doubleTapToLock || touchStartedOnApp) return false
                     lockScreen()
                     return true
@@ -135,6 +164,7 @@ class AppDrawerFragment : Fragment() {
                     e1: MotionEvent?, e2: MotionEvent,
                     velocityX: Float, velocityY: Float
                 ): Boolean {
+                    if (isSelecting) return false
                     val dx = e2.x - (e1?.x ?: e2.x)
                     val dy = e2.y - (e1?.y ?: e2.y)
                     val absDx = abs(dx)
@@ -164,7 +194,8 @@ class AppDrawerFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (currentFolderId != null) exitFolder()
+                    if (isSelecting) clearSelection()
+                    else if (currentFolderId != null) exitFolder()
                 }
             }
         )
@@ -191,6 +222,7 @@ class AppDrawerFragment : Fragment() {
         requireView().setBackgroundColor(bg)
         val restoreMainScroll = currentFolderId != null
         currentFolderId = null
+        selectedKeys.clear()
         if (appList.adapter == null) appList.adapter = homeAdapter
         applyChromeLayout()
         buildAppList()
@@ -240,6 +272,12 @@ class AppDrawerFragment : Fragment() {
         homeAdapter.clear()
         appList.recycledViewPool.clear()
         repository.close()
+        selectedKeys.clear()
+        viewAppKeys = emptySet()
+        activeConfirmDialog?.dismiss()
+        activeConfirmDialog = null
+        uninstallQueue.clear()
+        uninstalling = null
         activeFaqDetailDialog?.let { runCatching { it.dismiss() } }
         activeFaqDetailDialog = null
         PinEntryDialog.dismissActive()
@@ -248,10 +286,14 @@ class AppDrawerFragment : Fragment() {
 
     private fun applyChromeLayout() {
         val verticalPadding = (40 * resources.displayMetrics.density).toInt()
+        val selectionHeight = if (selectionBar.visibility == View.VISIBLE) selectionBar.height else 0
         appList.setPadding(
             appList.paddingLeft, verticalPadding + statusBarHeight,
-            appList.paddingRight, verticalPadding + bottomInset
+            appList.paddingRight, verticalPadding + maxOf(bottomInset, selectionHeight)
         )
+        if (selectionBar.paddingBottom != bottomInset) {
+            selectionBar.setPadding(selectionBar.paddingLeft, 0, selectionBar.paddingRight, bottomInset)
+        }
     }
 
     private fun isTouchOnLabel(event: MotionEvent): Boolean {
@@ -324,7 +366,14 @@ class AppDrawerFragment : Fragment() {
 
     private fun buildAppList() {
         val snapshot = repository.getHomeSnapshot(currentFolderId)
+        if (currentFolderId != null && snapshot.items.firstOrNull() != HomeItem.BackOut) {
+            currentFolderId = null
+        }
+        viewAppKeys = snapshot.items.filterIsInstance<HomeItem.AppItem>()
+            .mapTo(LinkedHashSet()) { it.info.key }
+        selectedKeys.retainAll(viewAppKeys)
         renderItems(snapshot.items)
+        syncSelectionBar()
         if (currentFolderId == null) configureFastScroll(snapshot.allApps)
         else fastScroll.visibility = View.GONE
     }
@@ -333,7 +382,8 @@ class AppDrawerFragment : Fragment() {
         homeAdapter.submit(RenderState(
             items, prefs.fontFamily, prefs.fontWeight, prefs.maxFontSize,
             prefs.lineSpacing, prefs.wordSpacing, prefs.textAlignment,
-            prefs.appTextColor, prefs.folderStyle, prefs.getAllAppColors()
+            prefs.appTextColor, prefs.folderTextColor, prefs.folderStyle,
+            prefs.getAllAppColors(), selectedKeys.toSet()
         ))
     }
 
@@ -378,7 +428,7 @@ class AppDrawerFragment : Fragment() {
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
             }
-            val label = TextView(parent.context)
+            val label = SelectionTextView(parent.context)
             row.addView(label, FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -406,7 +456,17 @@ class AppDrawerFragment : Fragment() {
                 typeface = rowTypeface
                 gravity = Gravity.CENTER_VERTICAL
                 setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-                isLongClickable = item != HomeItem.BackOut
+                val selecting = currentState.selectedKeys.isNotEmpty()
+                val selected = item is HomeItem.AppItem && item.info.key in currentState.selectedKeys
+                setSelectionMarker(selected, selecting && item is HomeItem.AppItem)
+                isSelected = selected
+                contentDescription = if (selecting && item is HomeItem.AppItem) {
+                    getString(
+                        if (selected) R.string.selection_row_selected else R.string.selection_row_not_selected,
+                        item.info.name
+                    )
+                } else null
+                isLongClickable = item != HomeItem.BackOut && (!selecting || item is HomeItem.AppItem)
                 layoutParams = (layoutParams as FrameLayout.LayoutParams).apply {
                     gravity = alignment
                 }
@@ -418,10 +478,20 @@ class AppDrawerFragment : Fragment() {
             super.onViewRecycled(holder)
         }
 
-        inner class RowHolder(row: FrameLayout, val label: TextView) : RecyclerView.ViewHolder(row) {
+        inner class RowHolder(row: FrameLayout, val label: SelectionTextView) : RecyclerView.ViewHolder(row) {
             var item: HomeItem? = null
 
             init {
+                ViewCompat.setAccessibilityDelegate(label, object : AccessibilityDelegateCompat() {
+                    override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+                        super.onInitializeAccessibilityNodeInfo(host, info)
+                        if (isSelecting && item is HomeItem.AppItem) {
+                            info.className = "android.widget.CheckBox"
+                            info.isCheckable = true
+                            info.isChecked = (item as HomeItem.AppItem).info.key in selectedKeys
+                        }
+                    }
+                })
                 label.setOnClickListener { item?.let { onRowClicked(it) } }
                 label.setOnLongClickListener {
                     val current = item ?: return@setOnLongClickListener false
@@ -439,6 +509,13 @@ class AppDrawerFragment : Fragment() {
     }
 
     private fun onRowClicked(item: HomeItem) {
+        if (isSelecting) {
+            if (item is HomeItem.AppItem) {
+                if (!selectedKeys.add(item.info.key)) selectedKeys.remove(item.info.key)
+                buildAppList()
+            }
+            return
+        }
         when (item) {
             is HomeItem.AppItem -> launchApp(item.info)
             is HomeItem.FolderItem -> enterFolder(item.folder.id)
@@ -448,6 +525,10 @@ class AppDrawerFragment : Fragment() {
     }
 
     private fun onRowLongClicked(item: HomeItem): Boolean {
+        if (isSelecting) {
+            if (item is HomeItem.AppItem) showSelectionMenu()
+            return true
+        }
         val title = when (item) {
             is HomeItem.AppItem -> R.string.code_app_menu
             is HomeItem.FolderItem -> R.string.code_folder_menu
@@ -501,7 +582,7 @@ class AppDrawerFragment : Fragment() {
             ?: defaultTextColor
 
     private fun colorForFolder(folder: Folder, defaultTextColor: Int): Int =
-        folder.color?.let { parseColorSafe(it, defaultTextColor) } ?: defaultTextColor
+        (folder.color ?: prefs.folderTextColor)?.let { parseColorSafe(it, defaultTextColor) } ?: defaultTextColor
 
     private fun launcherApps() = PinnedShortcutStore.launcherApps(requireContext())
 
@@ -514,21 +595,26 @@ class AppDrawerFragment : Fragment() {
         }
     }
 
+    private enum class ShortcutMenuAction(val label: Int) {
+        REMOVE(R.string.code_remove),
+        REFRESH(R.string.code_refresh),
+        OPEN_APP(R.string.open_app_label),
+    }
+
     private fun showShortcutMenu(shortcut: PinnedShortcut) {
         val sourceLabel = appLabelFor(shortcut.sourcePackage) ?: shortcut.sourcePackage
-        val items = listOf(
-            getString(R.string.code_remove),
-            getString(R.string.code_refresh),
-            getString(R.string.open_app_label, sourceLabel)
-        )
+        val actions = ShortcutMenuAction.entries
         SlateListDialog(
             context = requireContext(),
             title = shortcut.pinnedLabel,
-            items = items,
+            items = actions.map {
+                if (it == ShortcutMenuAction.OPEN_APP) getString(it.label, sourceLabel)
+                else getString(it.label)
+            },
             bgColor = prefs.backgroundColor
-        ) { _, label ->
-            when (label) {
-                getString(R.string.code_remove) -> {
+        ) { index, _ ->
+            when (actions[index]) {
+                ShortcutMenuAction.REMOVE -> {
                     // This row only ever renders the APP_LIST destination - unpin just that one,
                     // leaving an independent widget-strip pin (if any) untouched.
                     PinnedShortcutStore.remove(
@@ -537,11 +623,11 @@ class AppDrawerFragment : Fragment() {
                     )
                     buildAppList()
                 }
-                getString(R.string.code_refresh) -> {
+                ShortcutMenuAction.REFRESH -> {
                     PinnedShortcutStore.refreshOne(prefs, launcherApps(), shortcut)
                     buildAppList()
                 }
-                else -> {
+                ShortcutMenuAction.OPEN_APP -> {
                     // The remaining item is always "Open $sourceLabel".
                     val intent = requireContext().packageManager
                         .getLaunchIntentForPackage(shortcut.sourcePackage)
@@ -642,50 +728,223 @@ class AppDrawerFragment : Fragment() {
         }
     }
 
+    private fun clearSelection() {
+        if (!isSelecting) return
+        selectedKeys.clear()
+        buildAppList()
+    }
+
+    private fun syncSelectionBar() {
+        selectionBar.visibility = if (isSelecting) View.VISIBLE else View.GONE
+        if (isSelecting) {
+            selectionCount.text = resources.getQuantityString(
+                R.plurals.selection_count, selectedKeys.size, selectedKeys.size
+            )
+            val bg = parseColorSafe(prefs.backgroundColor)
+            val primary = if (isColorLight(bg)) Color.BLACK else Color.WHITE
+            selectionBar.setBackgroundColor(bg)
+            selectionCount.setTextColor(primary)
+            selectionBar.findViewById<TextView>(R.id.selectionActions).setTextColor(primary)
+            selectionBar.findViewById<TextView>(R.id.selectionCancel).setTextColor(primary)
+        }
+        applyChromeLayout()
+    }
+
+    private enum class SelectionMenuAction(val label: Int) {
+        PIN(R.string.code_pin_to_top),
+        UNPIN(R.string.code_unpin),
+        MOVE_TO_FOLDER(R.string.code_move_to_folder),
+        REMOVE_FROM_FOLDER(R.string.code_remove_from_folder),
+        CUSTOM_COLOR(R.string.code_custom_color),
+        HIDE(R.string.code_hide),
+        UNINSTALL(R.string.code_uninstall),
+        SELECT_ALL(R.string.menu_select_all),
+    }
+
+    private fun showSelectionMenu() {
+        val apps = repository.getAllApps().filter { it.key in selectedKeys }.distinctBy { it.key }
+        if (apps.isEmpty()) {
+            clearSelection()
+            return
+        }
+        val keys = apps.map { it.key }
+        val inFolders = FolderStore.keysInAnyFolder(prefs)
+        val removable = apps.filterNot { isSystemApp(it.packageName) }.map { it.packageName }
+        val actions = buildList {
+            add(if (keys.all { prefs.isPinned(it) }) SelectionMenuAction.UNPIN else SelectionMenuAction.PIN)
+            add(SelectionMenuAction.MOVE_TO_FOLDER)
+            if (keys.any { it in inFolders }) add(SelectionMenuAction.REMOVE_FROM_FOLDER)
+            add(SelectionMenuAction.CUSTOM_COLOR)
+            add(SelectionMenuAction.HIDE)
+            if (removable.isNotEmpty()) add(SelectionMenuAction.UNINSTALL)
+            if (viewAppKeys.any { it !in selectedKeys }) add(SelectionMenuAction.SELECT_ALL)
+        }
+        SlateListDialog(
+            context = requireContext(),
+            title = resources.getQuantityString(R.plurals.selection_count, keys.size, keys.size),
+            items = actions.map { getString(it.label) },
+            bgColor = prefs.backgroundColor
+        ) { index, _ ->
+            when (actions[index]) {
+                SelectionMenuAction.PIN -> {
+                    FolderStore.removeAppsFromFolders(prefs, keys)
+                    prefs.pinApps(keys)
+                    finishSelection()
+                }
+                SelectionMenuAction.UNPIN -> { prefs.unpinApps(keys); finishSelection() }
+                SelectionMenuAction.MOVE_TO_FOLDER -> showFolderPicker { id ->
+                    FolderStore.addAppsToFolder(prefs, id, keys)
+                    finishSelection()
+                }
+                SelectionMenuAction.REMOVE_FROM_FOLDER -> {
+                    FolderStore.removeAppsFromFolders(prefs, keys)
+                    finishSelection()
+                }
+                SelectionMenuAction.CUSTOM_COLOR -> showSelectionColorPicker(keys)
+                SelectionMenuAction.HIDE -> showConfirmDialog(
+                    getString(R.string.selection_hide_title),
+                    resources.getQuantityString(R.plurals.selection_hide_body, keys.size, keys.size),
+                    getString(R.string.code_hide)
+                ) { hideSelection(apps) }
+                SelectionMenuAction.UNINSTALL -> confirmUninstallSelection(removable, apps.size - removable.size)
+                SelectionMenuAction.SELECT_ALL -> { selectedKeys.addAll(viewAppKeys); buildAppList() }
+            }
+        }.show()
+    }
+
+    private fun showSelectionColorPicker(keys: List<String>) {
+        val custom = keys.mapNotNull { prefs.getAppTextColor(it) }
+        ColorPickerDialog(
+            context = requireContext(),
+            title = resources.getQuantityString(R.plurals.selection_apps, keys.size, keys.size),
+            initialColor = custom.distinct().singleOrNull() ?: prefs.appTextColor,
+            bgColor = prefs.backgroundColor,
+            showReset = custom.isNotEmpty(),
+            onReset = { prefs.clearAppTextColors(keys); finishSelection() }
+        ) { hex ->
+            prefs.setAppTextColors(keys, hex)
+            finishSelection()
+        }.show()
+    }
+
+    private fun finishSelection() {
+        selectedKeys.clear()
+        finishFolderChange()
+    }
+
+    private fun hideSelection(apps: List<AppInfo>) {
+        prefs.hideApps(apps.map { it.key })
+        val removed = apps.sumOf {
+            PinnedShortcutStore.removeForPackage(prefs, launcherApps(), it.packageName).size
+        }
+        finishSelection()
+        if (removed > 0) {
+            Toast.makeText(
+                requireContext(),
+                resources.getQuantityString(R.plurals.selection_shortcuts_removed, removed, removed),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun isSystemApp(packageName: String): Boolean = runCatching {
+        val info = requireContext().packageManager.getApplicationInfo(packageName, 0)
+        info.flags and ApplicationInfo.FLAG_SYSTEM != 0
+    }.getOrDefault(true)
+
+    private fun isInstalled(packageName: String): Boolean = runCatching {
+        requireContext().packageManager.getApplicationInfo(packageName, 0)
+    }.isSuccess
+
+    private fun confirmUninstallSelection(packages: List<String>, skipped: Int) {
+        val body = buildString {
+            append(resources.getQuantityString(R.plurals.selection_uninstall_body, packages.size, packages.size))
+            if (skipped > 0) {
+                append(" ")
+                append(resources.getQuantityString(R.plurals.selection_uninstall_skipped, skipped, skipped))
+            }
+        }
+        showConfirmDialog(
+            getString(R.string.selection_uninstall_title), body, getString(R.string.code_uninstall)
+        ) {
+            finishSelection()
+            uninstallQueue.clear()
+            uninstallQueue.addAll(packages)
+            launchNextUninstall()
+        }
+    }
+
+    private fun launchNextUninstall() {
+        val next = uninstallQueue.removeFirstOrNull()
+        uninstalling = next
+        if (next == null) return
+        val prompt = Intent(Intent.ACTION_DELETE, Uri.fromParts("package", next, null))
+            .putExtra(Intent.EXTRA_RETURN_RESULT, true)
+        runCatching { uninstallLauncher.launch(prompt) }.onFailure {
+            uninstalling = null
+            uninstallQueue.clear()
+            Toast.makeText(requireContext(), R.string.selection_uninstall_failed, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private enum class AppMenuAction(val label: Int) {
+        PIN(R.string.code_pin_to_top),
+        UNPIN(R.string.code_unpin),
+        APP_INFO(R.string.code_app_info),
+        HIDE(R.string.code_hide),
+        UNINSTALL(R.string.code_uninstall),
+        MOVE_TO_FOLDER(R.string.code_move_to_folder),
+        MOVE_TO_ANOTHER_FOLDER(R.string.code_move_to_another_folder),
+        REMOVE_FROM_FOLDER(R.string.code_remove_from_folder),
+        CUSTOM_COLOR(R.string.code_custom_color),
+        RENAME(R.string.code_rename),
+        SELECT(R.string.menu_select),
+    }
+
     private fun showAppMenu(app: AppInfo) {
         val isPinned = prefs.isPinned(app.key)
-        val pinLabel = if (isPinned) getString(R.string.code_unpin) else getString(R.string.code_pin_to_top)
+        val pinAction = if (isPinned) AppMenuAction.UNPIN else AppMenuAction.PIN
         val containingFolder = FolderStore.folderContaining(prefs, app.key)
-        // Build the menu dynamically so folder entries appear only where relevant. Dispatching
-        // on the chosen label avoids fragile index-based branching as items shift.
-        val items = buildList {
-            add(pinLabel)
-            add(getString(R.string.code_app_info))
-            add(getString(R.string.code_hide))
+        // Keep action identity independent of translated labels and optional entries.
+        val actions = buildList {
+            add(pinAction)
+            add(AppMenuAction.APP_INFO)
+            add(AppMenuAction.HIDE)
             // ACTION_DELETE carries no user, so for a work app it would silently target the
             // personal copy - the one destructive cross-profile intent with no way to aim it.
             // App Info still exposes the system's own uninstall where policy allows it.
-            add(getString(R.string.code_uninstall))
+            add(AppMenuAction.UNINSTALL)
             if (containingFolder != null) {
-                add(getString(R.string.code_move_to_another_folder))
-                add(getString(R.string.code_remove_from_folder))
+                add(AppMenuAction.MOVE_TO_ANOTHER_FOLDER)
+                add(AppMenuAction.REMOVE_FROM_FOLDER)
             } else {
-                add(getString(R.string.code_move_to_folder))
+                add(AppMenuAction.MOVE_TO_FOLDER)
             }
-            add(getString(R.string.code_custom_color))
-            add(getString(R.string.code_rename))
+            add(AppMenuAction.CUSTOM_COLOR)
+            add(AppMenuAction.RENAME)
+            add(AppMenuAction.SELECT)
         }
         SlateListDialog(
             context = requireContext(),
             title = app.name,
-            items = items,
+            items = actions.map { getString(it.label) },
             bgColor = prefs.backgroundColor
-        ) { _, label ->
-            when (label) {
-                getString(R.string.code_pin_to_top) -> {
+        ) { index, _ ->
+            when (actions[index]) {
+                AppMenuAction.PIN -> {
                     // Remove from folder FIRST so the "pinned ⊥ in-folder" invariant holds at
                     // every persistence intermediate, never just at the end of the sequence.
                     FolderStore.removeAppFromFolder(prefs, app.key)
                     prefs.pinApp(app.key)
-                    buildAppList()
+                    finishFolderChange()
                 }
-                getString(R.string.code_unpin) -> { prefs.unpinApp(app.key); buildAppList() }
-                getString(R.string.code_app_info) -> startActivity(
+                AppMenuAction.UNPIN -> { prefs.unpinApp(app.key); buildAppList() }
+                AppMenuAction.APP_INFO -> startActivity(
                     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.fromParts("package", app.packageName, null)
                     }
                 )
-                getString(R.string.code_hide) -> {
+                AppMenuAction.HIDE -> {
                     prefs.hideApp(app.key)
                     val removedShortcuts = PinnedShortcutStore.removeForPackage(prefs, launcherApps(), app.packageName)
                     buildAppList()
@@ -693,24 +952,19 @@ class AppDrawerFragment : Fragment() {
                         showShortcutsRemovedForHiddenAppDialog(app.name, removedShortcuts.size)
                     }
                 }
-                getString(R.string.code_uninstall) -> startActivity(
+                AppMenuAction.UNINSTALL -> startActivity(
                     Intent(Intent.ACTION_DELETE).apply {
                         data = Uri.fromParts("package", app.packageName, null)
                     }
                 )
-                getString(R.string.code_move_to_folder), getString(R.string.code_move_to_another_folder) -> showMoveToFolderDialog(app)
-                getString(R.string.code_remove_from_folder) -> {
+                AppMenuAction.MOVE_TO_FOLDER, AppMenuAction.MOVE_TO_ANOTHER_FOLDER -> showMoveToFolderDialog(app)
+                AppMenuAction.REMOVE_FROM_FOLDER -> {
                     FolderStore.removeAppFromFolder(prefs, app.key)
-                    // If we were inside the now-empty folder, exitFolder navigates back; otherwise
-                    // a plain rebuild is enough.
-                    if (currentFolderId != null && FolderStore.find(prefs, currentFolderId!!) == null) {
-                        exitFolder()
-                    } else {
-                        buildAppList()
-                    }
+                    finishFolderChange()
                 }
-                getString(R.string.code_custom_color) -> showAppColorPicker(app)
-                getString(R.string.code_rename) -> showRenameDialog(app)
+                AppMenuAction.CUSTOM_COLOR -> showAppColorPicker(app)
+                AppMenuAction.RENAME -> showRenameDialog(app)
+                AppMenuAction.SELECT -> { selectedKeys.add(app.key); buildAppList() }
             }
         }.show()
     }
@@ -732,47 +986,59 @@ class AppDrawerFragment : Fragment() {
         ) { _, _ -> }.show()
     }
 
-    /** Sub-menu listing existing folders + a getString(R.string.code_new_folder) entry. */
-    private fun showMoveToFolderDialog(app: AppInfo) {
+    private fun showMoveToFolderDialog(app: AppInfo) = showFolderPicker { id ->
+        FolderStore.addAppToFolder(prefs, id, app.key)
+        finishFolderChange()
+    }
+
+    private fun showFolderPicker(onPicked: (String) -> Unit) {
         val existing = FolderStore.all(prefs)
-        val items = existing.map { it.name } + getString(R.string.code_new_folder)
         SlateListDialog(
             context = requireContext(),
             title = getString(R.string.code_move_to_folder),
-            items = items,
+            items = existing.map { it.name } + getString(R.string.code_new_folder),
             bgColor = prefs.backgroundColor
         ) { index, _ ->
-            if (index < existing.size) {
-                FolderStore.addAppToFolder(prefs, existing[index].id, app.key)
-                buildAppList()
-            } else {
-                showCreateFolderDialog { newName ->
-                    val folder = FolderStore.createEmpty(prefs, newName)
-                    FolderStore.addAppToFolder(prefs, folder.id, app.key)
-                    buildAppList()
-                }
+            if (index < existing.size) onPicked(existing[index].id)
+            else showCreateFolderDialog { name ->
+                onPicked(FolderStore.createEmpty(prefs, name).id)
             }
         }.show()
     }
 
+    private fun finishFolderChange() {
+        val folderId = currentFolderId
+        if (folderId != null && FolderStore.find(prefs, folderId) == null) exitFolder()
+        else buildAppList()
+    }
+
     /** Long-press on a folder label - Pin / Rename / Delete / Custom color. */
+    private enum class FolderMenuAction(val label: Int) {
+        PIN(R.string.code_pin_to_top),
+        UNPIN(R.string.code_unpin),
+        RENAME(R.string.code_rename),
+        CUSTOM_COLOR(R.string.code_custom_color),
+        DELETE(R.string.code_delete_folder),
+    }
+
     private fun showFolderMenu(folder: Folder) {
         // Pin sits first and its label toggles, matching showAppMenu. Unlike pinning an app,
         // this touches nothing but the pin set: a folder is a container, so the "pinned apps
         // can't live in folders" invariant has nothing to resolve here.
-        val pinLabel = if (prefs.isFolderPinned(folder.id)) getString(R.string.code_unpin) else getString(R.string.code_pin_to_top)
+        val pinAction = if (prefs.isFolderPinned(folder.id)) FolderMenuAction.UNPIN else FolderMenuAction.PIN
+        val actions = listOf(pinAction, FolderMenuAction.RENAME, FolderMenuAction.CUSTOM_COLOR, FolderMenuAction.DELETE)
         SlateListDialog(
             context = requireContext(),
             title = folder.name,
-            items = listOf(pinLabel, getString(R.string.code_rename), getString(R.string.code_custom_color), getString(R.string.code_delete_folder)),
+            items = actions.map { getString(it.label) },
             bgColor = prefs.backgroundColor
-        ) { _, label ->
-            when (label) {
-                getString(R.string.code_pin_to_top) -> { prefs.pinFolder(folder.id); buildAppList() }
-                getString(R.string.code_unpin) -> { prefs.unpinFolder(folder.id); buildAppList() }
-                getString(R.string.code_rename) -> showRenameFolderDialog(folder)
-                getString(R.string.code_custom_color) -> showFolderColorPicker(folder)
-                getString(R.string.code_delete_folder) -> showDeleteFolderConfirm(folder)
+        ) { index, _ ->
+            when (actions[index]) {
+                FolderMenuAction.PIN -> { prefs.pinFolder(folder.id); buildAppList() }
+                FolderMenuAction.UNPIN -> { prefs.unpinFolder(folder.id); buildAppList() }
+                FolderMenuAction.RENAME -> showRenameFolderDialog(folder)
+                FolderMenuAction.CUSTOM_COLOR -> showFolderColorPicker(folder)
+                FolderMenuAction.DELETE -> showDeleteFolderConfirm(folder)
             }
         }.show()
     }
@@ -915,15 +1181,26 @@ class AppDrawerFragment : Fragment() {
         ColorPickerDialog(
             context = requireContext(),
             title = getString(R.string.code_folder_color),
-            initialColor = folder.color ?: prefs.appTextColor,
-            bgColor = prefs.backgroundColor
+            initialColor = folder.color ?: prefs.folderTextColor ?: prefs.appTextColor,
+            bgColor = prefs.backgroundColor,
+            showReset = folder.color != null,
+            onReset = { FolderStore.setColor(prefs, folder.id, null); buildAppList() }
         ) { hex ->
             FolderStore.setColor(prefs, folder.id, hex)
             buildAppList()
         }.show()
     }
 
-    private fun showDeleteFolderConfirm(folder: Folder) {
+    private fun showDeleteFolderConfirm(folder: Folder) = showConfirmDialog(
+        getString(R.string.code_delete_folder),
+        getString(R.string.folder_delete_prompt, folder.name),
+        getString(R.string.code_delete)
+    ) {
+        FolderStore.delete(prefs, folder.id)
+        finishFolderChange()
+    }
+
+    private fun showConfirmDialog(title: String, body: String, confirmLabel: String, onConfirm: () -> Unit) {
         // Reuses the accessibility-info dialog layout (title / body / two buttons) so the
         // confirm is unambiguous and doesn't render the body as a tappable list row.
         val dialog = Dialog(requireContext(), R.style.SlateDialogTheme)
@@ -954,11 +1231,11 @@ class AppDrawerFragment : Fragment() {
             cornerRadius = density * 12
         }
         dialog.findViewById<TextView>(R.id.dialogTitle)?.apply {
-            text = getString(R.string.code_delete_folder_2)
+            text = title
             setTextColor(accent)
         }
         dialog.findViewById<TextView>(R.id.dialogBody)?.apply {
-            text = getString(R.string.folder_delete_prompt, folder.name)
+            text = body
             setTextColor(primary)
         }
         dialog.findViewById<TextView>(R.id.dialogPrivacy)?.visibility = View.GONE
@@ -967,14 +1244,16 @@ class AppDrawerFragment : Fragment() {
             setOnClickListener { dialog.dismiss() }
         }
         dialog.findViewById<TextView>(R.id.btnContinue)?.apply {
-            text = getString(R.string.code_delete)
+            text = confirmLabel
             setTextColor(accent)
             setOnClickListener {
                 dialog.dismiss()
-                FolderStore.delete(prefs, folder.id)
-                if (currentFolderId == folder.id) exitFolder() else buildAppList()
+                onConfirm()
             }
         }
+        activeConfirmDialog?.dismiss()
+        activeConfirmDialog = dialog
+        dialog.setOnDismissListener { if (activeConfirmDialog === dialog) activeConfirmDialog = null }
         dialog.show()
     }
 

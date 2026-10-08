@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -32,5 +33,49 @@
         android:textSize="96sp"
         android:textStyle="bold"
         android:visibility="gone" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/selectionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingHorizontal="16dp"
+        android:visibility="gone"
+        app:flexWrap="wrap"
+        app:alignItems="center"
+        app:justifyContent="flex_end">
+
+        <TextView
+            android:id="@+id/selectionCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            android:paddingEnd="8dp"
+            android:textSize="14sp"
+            android:accessibilityLiveRegion="polite"
+            app:layout_flexGrow="1" />
+
+        <Button
+            android:id="@+id/selectionActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:paddingHorizontal="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/selection_actions"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/selectionCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:paddingHorizontal="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/ui_cancel"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
+    </com.google.android.flexbox.FlexboxLayout>
 
 </FrameLayout>

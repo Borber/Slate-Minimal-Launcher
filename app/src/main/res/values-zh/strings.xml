@@ -296,4 +296,34 @@
     <string name="tour_step_count">第 %1$d 步，共 %2$d 步</string>
     <string name="code_default">默认</string>
     <string name="onboarding_title">欢迎</string>
+
+    <!-- App management and shared color settings -->
+    <string name="menu_select">选择应用</string>
+    <string name="menu_select_all">全选</string>
+    <string name="selection_actions">操作</string>
+    <string name="selection_row_selected">%1$s，已选择</string>
+    <string name="selection_row_not_selected">%1$s，未选择</string>
+    <string name="selection_hide_title">隐藏所选应用</string>
+    <string name="selection_uninstall_title">卸载所选应用</string>
+    <string name="selection_uninstall_failed">无法打开卸载确认界面</string>
+    <string name="folder_default_color">文件夹文字</string>
+    <string name="folder_color_follow_apps">跟随应用文字</string>
+    <plurals name="selection_count">
+        <item quantity="other">已选择 %1$d 个应用</item>
+    </plurals>
+    <plurals name="selection_apps">
+        <item quantity="other">%1$d 个应用</item>
+    </plurals>
+    <plurals name="selection_hide_body">
+        <item quantity="other">隐藏 %1$d 个应用？这些应用的固定快捷方式也会被移除。</item>
+    </plurals>
+    <plurals name="selection_uninstall_body">
+        <item quantity="other">Android 将逐个请求确认卸载 %1$d 个应用。取消任意一次确认后，后续请求将停止。</item>
+    </plurals>
+    <plurals name="selection_uninstall_skipped">
+        <item quantity="other">将跳过 %1$d 个系统应用。</item>
+    </plurals>
+    <plurals name="selection_shortcuts_removed">
+        <item quantity="other">已移除 %1$d 个固定快捷方式。</item>
+    </plurals>
 </resources>

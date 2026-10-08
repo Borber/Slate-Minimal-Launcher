@@ -89,6 +89,8 @@ class BackupManager(private val prefs: PreferencesManager) {
         // Colors
         root.put("backgroundColor", prefs.backgroundColor)
         root.put("appTextColor", prefs.appTextColor)
+        prefs.folderTextColor?.let { root.put("folderTextColor", it) }
+        root.put("customColors", JSONArray(prefs.customColors))
 
         // Gestures
         root.put("doubleTapToLock", prefs.doubleTapToLock)
@@ -244,6 +246,11 @@ class BackupManager(private val prefs: PreferencesManager) {
         prefs.fontWeight   = root.optInt("fontWeight",   PreferencesManager.DEFAULT_FONT_WEIGHT)
         prefs.backgroundColor = root.optString("backgroundColor", PreferencesManager.DEFAULT_BACKGROUND_COLOR)
         prefs.appTextColor    = root.optString("appTextColor",    PreferencesManager.DEFAULT_TEXT_COLOR)
+        prefs.folderTextColor = root.optString("folderTextColor")
+            .takeIf { it.matches(Regex("^#[0-9A-Fa-f]{6}$")) }
+        root.optJSONArray("customColors")?.let { colors ->
+            prefs.customColors = (0 until colors.length()).map { colors.optString(it) }
+        }
         prefs.doubleTapToLock   = root.optBoolean("doubleTapToLock", false)
         // Sanitise: only "left"/"center"/"right" are valid. A hand-edited or future-version
         // backup with anything else falls back to the default rather than persisting an
@@ -258,7 +265,6 @@ class BackupManager(private val prefs: PreferencesManager) {
         prefs.lockOrientation   = root.optBoolean("lockOrientation", true)
         prefs.hideStatusBar     = root.optBoolean("hideStatusBar", false)
         prefs.syncToLockscreen  = root.optBoolean("syncToLockscreen", false)
-        prefs.language = root.optString("language", "system")
         // Pinned apps
         root.optJSONArray("pinnedApps")?.let { arr ->
             prefs.pinnedApps = (0 until arr.length())
@@ -345,7 +351,8 @@ class BackupManager(private val prefs: PreferencesManager) {
             val style = root.optString("folderStyle")
             if (style in knownFolderStyles) prefs.folderStyle = style
         }
-
+        // Apply last: changing the system app language can recreate the importing activity.
+        prefs.language = root.optString("language", "system")
     }
 
     /**
